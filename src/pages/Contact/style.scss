@@ -1,0 +1,143 @@
+@font-face {
+    font-family: 'Flower of Summer Personal Use';
+    src: url('../../assets/font/FlowersofSummerPersonalUse.woff2') format('woff2');
+}
+
+.contact-section {
+    position: relative;
+    text-align: center;
+    padding: 20px;
+
+    h4 {
+        font-size: 4rem;
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 10px;
+        font-family: "Flower of Summer Personal Use", sans-serif;
+    }
+
+    .sub-title {
+        font-size: 2rem;
+        color: #fff;
+        margin-bottom: 20px;
+        font-family: "Flower of Summer Personal Use", sans-serif;
+    }
+
+    p {
+        font-size: 14px;
+        color: #fff;
+        margin-bottom: 20px;
+        font-family: "Flower of Summer Personal Use", sans-serif;
+    }
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 50px !important;
+    text-align: left;
+    background-color: #fff;
+
+    .MuiSvgIcon-root {
+        margin-right: 10px;
+    }
+
+    h6 {
+        margin: 0;
+        font-size: 14px;
+        color: #333;
+    }
+}
+
+.decorative-image {
+    position: absolute;
+    width: 60px;
+    height: auto;
+
+    &.left {
+        top: 5%;
+        left: 0;
+    }
+
+    &.right {
+        bottom: 5%;
+        right: 0;
+    }
+}
+.write-section {
+    background-color: #B9D514;
+    padding: 40px 20px;
+    border-radius: 20px;
+}
+
+.title-write {
+    font-family: "Flower of Summer Personal Use", sans-serif !important;
+    color: white;
+    font-size: 3.5rem !important;
+    font-weight: 300;
+    margin-bottom: 20px;
+}
+
+.input-field {
+    background-color: #fff;
+    border-radius: 50px;
+    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
+.input-field input, .input-field textarea {
+    padding-left: 20px;
+}
+
+.button {
+    display: block;
+    margin: 0 auto;
+    border-radius: 50px;
+    padding: 10px 30px;
+    font-family: "Flower of Summer Personal Use", sans-serif !important;
+    font-weight: 300;
+}
+
+// Responsive design for mobile devices
+@media (max-width: 600px) {
+    .contact-section {
+        padding: 15px;
+
+        h4 {
+            font-size: 1.5rem;
+        }
+
+        .sub-title {
+            font-size: 1rem;
+        }
+
+        p {
+            font-size: 12px;
+        }
+    }
+
+    .contact-item {
+        padding: 10px;
+        border-radius: 8px;
+
+        .MuiSvgIcon-root {
+            margin-right: 8px;
+        }
+
+        h6 {
+            font-size: 12px;
+        }
+    }
+
+    .decorative-image {
+        width: 50px;
+
+        &.left {
+            top: 3%;
+        }
+
+        &.right {
+            bottom: 3%;
+        }
+    }
+}

@@ -1,0 +1,152 @@
+.about-text-container {
+    .about-text {
+        background-color: #fff;
+        border-bottom-left-radius: 61px;
+        border-top-right-radius: 65px;
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        margin: 117px;
+        justify-content: center;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+
+        .about-text-image {
+            width: 100px;
+            height: auto;
+            border-radius: 50%;
+            margin-right: 20px;
+            position: relative;
+            top: -149px;
+            left: -54px;
+            animation: zoomInOut 5s infinite;
+        }
+
+        .about-text-image-1 {
+            width: 170px;
+            height: auto;
+            border-radius: 50%;
+            margin-right: 20px;
+            position: relative;
+            top: -151px;
+            left: 87%;
+            transform: rotate(318deg);
+            animation: zoomInOut 5s infinite;
+        }
+
+        .about-text-image-2 {
+            position: absolute;
+            left: 2px;
+            width: 130px;
+            margin-top: 176px;
+            animation: zoomInOut 5s infinite;
+        }
+
+        .about-text-image-3 {
+            width: 149px;
+            position: absolute;
+            left: 88%;
+            margin-top: 19%;
+            animation: zoomInOut 5s infinite;
+        }
+
+        .about-text-content {
+            p {
+                font-size: 39px;
+                color: #333;
+                line-height: 1.5;
+                margin: 72px 72px 72px -171px;
+            }
+        }
+    }
+}
+
+// Responsive styles
+@media (max-width: 1200px) { // Large screens like desktops
+    .about-text-container {
+        .about-text {
+            margin: 80px auto; // Reduce margin
+            .about-text-content {
+                p {
+                    font-size: 32px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 992px) { // Tablets and smaller desktops
+    .about-text-container {
+        .about-text {
+            flex-direction: column; // Stack elements vertically
+            margin: 60px auto; // Adjust margin
+            .about-text-image,
+            .about-text-image-1,
+            .about-text-image-2,
+            .about-text-image-3 {
+                width: 80px; // Adjust size for tablets
+            }
+            .about-text-content {
+                p {
+                    font-size: 28px;
+                    margin: 20px 0; // Adjust margin
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) { // Small tablets and larger mobile phones
+    .about-text-container {
+        .about-text {
+            margin: 40px auto; // Reduce margin
+            .about-text-image,
+            .about-text-image-1,
+            .about-text-image-2,
+            .about-text-image-3 {
+                width: 60px; // Further adjust size
+            }
+            .about-text-content {
+                p {
+                    font-size: 24px;
+                    margin: 10px 0; // Adjust margin
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) { // Mobile phones
+    .about-text-container {
+        .about-text {
+            margin: 20px auto; // Minimal margin for mobile
+            padding: 12px; // Reduced padding
+            .about-text-image,
+            .about-text-image-1,
+            .about-text-image-2,
+            .about-text-image-3 {
+                width: 50px; // Further adjust size
+            }
+            .about-text-content {
+                p {
+                    font-size: 18px;
+                    margin: 5px 0; // Adjust margin
+                }
+            }
+        }
+    }
+}
+
+
+@keyframes zoomInOut {
+    0% {
+        transform: scale(1); // Initial size
+    }
+
+    50% {
+        transform: scale(1.2); // Zoom in
+    }
+
+    100% {
+        transform: scale(1); // Zoom out
+    }
+}

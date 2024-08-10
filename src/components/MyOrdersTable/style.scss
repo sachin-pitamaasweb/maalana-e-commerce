@@ -1,0 +1,70 @@
+/* styles.scss */
+
+/* General Table Styling */
+.table-container {
+    margin: 20px auto; /* Center the container */
+    max-width: 100%; /* Ensure container width adjusts to screen size */
+  
+    .MuiTableContainer-root {
+      overflow-x: auto;
+    }
+  
+    .MuiTable-root {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%; /* Make table width responsive */
+      min-width: 600px; /* Set a minimum width to avoid excessive shrinking */
+    }
+  
+    .MuiTableHead-root {
+      background-color: #f5f5f5;
+    }
+  
+    .MuiTableCell-root {
+      border-bottom: 1px solid #ddd;
+      padding: 16px;
+      font-size: 14px;
+    }
+  
+    .MuiTableRow-root {
+      &:nth-of-type(even) {
+        background-color: #f9f9f9;
+      }
+    }
+  }
+  
+  /* Responsive Adjustments for Tablets and Mobile */
+  @media (max-width: 1024px) {
+    .table-container {
+      .MuiTable-root {
+        min-width: 500px; /* Adjust minimum width for tablets */
+      }
+    }
+  }
+  .table-pagination{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .table-container {
+      .MuiTable-root {
+        min-width: 400px; /* Adjust minimum width for smaller screens */
+      }
+  
+      .MuiTableCell-root {
+        font-size: 12px; /* Adjust font size for mobile */
+        padding: 12px; /* Adjust padding for mobile */
+      }
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .table-container {
+      .MuiTable-root {
+        min-width: 300px; /* Adjust minimum width for very small screens */
+      }
+    }
+  }
+  

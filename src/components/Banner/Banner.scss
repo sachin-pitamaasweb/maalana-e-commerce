@@ -1,0 +1,217 @@
+// .banner-container {
+//     margin: 80px;
+
+//     .banner {
+//       width: 100%;
+//       height: auto;
+//       border-radius: 8px;
+//       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+//     }
+//   }
+
+
+// .banner-slider {
+//   width: 100%;
+//   position: relative;
+//   overflow: hidden;
+
+//   .slick-slide {
+//       display: flex;
+//       justify-content: center;
+//       align-items: center;
+//   }
+
+//   .banner-slide {
+//       position: relative;
+//       width: 100%;
+//       text-align: center;
+
+//       .banner {
+//           width: 100%;
+//           max-height: 600px; 
+//           height: 100%;
+//           border-radius: 8px;
+//           object-fit: cover;
+//       }
+
+//       .banner-title {
+//           position: absolute;
+//           bottom: 20px;
+//           left: 50%;
+//           transform: translateX(-50%);
+//           background: rgba(0, 0, 0, 0.5);
+//           color: #fff;
+//           padding: 10px 20px;
+//           border-radius: 5px;
+//           font-size: 1.5rem;
+//       }
+//   }
+
+//   .slick-dots {
+//       bottom: 15px;
+//   }
+// }
+
+// /* Adjustments for mobile responsiveness */
+// @media (max-width: 768px) {
+//   .banner-slider {
+//     overflow: hidden;
+//       .banner-slide {
+//           .banner-title {
+//               font-size: 1.2rem;
+//               bottom: 10px;
+//           }
+//       }
+//   }
+// }
+
+
+.banner-slider {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+
+    .slick-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .banner-slide {
+        position: relative;
+        width: 100%;
+        text-align: center;
+
+        .banner {
+            width: 100%;
+            max-height: 600px;
+            height: 100%;
+            // border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .banner-title {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.5rem;
+            transition: font-size 0.3s ease;
+        }
+    }
+
+    .slick-dots {
+        bottom: 15px;
+    }
+}
+
+/* Adjustments for tablet devices */
+@media (max-width: 1024px) {
+    .banner-slider {
+        .banner-slide {
+            .banner {
+                max-height: 500px;
+            }
+
+            .banner-title {
+                font-size: 1.3rem;
+            }
+        }
+    }
+}
+
+/* Adjustments for mobile devices */
+@media (max-width: 768px) {
+    .banner-slider {
+        .banner-slide {
+            .banner {
+                max-height: 362px;
+                height: 100%;
+                margin-top: 31px;
+            }
+
+            .banner-title {
+                font-size: 1.2rem;
+                bottom: 10px;
+                padding: 8px 16px;
+            }
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .banner-slider {
+        .banner-slide {
+            .banner {
+                max-height: 162px;
+                height: 100%;
+                margin-top: 31px;
+            }
+
+            .banner-title {
+                font-size: 1.2rem;
+                bottom: 10px;
+                padding: 8px 16px;
+            }
+        }
+    }
+}
+
+/* Adjustments for small mobile devices */
+@media (max-width: 480px) {
+    .banner-slider {
+        .banner-slide {
+            .banner {
+                max-height: 132px;
+                height: 100%;
+                margin-top: 31px;
+            }
+
+            .banner-title {
+                font-size: 1rem;
+                padding: 6px 12px;
+            }
+        }
+    }
+}
+
+@media (max-width: 375px) {
+    .banner-slider {
+        .banner-slide {
+            .banner {
+                max-height: 112px;
+                height: 100%;
+                margin-top: 10px;
+            }
+
+            .banner-title {
+                font-size: 1rem;
+                padding: 6px 12px;
+            }
+        }
+    }
+}
+
+@media (max-width: 320px) {
+    .banner-slider {
+
+        .banner-slide {
+            .banner {
+                width: 100%;
+                max-height: 257px;
+                height: 14vh;
+                margin-top: 10px;
+                max-width: 320px;
+            }
+
+            .banner-title {
+                font-size: 1rem;
+                padding: 6px 12px;
+            }
+        }
+    }
+}

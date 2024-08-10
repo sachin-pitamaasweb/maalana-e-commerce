@@ -1,0 +1,106 @@
+.profile-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #B9D514; 
+
+    .filter-section {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+
+            .MuiButton-startIcon {
+                background-color: #B9D514;
+                border-radius: 50%;
+                padding: 4px;
+            }
+        }
+
+        .filter-dropdown {
+            width: 100%;
+            background-color: #fff;
+        }
+    }
+
+    .profile-page {
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        // width: 100%;
+        max-width: 600px; 
+        margin-top: 50px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        .header-section {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            padding: 10px 0;
+
+            .title {
+                font-size: 24px;
+                color: #000;
+                margin-left: 20px;
+            }
+
+            .edit-icon {
+                position: absolute;
+                right: 20px;
+            }
+        }
+
+        .profile-form-section {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+
+            .form-container {
+                width: 100%;
+                max-width: 600px;
+
+                .form-header {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 20px;
+
+                    .avatar {
+                        margin-right: 10px;
+                        width: 150px;
+                        height: 150px;
+                    }
+                }
+
+                .form-field {
+                    margin-bottom: 20px;
+                }
+
+                .gender-group {
+                    margin-bottom: 20px;
+                }
+
+                .save-button {
+                    width: 100%;
+                    background-color: #B9D514;
+                    color: #fff;
+                }
+            }
+        }
+        // .orders-section {
+        //     width: 100%;
+        //     display: flex;
+        //     justify-content: center;
+        //     margin-top: 20px;
+        // }
+    }
+}

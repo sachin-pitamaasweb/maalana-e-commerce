@@ -1,0 +1,206 @@
+@font-face {
+  font-family: 'Flower of Summer Personal Use';
+  src: url('../../assets/font/FlowersofSummerPersonalUse.woff2') format('truetype');
+}
+
+$background-color: #B9D514;
+$form-background: #ffffff;
+$input-background: #ffffff;
+$input-border-radius: 0px;
+$button-background: #66cc99;
+$button-text-color: #ffffff;
+
+.signupContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: $background-color;
+  background-image: url('https://res.cloudinary.com/dtivafy25/image/upload/v1721116887/img-1_nrpbms.svg');
+  background-size: contain;
+  background-position: center;
+  padding: 20px;
+  box-sizing: border-box;
+
+  @media (max-width: 1200px) {
+    height: 100vh;
+  }
+
+  @media (max-width: 992px) {
+    height: 100vh;
+  }
+
+  @media (max-width: 768px) {
+    height: 100vh;
+  }
+
+  @media (max-width: 576px) {
+    height: 100vh;
+  }
+}
+
+.signupFormPartner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: $background-color;
+  background-size: contain;
+  background-position: center;
+  padding: 20px;
+  box-sizing: border-box;
+
+  @media (max-width: 1200px) {
+    height: auto;
+  }
+
+  @media (max-width: 992px) {
+    height: auto;
+  }
+
+  @media (max-width: 768px) {
+    height: auto;
+  }
+
+  @media (max-width: 576px) {
+    height: auto;
+  }
+}
+
+.signupForm {
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+}
+
+.title {
+  font-size: 4rem !important;
+  margin-bottom: 3rem !important;
+  color: $button-text-color !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+  font-weight: 300 !important;
+  font-family: "Flower of Summer Personal Use", sans-serif !important;
+}
+
+.inputGroup {
+  margin-bottom: 15px;
+
+  .css-1k51tf5-MuiTooltip-tooltip {
+    background-color: rgba(255, 6, 6, 0.92);
+    border-radius: 4px;
+    color: #fff;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    padding: 4px 8px;
+    font-size: 0.6875rem;
+    max-width: 300px;
+    margin: 0;
+    word-wrap: break-word;
+    font-weight: 500;
+    position: relative;
+  }
+}
+
+.inputField {
+  background-color: $input-background;
+  border: none;
+  width: 100%;
+  border-radius: 44px;
+  padding: 25px 23px;
+  box-sizing: border-box;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  font-size: 20px;
+
+  &.errorInput {
+    border-color: red;
+  }
+
+  &:focus {
+    border-color: $button-background;
+    outline: none;
+  }
+
+  @media (max-width: 1200px) {
+    padding: 16px 23px;
+    font-size: 16px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 16px 23px;
+    font-size: 16px;
+  }
+
+}
+
+.errorMessage {
+  color: red;
+  font-size: 0.875rem;
+}
+
+.submitButton {
+  color: $button-text-color !important;
+  background-color: $background-color !important;
+  padding: 5px 79px !important;
+  border-radius: 50px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+  margin-top: 1rem !important;
+  border: 4px solid $button-text-color !important;
+  font-family: "Flower of Summer Personal Use", sans-serif !important;
+  font-weight: 300 !important;
+  text-transform: capitalize !important;
+  font-size: 40px !important;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  letter-spacing: 1px !important;
+  margin: 39px 1px 0px !important;
+
+  &:hover {
+    color: $button-text-color !important;
+    border: 2px solid $button-text-color !important;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .title {
+    font-size: 5rem !important;
+    margin-bottom: 2rem !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .title {
+    font-size: 4rem !important;
+    margin-bottom: 2rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 3rem !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .signupForm {
+    padding: 1.5rem;
+  }
+
+  .submitButton {
+    font-size: 30px !important;
+    padding: 5px 60px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .title {
+    font-size: 2.5rem !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .submitButton {
+    font-size: 16px !important;
+    padding: 5px 40px !important;
+    font-family: "tahoma", sans-serif !important;
+  }
+}

@@ -1,0 +1,172 @@
+.address-section {
+    // background-color: #ffffff;
+    // padding: 20px;
+    // border-radius: 10px;
+    // box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    // max-width: 800px;
+    // margin: 20px auto;
+    // border: 2px solid #c0e039; /* Matches the green border in the screenshot */
+
+    .address-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+
+        h2 {
+            font-size: 18px;
+            
+            font-weight: 600;
+        }
+
+        span {
+            font-size: 12px;
+            color: #a1a1a1;
+        }
+
+        .add-button {
+            background-color: #c0e039;
+            color: #000;
+            font-weight: 600;
+            border-radius: 20px;
+            padding: 5px 15px;
+            text-transform: none;
+            box-shadow: none;
+
+            &:hover {
+                background-color: #a4c02c;
+            }
+        }
+    }
+
+    .address-form {
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .shipping-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .edit-button {
+            background-color: #c0e039;
+            color: #000;
+            font-weight: 600;
+            border-radius: 20px;
+            padding: 5px 15px;
+            text-transform: none;
+            box-shadow: none;
+
+            &:hover {
+                background-color: #a4c02c;
+            }
+        }
+
+        .MuiTextField-root {
+            .MuiOutlinedInput-root {
+                fieldset {
+                    border-color: #c0e039;
+                }
+
+                &:hover fieldset {
+                    border-color: #a4c02c;
+                }
+
+                &.Mui-focused fieldset {
+                    border-color: #c0e039;
+                }
+            }
+        }
+
+        .save-button {
+            background-color: #c0e039;
+            color: #000;
+            font-weight: 600;
+            text-transform: none;
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: none;
+
+            &:hover {
+                background-color: #a4c02c;
+            }
+        }
+    }
+
+    /* Responsive styling */
+    @media (max-width: 768px) {
+        padding: 15px;
+
+        .address-header {
+            flex-direction: column;
+            align-items: flex-start;
+
+            h2 {
+                font-size: 16px;
+            }
+
+            span {
+                font-size: 10px;
+                margin-top: 5px;
+            }
+
+            .add-button {
+                align-self: flex-end;
+                padding: 3px 10px;
+            }
+        }
+
+        .address-form {
+            h3 {
+                font-size: 14px;
+            }
+
+            .edit-button {
+                padding: 3px 10px;
+            }
+
+            .save-button {
+                padding: 8px;
+            }
+        }
+    }
+
+    @media (max-width: 480px) {
+        padding: 10px;
+
+        .address-header {
+            h2 {
+                font-size: 14px;
+            }
+
+            span {
+                font-size: 9px;
+            }
+
+            .add-button {
+                padding: 2px 8px;
+            }
+        }
+
+        .address-form {
+            h3 {
+                font-size: 13px;
+            }
+
+            .edit-button {
+                padding: 2px 8px;
+            }
+
+            .save-button {
+                padding: 6px;
+            }
+        }
+    }
+}

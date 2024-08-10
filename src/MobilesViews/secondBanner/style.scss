@@ -1,0 +1,64 @@
+.snd-banner {
+  height: 100vh; // Full height of the viewport
+  background-color: #D5C1FF;
+  position: relative; // Positioning context for absolutely positioned children
+  overflow: hidden; // Ensure no overflow from images
+
+  .banner-image {
+    position: absolute; // Absolute positioning for proper placement
+    transition: transform 0.5s ease; // Smooth zoom-in effect
+
+    &.top-left {
+      top: 100px;
+      left: 50px;
+      transform: scale(1); // Initial scale
+      width: 100px;
+      cursor: pointer;
+    }
+
+    &.top-right {
+      top: 150px;
+      right: 50px;
+      transform: scale(1); // Initial scale
+      width: 100px;
+      cursor: pointer;
+    }
+
+    &.bottom-left {
+      bottom: 150px;
+      left: 50px;
+      transform: scale(1); // Initial scale
+      width: 100px;
+      cursor: pointer;
+    }
+
+    &.bottom-right {
+      bottom: 100px;
+      right: 50px;
+      transform: scale(1); // Initial scale
+      width: 100px;
+      cursor: pointer;
+    }
+  }
+
+  .banner-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .banner-text {
+    text-align: center;
+    font-size: 2rem;
+    color: #000;
+    position: relative; // Ensure text is above the background
+    z-index: 1;
+
+    img {
+      max-width: 100%; /* Ensures the image is responsive */
+      height: auto;
+    }
+  }
+}

@@ -1,0 +1,67 @@
+.our-journey-container {
+    .our-journey {
+      text-align: center;
+      margin: 60px auto;
+      background: #fff url('../../assets/about/line-bg.png') no-repeat center center;
+      p {
+        font-size: 32px;
+        padding: 43px;
+      }
+    }
+  }
+  
+  @media (max-width: 1200px) {
+    .our-journey-container {
+      .our-journey {
+        p {
+          font-size: 28px;
+          padding: 35px;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .our-journey-container {
+      .our-journey {
+        p {
+          font-size: 24px;
+          padding: 30px;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .our-journey-container {
+      .our-journey {
+        p {
+          font-size: 20px;
+          padding: 25px;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .our-journey-container {
+      .our-journey {
+        p {
+          font-size: 18px;
+          padding: 20px;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 400px) {
+    .our-journey-container {
+      .our-journey {
+        p {
+          font-size: 16px;
+          padding: 15px;
+        }
+      }
+    }
+  }
+  

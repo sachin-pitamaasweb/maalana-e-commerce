@@ -1,0 +1,54 @@
+.third-banner {
+    // background-color: #FFD9AC; // Background color
+    background:  #FFD9AC url('../../assets/products/bg-effect.png') no-repeat center center / cover ;
+    height: 100vh; // Full height of the viewport
+    position: relative; // Positioning context for absolutely positioned children
+    overflow: hidden; // Ensure no overflow from images
+  
+    .product-image {
+      position: absolute;
+      max-width: 25%;
+      height: auto;
+      top: 10%;
+      left: 38%;
+      transform: translateX(-50%);
+      transition: transform 0.5s ease; // Smooth transition effect
+    }
+  
+    .cloud-image {
+      position: absolute; // Absolute positioning for proper placement
+    //   max-width: 50%; // Adjust size as needed
+      height: auto;
+      top: 30%; // Position under the product image
+      left: 50%;
+      transform: translateX(-50%);
+      transition: transform 0.5s ease; // Smooth transition effect
+    }
+  
+    .product-images {
+      position: absolute; // Absolute positioning for proper placement
+      top: 56%; // Middle center
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex; // Display images in a row
+      gap: 64px; // Gap between images
+  
+      .mid-product {
+        max-width: 15%; // Adjust size as needed
+        height: auto;
+        transition: transform 0.5s ease; // Smooth transition effect
+      }
+    }
+  
+    .view-more-image {
+        position: absolute;
+        max-width: 20%;
+        height: auto;
+        bottom: 6%;
+        left: 40%;      
+      transform: translateX(-50%);
+      transition: transform 0.5s ease; // Smooth transition effect
+      cursor: pointer;
+    }
+  }
+  
