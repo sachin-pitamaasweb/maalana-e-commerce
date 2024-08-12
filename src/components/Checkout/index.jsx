@@ -116,7 +116,7 @@ const Checkout = () => {
       </Box>
 
       {/* Product List and Order Summary Section */}
-      <Box className="product-list">
+      <Box className="product-list-section">
         <List>
           {products.map((product, index) => (
             <React.Fragment key={product.id}>

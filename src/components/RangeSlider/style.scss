@@ -1,0 +1,63 @@
+.price-range-slider {
+    width: 100%;
+    float: left;
+    padding: 20px 0px 34px;
+
+    .range-value {
+        margin: 20px;
+
+
+        input {
+            width: 100%;
+            background: none;
+            color: #000;
+            font-size: 16px;
+            font-weight: initial;
+            box-shadow: none;
+            border: none;
+            margin: 0px;
+        }
+
+        .value-div {
+            display: flex;
+            .value-1{
+                margin-left: -12px;
+                border: none;
+                &:focus {
+                    outline: none; 
+                }
+            }
+            .value-2 {
+                text-align: center;
+                margin-right: 26px;
+                border: none;
+                &:focus {
+                    outline: none; 
+                }
+            }
+        }
+    }
+
+    .range-bar {
+        border: none;
+        background: #000;
+        height: 3px;
+        width: 70%;
+        margin-left: 8px;
+
+        .ui-slider-range {
+            background: #B9D514;
+        }
+
+        .ui-slider-handle {
+            border: none;
+            border-radius: 25px;
+            background: #B9D514;
+            border: 2px solid #B9D514;
+            height: 17px;
+            width: 17px;
+            top: -0.52em;
+            cursor: pointer;
+        }
+    }
+}

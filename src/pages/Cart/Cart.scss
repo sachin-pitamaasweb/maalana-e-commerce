@@ -1,0 +1,175 @@
+.cart-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 100px 259px;
+}
+
+.cart-items {
+    flex: 2;
+    margin-right: 20px;
+}
+
+.steps {
+    display: flex;
+    justify-content: left;
+    margin-bottom: 59px;
+    gap: 20%;
+}
+
+.steps span {
+    position: relative;
+    padding: 0 20px;
+    font-size: 16px;
+}
+
+.steps span:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 60%;
+    right: -149px;
+    transform: translateY(-50%);
+    width: 135px;
+    height: 2px;
+    background-color: #000;
+}
+
+.summary-and-coupon {
+    flex: 1;
+    margin: 102px 0px 0px 0px;
+}
+
+.cart-item {
+    width: 100%;
+    max-width: 685px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 45px;
+    border-bottom: none;
+    padding-bottom: 43px;
+}
+
+.cart-item:not(:last-child) {
+    border-bottom: 2px solid #000;
+}
+.cart-item-image {
+    margin-right: 20px;
+    max-width: 200px;
+    width: 100%;
+}
+
+.cart-item-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.cart-item-name {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.cart-item-price {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.order-summary {
+    background-color: #DEEB90;
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid #000;
+}
+
+.summary-details {
+    margin-bottom: 20px;
+}
+
+.summary-details p {
+    display: flex;
+    justify-content: space-between;
+    margin: 25px 0;
+}
+
+.checkout-btn {
+    width: 100%;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+    cursor: pointer;
+    margin: 18px 0px;
+    border-radius: 10px;
+    padding: 15px;
+}
+.delivery{
+    border-top: 1px solid #000;
+    margin: 11px;
+    padding: 20px 0px 0px;
+    text-align: center;
+
+}
+
+.coupon-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #DEEB90;
+    border-radius: 10px;
+    border: 1px solid #000;
+}
+
+.coupon-btn {
+    background-color: transparent;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin-right: 65px;
+    font-weight: 600;
+}
+
+.coupon-input {
+    flex: 1 1;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    border: 1px solid #000;
+}
+
+.address-section {
+    background-color: #DEEB90;
+    padding: 20px;
+    border: 1px solid #000;
+    border-radius: 10px;
+}
+
+.address-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.address-radio{
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.address {
+    margin: 20px 0px;
+}
+
+.address-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn, .delete-btn {
+    background-color: #fff;
+    color: #000;
+    padding: 10px 21px;
+    cursor: pointer;
+    border: 1px solid #000;
+    border-radius: 10px;
+}

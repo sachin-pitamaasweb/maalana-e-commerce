@@ -1,141 +1,274 @@
+// .about-text-container {
+//     .about-text {
+//         background-color: #fff;
+//         border-bottom-left-radius: 61px;
+//         border-top-right-radius: 65px;
+//         padding: 24px;
+//         display: flex;
+//         align-items: center;
+//         margin: 117px;
+//         justify-content: center;
+//         box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+
+//         .about-text-image {
+//             width: 100px;
+//             height: auto;
+//             border-radius: 50%;
+//             margin-right: 20px;
+//             position: relative;
+//             top: -149px;
+//             left: -54px;
+//             animation: zoomInOut 5s infinite;
+//         }
+
+//         .about-text-image-1 {
+//             width: 170px;
+//             height: auto;
+//             border-radius: 50%;
+//             margin-right: 20px;
+//             position: relative;
+//             top: -151px;
+//             left: 87%;
+//             transform: rotate(318deg);
+//             animation: zoomInOut 5s infinite;
+//         }
+
+//         .about-text-image-2 {
+//             position: absolute;
+//             left: 2px;
+//             width: 130px;
+//             margin-top: 176px;
+//             animation: zoomInOut 5s infinite;
+//         }
+
+//         .about-text-image-3 {
+//             width: 149px;
+//             position: absolute;
+//             left: 88%;
+//             margin-top: 19%;
+//             animation: zoomInOut 5s infinite;
+//         }
+
+//         .about-text-content {
+//             p {
+//                 font-size: 39px;
+//                 color: #333;
+//                 line-height: 1.5;
+//                 margin: 72px 72px 72px -171px;
+//             }
+//         }
+//     }
+// }
+
+// // Responsive styles
+// @media (max-width: 1200px) { // Large screens like desktops
+//     .about-text-container {
+//         .about-text {
+//             margin: 80px auto; // Reduce margin
+//             .about-text-content {
+//                 p {
+//                     font-size: 32px;
+//                 }
+//             }
+//         }
+//     }
+// }
+
+// @media (max-width: 992px) { // Tablets and smaller desktops
+//     .about-text-container {
+//         .about-text {
+//             flex-direction: column; // Stack elements vertically
+//             margin: 60px auto; // Adjust margin
+//             .about-text-image,
+//             .about-text-image-1,
+//             .about-text-image-2,
+//             .about-text-image-3 {
+//                 width: 80px; // Adjust size for tablets
+//             }
+//             .about-text-content {
+//                 p {
+//                     font-size: 28px;
+//                     margin: 20px 0; // Adjust margin
+//                 }
+//             }
+//         }
+//     }
+// }
+
+// @media (max-width: 768px) { // Small tablets and larger mobile phones
+//     .about-text-container {
+//         .about-text {
+//             margin: 40px auto; // Reduce margin
+//             .about-text-image,
+//             .about-text-image-1,
+//             .about-text-image-2,
+//             .about-text-image-3 {
+//                 width: 60px; // Further adjust size
+//             }
+//             .about-text-content {
+//                 p {
+//                     font-size: 24px;
+//                     margin: 10px 0; // Adjust margin
+//                 }
+//             }
+//         }
+//     }
+// }
+
+// @media (max-width: 480px) { // Mobile phones
+//     .about-text-container {
+//         .about-text {
+//             margin: 20px auto; // Minimal margin for mobile
+//             padding: 12px; // Reduced padding
+//             .about-text-image,
+//             .about-text-image-1,
+//             .about-text-image-2,
+//             .about-text-image-3 {
+//                 width: 50px; // Further adjust size
+//             }
+//             .about-text-content {
+//                 p {
+//                     font-size: 18px;
+//                     margin: 5px 0; // Adjust margin
+//                 }
+//             }
+//         }
+//     }
+// }
+
+
+// @keyframes zoomInOut {
+//     0% {
+//         transform: scale(1); // Initial size
+//     }
+
+//     50% {
+//         transform: scale(1.2); // Zoom in
+//     }
+
+//     100% {
+//         transform: scale(1); // Zoom out
+//     }
+// }
+
+
+@font-face {
+    font-family: 'Flower of Summer Personal Use';
+    src: url('../../assets/font/FlowersofSummerPersonalUse.woff2') format('woff2');
+}
+
 .about-text-container {
-    .about-text {
+    display: flex;
+    justify-content: center;
+    margin-top: 39px;
+    position: relative; // Make the container a positioning context
+
+    .about-div {
+        width: 90%; // Default width for smaller screens
+        max-width: 1300px; // Maximum width for larger screens
         background-color: #fff;
-        border-bottom-left-radius: 61px;
-        border-top-right-radius: 65px;
-        padding: 24px;
-        display: flex;
-        align-items: center;
-        margin: 117px;
-        justify-content: center;
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+        border-bottom-left-radius: 56px;
+        border-top-right-radius: 56px;
+        box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+            rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset,
+            rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset,
+            rgba(0, 0, 0, 0.06) 0px 2px 1px,
+            rgba(0, 0, 0, 0.09) 0px 4px 2px,
+            rgba(0, 0, 0, 0.09) 0px 8px 4px,
+            rgba(0, 0, 0, 0.09) 0px 16px 8px,
+            rgba(0, 0, 0, 0.09) 0px 32px 16px;
+        position: relative; // Make the div a positioning context
 
-        .about-text-image {
-            width: 100px;
-            height: auto;
-            border-radius: 50%;
-            margin-right: 20px;
-            position: relative;
-            top: -149px;
-            left: -54px;
-            animation: zoomInOut 5s infinite;
+        p {
+            font-size: 24px; // Default font size
+            padding: 20px; // Default padding
+            line-height: 1.5; // Improve readability
         }
 
-        .about-text-image-1 {
-            width: 170px;
-            height: auto;
-            border-radius: 50%;
-            margin-right: 20px;
-            position: relative;
-            top: -151px;
-            left: 87%;
-            transform: rotate(318deg);
-            animation: zoomInOut 5s infinite;
-        }
-
-        .about-text-image-2 {
+        // Top-left decoration image
+        .decoration-top-left {
             position: absolute;
-            left: 2px;
-            width: 130px;
-            margin-top: 176px;
+            top: -20px;
+            left: -20px;
+            width: 80px; // Adjust size as needed
+            height: 80px; // Adjust size as needed
+            background: url('../../assets/about/img-1.png') no-repeat center/contain;
             animation: zoomInOut 5s infinite;
         }
 
-        .about-text-image-3 {
-            width: 149px;
+        // Top-right decoration image
+        .decoration-top-right {
             position: absolute;
-            left: 88%;
-            margin-top: 19%;
+            top: -20px;
+            right: -20px;
+            width: 80px;
+            height: 80px;
+            background: url('../../assets/about/img-2.png') no-repeat center/contain;
             animation: zoomInOut 5s infinite;
         }
 
-        .about-text-content {
+        // Bottom-left decoration image
+        .decoration-bottom-left {
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 80px;
+            height: 80px;
+            background: url('../../assets/about/img-4.png') no-repeat center/contain;
+            animation: zoomInOut 5s infinite;
+        }
+
+        // Bottom-right decoration image
+        .decoration-bottom-right {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 80px;
+            height: 80px;
+            background: url('../../assets/about/img-5.png') no-repeat center/contain;
+            animation: zoomInOut 5s infinite;
+        }
+    }
+}
+
+// Media queries for larger screens
+@media (min-width: 768px) {
+    .about-text-container {
+        .about-div {
+            width: 80%; // Adjust width for medium-sized screens
+            padding: 30px; // Increase padding for medium-sized screens
+
             p {
-                font-size: 39px;
-                color: #333;
-                line-height: 1.5;
-                margin: 72px 72px 72px -171px;
+                font-size: 26px; // Increase font size for medium-sized screens
             }
         }
     }
 }
 
-// Responsive styles
-@media (max-width: 1200px) { // Large screens like desktops
+@media (min-width: 1024px) {
     .about-text-container {
-        .about-text {
-            margin: 80px auto; // Reduce margin
-            .about-text-content {
-                p {
-                    font-size: 32px;
-                }
+        .about-div {
+            width: 90%; // Adjust width for large screens
+            padding: 40px; // Increase padding for large screens
+
+            p {
+                font-size: 29px; // Increase font size for large screens
             }
         }
     }
 }
 
-@media (max-width: 992px) { // Tablets and smaller desktops
+@media (min-width: 1440px) {
     .about-text-container {
-        .about-text {
-            flex-direction: column; // Stack elements vertically
-            margin: 60px auto; // Adjust margin
-            .about-text-image,
-            .about-text-image-1,
-            .about-text-image-2,
-            .about-text-image-3 {
-                width: 80px; // Adjust size for tablets
-            }
-            .about-text-content {
-                p {
-                    font-size: 28px;
-                    margin: 20px 0; // Adjust margin
-                }
+        .about-div {
+            width: 80%; // Adjust width for extra-large screens
+
+            p {
+                font-size: 32px; // Increase font size for extra-large screens
             }
         }
     }
 }
-
-@media (max-width: 768px) { // Small tablets and larger mobile phones
-    .about-text-container {
-        .about-text {
-            margin: 40px auto; // Reduce margin
-            .about-text-image,
-            .about-text-image-1,
-            .about-text-image-2,
-            .about-text-image-3 {
-                width: 60px; // Further adjust size
-            }
-            .about-text-content {
-                p {
-                    font-size: 24px;
-                    margin: 10px 0; // Adjust margin
-                }
-            }
-        }
-    }
-}
-
-@media (max-width: 480px) { // Mobile phones
-    .about-text-container {
-        .about-text {
-            margin: 20px auto; // Minimal margin for mobile
-            padding: 12px; // Reduced padding
-            .about-text-image,
-            .about-text-image-1,
-            .about-text-image-2,
-            .about-text-image-3 {
-                width: 50px; // Further adjust size
-            }
-            .about-text-content {
-                p {
-                    font-size: 18px;
-                    margin: 5px 0; // Adjust margin
-                }
-            }
-        }
-    }
-}
-
 
 @keyframes zoomInOut {
     0% {

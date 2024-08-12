@@ -1,0 +1,157 @@
+.styled-box {
+    position: relative;
+    width: 90%;
+    // max-width: 800px;
+    margin: 201px auto 0 auto;
+    padding: 40px 20px;
+    border: 1px solid #ccc;
+    border-radius: 120px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+
+    .content {
+        font-size: 36px;
+        color: #333;
+        padding: 38px;
+    }
+
+    .label {
+        position: absolute;
+        background-color: transparent;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 20px;
+
+        &.candy {
+            top: -50px;
+            left: -80px;
+            transform: rotate(-2deg);
+
+            .candy-img1 {
+                width: 60%;
+                animation: float 3s ease-in-out infinite;
+            }
+        }
+
+        &.tasty {
+            top: 10px;
+            right: -80px;
+            transform: rotate(5deg);
+
+            .tasty-img2 {
+                width: 60%;
+                animation: float 3s ease-in-out infinite;
+            }
+        }
+
+        &.sweet {
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-5deg);
+
+            .sweet-img3 {
+                width: 60%;
+                animation: float 3s ease-in-out infinite;
+            }
+        }
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .styled-box {
+        padding: 30px 15px;
+        border-radius: 40px;
+
+        .content {
+            font-size: 18px;
+        }
+
+        .label {
+            font-size: 16px;
+
+            &.candy {
+                top: -40px;
+                left: -70px;
+
+                .candy-img1 {
+                    width: 50%;
+                }
+            }
+
+            &.tasty {
+                top: 10px;
+                right: -70px;
+
+                .tasty-img2 {
+                    width: 50%;
+                }
+            }
+
+            &.sweet {
+                bottom: -40px;
+
+                .sweet-img3 {
+                    width: 50%;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .styled-box {
+        padding: 20px 10px;
+        border-radius: 30px;
+
+        .content {
+            font-size: 16px;
+        }
+
+        .label {
+            font-size: 14px;
+
+            &.candy {
+                top: -30px;
+                left: -60px;
+
+                .candy-img1 {
+                    width: 45%;
+                }
+            }
+
+            &.tasty {
+                top: 10px;
+                right: -60px;
+
+                .tasty-img2 {
+                    width: 45%;
+                }
+            }
+
+            &.sweet {
+                bottom: -30px;
+
+                .sweet-img3 {
+                    width: 45%;
+                }
+            }
+        }
+    }
+}

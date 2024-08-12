@@ -1,16 +1,17 @@
-.category-filter {
+    .category-filter {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 50px;
+    overflow: hidden;
 
     .category-slider {
-        width: 64%; 
+        width: 80%;  // Adjusted width for better responsiveness
         margin: 20px 20px;
 
         .slick-list {
-            padding: 0 20px; // Optional: Add padding to the container
+            padding: 0 20px; // Padding for the slider container
         }
 
         .slick-slide {
@@ -26,8 +27,8 @@
             cursor: pointer;
 
             .image-container {
-                width: 100px;
-                height: 100px;
+                width: 90px; // Default width for image container
+                height: 90px; // Default height for image container
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -38,8 +39,8 @@
             }
 
             .category-image {
-                max-width: 60%;
-                max-height: 60%;
+                max-width: 70%; // Adjusted max width for image
+                max-height: 70%; // Adjusted max height for image
                 object-fit: contain;
             }
 
@@ -49,29 +50,47 @@
             }
 
             &.selected .image-container {
-                border: 4px double #f39c12; // Apply double border to the selected category
+                border: 4px double #f39c12; // Double border for selected item
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             }
         }
     }
 }
 
-/* Adjustments for mobile responsiveness */
+/* Adjustments for tablets and medium screens */
+@media (max-width: 768px) {
+    .category-filter {
+        .category-slider {
+            width: 90%; // Increase width for tablet screens
+            .category-option {
+                .image-container {
+                    width: 80px; // Slightly smaller image container
+                    height: 80px;
+                }
+
+                .category-name {
+                    font-size: 0.8rem; // Slightly smaller text
+                }
+            }
+        }
+    }
+}
+
+/* Adjustments for mobile devices */
 @media (max-width: 600px) {
     .category-filter {
         .category-slider {
-            width: 100%; 
-            margin: 20px 20px;
-        .category-option {
-            .image-container {
-                width: 70px;
-                height: 70px;
-            }
+            width: 100%; // Full width for mobile screens
+            .category-option {
+                .image-container {
+                    width: 40px; // Smaller image container for mobile
+                    height: 40px;
+                }
 
-            .category-name {
-                font-size: 0.75rem;
+                .category-name {
+                    font-size: 13px; // Smaller text size for mobile
+                }
             }
-        }
         }
     }
 }

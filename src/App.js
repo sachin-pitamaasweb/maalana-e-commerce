@@ -15,6 +15,7 @@ import Profile from './pages/Profile/index.jsx';
 import BecomePartner from './pages/BecomePartner/index.jsx';
 import Contact from './pages/Contact/index.jsx';
 import Products from './pages/Products/index.jsx';
+import Cart from './pages/Cart/index.jsx'
 
 // components 
 import Checkout from './components/Checkout/index.jsx';
@@ -40,6 +41,7 @@ function App() {
           <Route path="/become-partner" element={<BecomePartner />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </Router>
     </>

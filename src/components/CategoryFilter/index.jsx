@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -13,8 +13,7 @@ import Img5 from '../../assets/cate/img-5.png'
 import Img6 from '../../assets/cate/img-6.png'
 
 
-const CategoryFilter = () => {
-    const [selectedCategory, setSelectedCategory] = useState(null);
+const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -50,17 +49,17 @@ const CategoryFilter = () => {
             <Box className="category-slider">
                 <Slider {...settings}>
                     {categories.map((category, index) => (
-                        <Box 
-                            key={index} 
+                        <Box
+                            key={index}
                             className={`category-option ${selectedCategory === category.name ? 'selected' : ''}`}
                             onClick={() => handleCategoryClick(category.name)}
                         >
                             <Box className="image-container">
                                 <img src={category.img} alt={category.name} className="category-image" />
                             </Box>
-                            <Typography variant="body1" className="category-name">
+                            {!isMobile && <Typography variant="body1" className="category-name">
                                 {category.name}
-                            </Typography>
+                            </Typography>}
                         </Box>
                     ))}
                 </Slider>

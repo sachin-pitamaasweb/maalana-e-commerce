@@ -10,11 +10,11 @@
     height: 100vh;
     text-align: center;
     // padding: 0 1rem;
-    margin-top: calc(5rem + 2vw); // Adjust margin-top with calc for responsiveness
+    margin-top: calc(1rem + 2vw); // Adjust margin-top with calc for responsiveness
 
     .title {
         color: #fff;
-        font-size: calc(2rem + 2vw); // Use calc to adjust font size based on viewport width
+        font-size: calc(2rem + 1.5vw); // Use calc to adjust font size based on viewport width
         margin: 0;
         font-family: "Flower of Summer Personal Use", sans-serif !important;
         letter-spacing: calc(0.2rem + 0.2vw); // Adjust letter-spacing with calc
@@ -48,7 +48,7 @@
 
     .subtitle {
         color: #fff;
-        font-size: calc(1.5rem + 1vw); // Use calc to adjust font size based on viewport width
+        font-size: calc(1.5rem + 0.2vw); // Use calc to adjust font size based on viewport width
         margin: 0;
         font-family: "Flower of Summer Personal Use", sans-serif !important;
         letter-spacing: calc(0.2rem + 0.2vw); // Adjust letter-spacing with calc

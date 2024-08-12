@@ -26,27 +26,43 @@
 
 
 
-import React from 'react';
+// import React from 'react';
 
+// import './style.scss';
+
+// const ProfileQuote = () => {
+//     return (
+//         <>
+//             <div className="profile-container">
+//                 <div className="profile-quote">
+//                     <p className="profile-quote-text">
+//                         "Crafting Sweet Memories: Maalana, Where Every Confection Tells a Story."
+//                     </p>
+//                 </div>
+//                 <img src={require('../../assets/about/img-8.png')} alt="Profile" className="profile-img" />
+//                 <div className="profile-name">
+//                     <p className="profile-name-text">NAVEEN ANAND</p>
+//                     <img src={require('../../assets/about/img-7.png')} alt="Profile" className="profile-name-img" />
+//                 </div>
+//             </div>
+//         </>
+//     );
+// };
+
+// export default ProfileQuote;
+
+
+import React from 'react';
 import './style.scss';
 
-const ProfileQuote = () => {
+const ProfileQuote = ({ clientImage, quote, clientName }) => {
     return (
-        <>
-            <div className="profile-container">
-                <div className="profile-quote">
-                    <p className="profile-quote-text">
-                        "Crafting Sweet Memories: Maalana, Where Every Confection Tells a Story."
-                    </p>
-                </div>
-                <img src={require('../../assets/about/img-8.png')} alt="Profile" className="profile-img" />
-                <div className="profile-name">
-                    <p className="profile-name-text">NAVEEN ANAND</p>
-                    <img src={require('../../assets/about/img-7.png')} alt="Profile" className="profile-name-img" />
-                </div>
-            </div>
-        </>
+        <div className="profile-quote-container">
+            <img src={clientImage} alt={`${clientName}'s profile`} className="client-image" />
+            <p className="client-quote">"{quote}"</p>
+            <p className="client-name">- {clientName}</p>
+        </div>
     );
-};
+}
 
 export default ProfileQuote;
