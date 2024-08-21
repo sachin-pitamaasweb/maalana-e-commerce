@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { Grid, Button, Box, Typography, Snackbar, Alert, Tooltip } from '@mui/material';
 
 import styles from './CommonForm.module.scss';
-
 import { validateForm } from '../../utils/validation.js';
+import { useAuth } from '../../context/AuthContext'; // Import the useAuth hook
 
 const CommonForm = ({ title = "" }) => {
     const navigate = useNavigate();
+    const { login } = useAuth(); // Destructure the login function from the useAuth hook
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -29,8 +30,6 @@ const CommonForm = ({ title = "" }) => {
             document.body.style.backgroundColor = '';
         };
     }, []);
-
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -59,22 +58,41 @@ const CommonForm = ({ title = "" }) => {
                         mobileNumber: formData.phoneNumber,
                         password: formData.password,
                     }),
-                })
+                });
                 const responseData = await response.json();
-                console.log('Response data:', responseData.user._id);
-                sessionStorage.setItem('userId', responseData.user._id);
                 if (responseData.success) {
                     setSnackbarSeverity('success');
                     setSnackbarMessage('User registered successfully. Please check your email for verification.');
+                    login(responseData.user._id); 
                     navigate(`/profile/${responseData.user._id}`, { state: { id: responseData.user._id } });
                 } else {
                     setSnackbarSeverity('error');
                     setSnackbarMessage('An error occurred. Please try again later.');
                 }
+            } else if (title === "Login") {
+                const response = await fetch('http://localhost:8000/api/login-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: formData.email,
+                        password: formData.password,
+                    }),
+                });
+                const responseData = await response.json();
+                if (responseData.success) {
+                    setSnackbarSeverity('success');
+                    setSnackbarMessage('Login successful!');
+                    login(responseData.user._id); // Mark the user as authenticated
+                    navigate(`/profile/${responseData.user._id}`, { state: { id: responseData.user._id } });
+                } else {
+                    setSnackbarSeverity('error');
+                    setSnackbarMessage('Invalid credentials. Please try again.');
+                }
             }
         } catch (error) {
-            console.log('Error:', error);
-            console.error(error);
+            console.error('Error:', error);
             setSnackbarSeverity('error');
             setSnackbarMessage('An error occurred. Please try again later.');
         } finally {
@@ -91,7 +109,7 @@ const CommonForm = ({ title = "" }) => {
             });
             setErrors({});
         }
-    }
+    };
 
     const handleSnackbarClose = () => {
         setSnackbarOpen(false);
@@ -124,7 +142,6 @@ const CommonForm = ({ title = "" }) => {
                                     required
                                 />
                             </Tooltip>
-                            {/* {errors.firstName && <Typography color="error">{errors.firstName}</Typography>} */}
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Tooltip
@@ -147,34 +164,34 @@ const CommonForm = ({ title = "" }) => {
                                     required
                                 />
                             </Tooltip>
-                            {/* {errors.lastName && <Typography color="error">{errors.lastName}</Typography>} */}
                         </Grid>
                     </Grid>
                 )}
                 <Grid container spacing={2}>
-                    {title === "Humko join karlo!" && (<Grid item xs={12} className={styles.inputGroup}>
-                        <Tooltip
-                            title={errors.companyName || ''}
-                            open={Boolean(errors.companyName)}
-                            placement="top"
-                            arrow
-                            sx={{
-                                m: 1,
-                                backgroundColor: 'red !important'
-                            }}
-                        >
-                            <input
-                                type="text"
+                    {title === "Humko join karlo!" && (
+                        <Grid item xs={12} className={styles.inputGroup}>
+                            <Tooltip
+                                title={errors.companyName || ''}
+                                open={Boolean(errors.companyName)}
+                                placement="top"
+                                arrow
+                                sx={{
+                                    m: 1,
+                                    backgroundColor: 'red !important'
+                                }}
+                            >
+                                <input
+                                    type="text"
                                 placeholder="Company name"
                                 className={`${styles.inputField} ${errors.companyName ? styles.errorInput : ''}`}
                                 name='companyName'
                                 value={formData.companyName}
                                 onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                                 required
-                            />
-                        </Tooltip>
-                        {/* {errors.companyName && <Typography color="error">{errors.companyName}</Typography>} */}
-                    </Grid>)}
+                                />
+                            </Tooltip>
+                        </Grid>
+                    )}
                     <Grid item xs={12} className={styles.inputGroup}>
                         <Tooltip
                             title={errors.email || ''}
@@ -196,7 +213,6 @@ const CommonForm = ({ title = "" }) => {
                                 required
                             />
                         </Tooltip>
-                        {/* {errors.email && <Typography color="error">{errors.email}</Typography>} */}
                     </Grid>
                     {(title === "Sign Up" || title === "Humko join karlo!") && (
                         <Grid item xs={12} className={styles.inputGroup}>
@@ -220,7 +236,6 @@ const CommonForm = ({ title = "" }) => {
                                     required
                                 />
                             </Tooltip>
-                            {/* {errors.phoneNumber && <Typography color="error">{errors.phoneNumber}</Typography>} */}
                         </Grid>
                     )}
                     {(title === "Sign Up" || title === "Login") && (
@@ -245,35 +260,34 @@ const CommonForm = ({ title = "" }) => {
                                     required
                                 />
                             </Tooltip>
-                            {/* {errors.password && <Typography color="error">{errors.password}</Typography>} */}
                         </Grid>
                     )}
-                    {title === "Humko join karlo!" && (<Grid item xs={12} className={styles.inputGroup}>
-                        <Tooltip
-                            title={errors.message || ''}
-                            open={Boolean(errors.message)}
-                            placement="top"
-                            arrow
-                            sx={{
-                                m: 1,
-                                backgroundColor: 'red !important'
-                            }}
-                        >
-                            <textarea
-                                type="Text"
-                                placeholder="Message"
-                                className={`${styles.inputField} ${errors.message ? styles.errorInput : ''}`}
-                                style={{ height: "120px" }}
-                                multiline
-                                name='message'
-                                value={formData.message}
-                                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                required
-                            />
-                        </Tooltip>
-
-                        {/* {errors.message && <Typography color="error">{errors.message}</Typography>} */}
-                    </Grid>)}
+                    {title === "Humko join karlo!" && (
+                        <Grid item xs={12} className={styles.inputGroup}>
+                            <Tooltip
+                                title={errors.message || ''}
+                                open={Boolean(errors.message)}
+                                placement="top"
+                                arrow
+                                sx={{
+                                    m: 1,
+                                    backgroundColor: 'red !important'
+                                }}
+                            >
+                                <textarea
+                                    type="Text"
+                                    placeholder="Message"
+                                    className={`${styles.inputField} ${errors.message ? styles.errorInput : ''}`}
+                                    style={{ height: "120px" }}
+                                    multiline
+                                    name='message'
+                                    value={formData.message}
+                                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                    required
+                                />
+                            </Tooltip>
+                        </Grid>
+                    )}
                 </Grid>
                 {title === "Login" &&
                     <Typography

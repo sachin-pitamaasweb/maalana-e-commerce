@@ -4,6 +4,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './BestSellers.scss';
 
+import { useAuth } from '../../context/AuthContext';
+
 const BestSellers = () => {
     const settings = {
         dots: true,
@@ -76,6 +78,25 @@ const BestSellers = () => {
         },
         // Add more products if needed
     ];
+    
+
+    const { userId } = useAuth();
+
+    const handleAddtoCart = () => {
+        console.log('Add to cart clicked');
+    };
+
+    if (!userId) {
+        return null;
+    }
+
+    if (products.length === 0) {
+        return (
+            <div className="more-products">
+                <h2>No products found</h2>
+            </div>
+        );
+    }
 
     return (
         <div className="more-products">
@@ -91,7 +112,7 @@ const BestSellers = () => {
                                     </div>
                                     <p className="lollipop-name">{product.name}</p>
                                     <p className="lollipop-price">{product.price}</p>
-                                    <button className="lollipop-button">
+                                    <button className="lollipop-button" onClick={handleAddtoCart}>
                                         Add to Cart
                                     </button>
                                 </div>

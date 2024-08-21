@@ -71,7 +71,7 @@ const ProductList = ({ products }) => {
         <span className="filter-icon" onClick={toggleDrawer(true)}>
           <TuneIcon />
         </span>
-        <span className="product-count">{`${products.length} Products`}</span>
+        {/* <span className="product-count">{`${products.length} Products`}</span> */}
       </div>
       <div className="products-container" onClick={() => handleClick(productsCategory.length - 1)}>
         {products.map((product, index) => (

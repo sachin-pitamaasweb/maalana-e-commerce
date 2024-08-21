@@ -1,0 +1,46 @@
+.second-banner-Desktop {
+    background-color: #D5C1FF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; // To ensure the image doesn't overflow the container
+
+    .second-banner-image {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    &.zoom-in .second-banner-image {
+        transform: scale(1.1); // Zoom in
+    }
+
+    &.zoom-out .second-banner-image {
+        transform: scale(1); // Zoom out
+    }
+
+    @media (max-width: 1200px) {
+        padding: 15px;
+
+        .second-banner-image {
+            max-width: 100%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 10px;
+
+        .second-banner-image {
+            max-width: 100%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        padding: 5px;
+
+        .second-banner-image {
+            max-width: 100%;
+        }
+    }
+}

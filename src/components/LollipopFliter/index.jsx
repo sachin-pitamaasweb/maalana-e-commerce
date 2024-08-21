@@ -13,7 +13,7 @@ const products = [
     { id: '66910f75740e745cef3b98da', img: require('../../assets/product-cate/img-1.png'), name: 'Imli soft candy pouch - 100 g', price: 50 },
   ];
 
-const LollipopFliter = () => {
+const LollipopFliter = ({ filter }) => {
     return (
         <ProductList 
             products={products}

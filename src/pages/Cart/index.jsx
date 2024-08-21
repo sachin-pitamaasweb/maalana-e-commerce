@@ -4,13 +4,11 @@ import Pagination from '@mui/material/Pagination';
 import CartItem from '../../components/CartItem/CartItem.jsx';
 import OrderSummary from '../../components/OrderSummary/index.jsx';
 import CouponSection from '../../components/CouponSection/index.jsx';
-import AddressSection from '../../components/AddressSection/index.jsx';
+import AddressSection from '../../components/AddressSection1/index.jsx';
 
 import Cart1 from '../../assets/product-cate/img-1.png';
 
 import './Cart.scss';
-
-
 
 const cartItems = [
     { id: 1, img: Cart1, name: 'Orange Fruit Katli', weight: 250, price: 150 },
@@ -51,21 +49,37 @@ const Cart = () => {
                     <span>2. Checkout</span>
                     <span>3. Payment</span>
                 </div>
-                {paginatedItems.map(item => (
-                    <CartItem key={item.id} item={item} />
-                ))}
-                <Pagination
-                    count={Math.ceil(cartItems.length / itemsPerPage)}
-                    page={page}
-                    onChange={handlePageChange}
-                    variant="outlined"
-                    color="primary"
-                />
+                {cartItems.length === 0 ? (
+                    <p>Your cart is empty.</p>
+                ) : (
+                    <>
+                        {paginatedItems.map(item => (
+                            <CartItem key={item.id} item={item} />
+                        ))}
+                        <Pagination
+                            count={Math.ceil(cartItems.length / itemsPerPage)}
+                            page={page}
+                            onChange={handlePageChange}
+                            variant="outlined"
+                            color="primary"
+                        />
+                    </>
+                )}
             </div>
             <div className="summary-and-coupon">
-                <OrderSummary summary={orderSummary} />
+                {Object.keys(orderSummary).length === 0 ? (
+                    <p>Order summary is not available.</p>
+                ) : (
+                    <OrderSummary summary={orderSummary} />
+                )}
                 <CouponSection />
-                <AddressSection addresses={addresses} />
+                {addresses.length === 0 ? (
+                    <p>
+                        No addresses available. go to profile and click on "MY Address"
+                    </p>
+                ) : (
+                    <AddressSection addresses={addresses} />
+                )}
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import AOS from 'aos';
@@ -20,30 +20,108 @@ import Cart from './pages/Cart/index.jsx'
 // components 
 import Checkout from './components/Checkout/index.jsx';
 
+// Auth and Protected Route
+import { AuthProvider } from './context/AuthContext.js';
+import ProtectedRoute from './ProtectedRoute/index.jsx';
+
 function App() {
-    useEffect(() => {
-      AOS.init({
-        duration: 1000, // duration of the animations in milliseconds
-        once: true, // whether animation should happen only once - while scrolling down
-      });
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // duration of the animations in milliseconds
+      once: true, // whether animation should happen only once - while scrolling down
     });
+  });
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/admin/get-all-products');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        setProducts(data);
+      } catch (err) {
+        console.error('Failed to fetch products:', err);
+      }
+    };
+  
+    fetchProducts();
+  }, []); // Empty dependency array ensures this runs only once
+  
   return (
     <>
-      <Router>
-      <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/payment" element={<Checkout />} />
-          <Route path="/become-partner" element={<BecomePartner />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/cart" element={<Cart />} />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Header />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Home />
+              }
+            />
+            <Route
+              path="/about"
+              element={
+                <About />
+              } />
+            <Route
+              path="/login"
+              element={
+                <Login />
+
+              } />
+            <Route
+              path="/signup"
+              element={
+                <Signup />
+              }
+            />
+            <Route
+              path="/profile/:userId"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } />
+            <Route
+              path="/payment"
+              element={
+                <ProtectedRoute>
+                  <Checkout />
+                </ProtectedRoute>
+              } />
+            <Route
+              path="/become-partner"
+              element={
+                <BecomePartner />
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <Contact />
+              }
+            />
+            <Route
+              path="/products"
+              element={
+                <ProtectedRoute>
+                  <Products products={products} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/cart"
+              element={
+                <ProtectedRoute>
+                  <Cart />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </>
   );
 }

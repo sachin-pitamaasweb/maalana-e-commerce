@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
     Box, Avatar, Button, TextField, RadioGroup, FormControlLabel, Radio, Typography, MenuItem, Select, useMediaQuery, useTheme, IconButton
 } from '@mui/material';
 import { AccountCircle, ShoppingBag, LocationOn, Edit } from '@mui/icons-material';
+// import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import InputMask from 'react-input-mask';
+import axios from 'axios';
+
 import './style.scss';
 
 import MyOrdersTable from '../../components/MyOrdersTable';
 import AddressSection from '../../components/AddressSection';
 import WishListSection from '../../components/WishListSection';
 
-
+import { useAuth } from '../../context/AuthContext'
 
 const ProfilePage = () => {
     const [selectedMenu, setSelectedMenu] = useState('My Account');
@@ -20,10 +24,54 @@ const ProfilePage = () => {
         dateOfBirth: '',
         gender: '',
         phone: '',
-        email: ''
+        email: '',
+        profileImage: '',
     });
+    const [isEditable, setIsEditable] = useState(false);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+    const { userId } = useAuth();
+    const fileInputRef = useRef(null);
+
+    const handleButtonClick = () => {
+        // Trigger the file input click
+        fileInputRef.current.click();
+    };
+
+    const handleImageChange = async (event) => {
+        try {
+            const file = event.target.files[0];
+
+            if (file) {
+                console.log('Selected file:', file);
+
+                const compressedFile = await file; // Placeholder for compression logic if needed
+
+                const data = new FormData();
+                data.append("file", compressedFile);
+                data.append("upload_preset", "eq5btcc4");
+
+                await axios
+                    .post(
+                        `https://api.cloudinary.com/v1_1/dtivafy25/image/upload`,
+                        data
+                    )
+                    .then((response) => {
+                        if (response.status === 200) {
+                            const imageURL = response.data.url;
+                            setProfile((prevProfile) => ({
+                                ...prevProfile,
+                                profileImage: imageURL
+                            }));
+                        }
+                    });
+            }
+        } catch (error) {
+            console.log("image upload error", error);
+        }
+    };
+
 
     useEffect(() => {
         document.body.style.backgroundColor = '#B9D514';
@@ -31,6 +79,37 @@ const ProfilePage = () => {
             document.body.style.backgroundColor = '';
         };
     }, []);
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString); // Parse the date string
+
+        const day = String(date.getUTCDate()).padStart(2, '0'); // Get day and pad with leading zero
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Get month and pad with leading zero
+        const year = date.getUTCFullYear(); // Get full year
+
+        return `${day}/${month}/${year}`; // Format as DD/MM/YYYY
+    };
+    useEffect(() => {
+        if (userId) {
+            // Fetch user data on component load
+            fetch(`http://localhost:8000/api/get-single-user/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        setProfile({
+                            firstName: data.user.firstName || '',
+                            lastName: data.user.lastName || '',
+                            dateOfBirth: formatDate(data.user.dateofbirth) || '',
+                            gender: data.user.gender || '',
+                            phone: data.user.mobileNumber || '',
+                            email: data.user.email || '',
+                            profileImage: data.user.userImage || ''
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching user data:', error));
+        }
+    }, [userId]);
 
     const handleMenuClick = (menu) => {
         setSelectedMenu(menu);
@@ -44,10 +123,37 @@ const ProfilePage = () => {
         });
     };
 
-    const handleSave = () => {
-        console.log('Profile Saved', profile);
+    const handleSave = async () => {
+        try {
+            const response = await axios.put(
+                `http://localhost:8000/api/update-user-by-id/${userId}`,
+                {
+                    firstName: profile.firstName,
+                    lastName: profile.lastName,
+                    dateofbirth: profile.dateOfBirth,
+                    gender: profile.gender,
+                    mobileNumber: profile.phone,
+                    email: profile.email,
+                    userImage: profile.profileImage,
+                }
+            );
+
+            if (response.status === 200) {
+                console.log('Profile updated successfully', response.data);
+                setIsEditable(false);
+            } else {
+                console.error('Error updating profile', response);
+            }
+        } catch (error) {
+            console.error('Error updating profile', error);
+        }
     };
 
+
+    const handleEditClick = () => {
+        setIsEditable(true); // Enable edit mode
+    };
+    console.log(profile.dateOfBirth);
     return (
         <Box className="profile-page-container">
             <Box className="filter-section">
@@ -163,7 +269,7 @@ const ProfilePage = () => {
                 <Box className="header-section">
                     <Typography variant="h4" className="title">{selectedMenu}</Typography>
                     {selectedMenu === 'My Account' && (
-                        <IconButton className="edit-icon" color="primary">
+                        <IconButton className="edit-icon" color="primary" onClick={handleEditClick}>
                             <Edit sx={{ color: '#B9D514' }} />
                         </IconButton>
                     )}
@@ -175,11 +281,22 @@ const ProfilePage = () => {
                             <Box className="form-header">
                                 <Avatar
                                     className="avatar"
-                                    src="profile_image_url"
+                                    src={profile.profileImage || "profile_image_url"}
                                     alt="Profile"
                                 />
                                 <Box>
-                                    <Typography variant="h5">Lily</Typography>
+                                    <Typography variant="h5">{profile.firstName + " " + profile.lastName || "N/A"}</Typography>
+                                    <input
+                                        type='file'
+                                        name='profile_image'
+                                        onChange={handleImageChange}
+                                        ref={fileInputRef}
+                                        style={{ display: 'none' }}
+                                        disabled={!isEditable}
+                                    />
+                                    <Button color="primary" onClick={handleButtonClick} disabled={!isEditable}>
+                                        Add Photo
+                                    </Button>
                                 </Box>
                             </Box>
                             <TextField
@@ -189,6 +306,7 @@ const ProfilePage = () => {
                                 value={profile.firstName}
                                 onChange={handleChange}
                                 className="form-field"
+                                disabled={!isEditable}
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         '& fieldset': {
@@ -210,6 +328,7 @@ const ProfilePage = () => {
                                 value={profile.lastName}
                                 onChange={handleChange}
                                 className="form-field"
+                                disabled={!isEditable}
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         '& fieldset': {
@@ -224,36 +343,45 @@ const ProfilePage = () => {
                                     }
                                 }}
                             />
-                            <TextField
-                                fullWidth
-                                label="Date of Birth"
-                                name="dateOfBirth"
+                            <InputMask
+                                mask="99/99/9999" // or "99-99-9999" if you prefer the "-" format
                                 value={profile.dateOfBirth}
                                 onChange={handleChange}
-                                className="form-field"
-                                sx={{
-                                    '& .MuiOutlinedInput-root': {
-                                        '& fieldset': {
-                                            borderColor: '#B9D514'
-                                        },
-                                        '&:hover fieldset': {
-                                            borderColor: '#B9D514'
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            borderColor: '#B9D514'
-                                        }
-                                    }
-                                }}
-                            />
+                                disabled={!isEditable}
+                            >
+                                {() => (
+                                    <TextField
+                                        fullWidth
+                                        label="Date of Birth"
+                                        name="dateOfBirth"
+                                        className="form-field"
+                                        disabled={!isEditable}
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                '& fieldset': {
+                                                    borderColor: '#B9D514',
+                                                },
+                                                '&:hover fieldset': {
+                                                    borderColor: '#B9D514',
+                                                },
+                                                '&.Mui-focused fieldset': {
+                                                    borderColor: '#B9D514',
+                                                },
+                                            },
+                                        }}
+                                    />
+                                )}
+                            </InputMask>
                             <RadioGroup
                                 row
                                 name="gender"
                                 value={profile.gender}
                                 onChange={handleChange}
                                 className="form-field gender-group"
+                                disabled={!isEditable}
                             >
-                                <FormControlLabel value="Male" control={<Radio />} label="Male" />
-                                <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                                <FormControlLabel value="male" control={<Radio />} label="Male" disabled={!isEditable} />
+                                <FormControlLabel value="female" control={<Radio />} label="Female" disabled={!isEditable} />
                             </RadioGroup>
                             <TextField
                                 fullWidth
@@ -262,6 +390,7 @@ const ProfilePage = () => {
                                 value={profile.phone}
                                 onChange={handleChange}
                                 className="form-field"
+                                disabled={!isEditable}
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         '& fieldset': {
@@ -283,6 +412,7 @@ const ProfilePage = () => {
                                 value={profile.email}
                                 onChange={handleChange}
                                 className="form-field"
+                                disabled={!isEditable}
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         '& fieldset': {
@@ -302,6 +432,7 @@ const ProfilePage = () => {
                                 color="primary"
                                 onClick={handleSave}
                                 className="save-button"
+                                disabled={!isEditable}
                             >
                                 Save Changes
                             </Button>
@@ -315,7 +446,7 @@ const ProfilePage = () => {
                     )}
                     {selectedMenu === 'My Address' && (
                         <Box className="address-section">
-                            <AddressSection />
+                            <AddressSection firstName={profile.firstName} lastName={profile.lastName} phone={profile.phone} />
                         </Box>
                     )}
                     {selectedMenu === 'Wishlist' && (

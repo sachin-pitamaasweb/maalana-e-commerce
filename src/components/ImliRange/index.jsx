@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './style.scss';
 
-const  ImliRange = () => {
+const ImliRange = ({ products }) => {
+    const [filteredProducts, setFilteredProducts] = useState([
+        {
+            name: '',
+            img: '',
+            price: '',
+            bgColor: '',
+        }
+    ]);
+
     const settings = {
         dots: true,
         infinite: true,
@@ -16,7 +25,7 @@ const  ImliRange = () => {
             {
                 breakpoint: 1500,
                 settings: {
-                    slidesToShow: 3,
+                    slidesToShow: 4,
                     slidesToScroll: 1,
                     infinite: true,
                     dots: true,
@@ -43,7 +52,7 @@ const  ImliRange = () => {
         ],
     };
 
-    const products = [
+    const product = [
         {
             name: 'Imli Ladoo',
             img: require('../../assets/more-product/img-4.png'),
@@ -71,12 +80,37 @@ const  ImliRange = () => {
         // Add more products if needed
     ];
 
+    // console.log('product', product);
+
+    // console.log('filteredProducts', products);
+
+    useEffect(() =>{
+        const fetchImliRange = async () => {
+           if(products) {
+              const filteredProducts = products.filter((product) => {
+                return product.category === 'Imli Range';
+              });
+              console.log('filteredProducts', filteredProducts);
+              
+              setFilteredProducts([{
+                name: filteredProducts.name,
+                img: filteredProducts.img,
+                price: filteredProducts.price,
+                bgColor: filteredProducts.bgColor,
+              }]);
+           }
+        }
+        fetchImliRange();
+    }, [products]);
+
+    console.log('filteredProducts', filteredProducts);
+
     return (
         <div className="more-products">
             <h2>Imli Range</h2>
             <div className='more'>
                 <Slider {...settings}>
-                    {products.map((product, index) => (
+                    {product.map((product, index) => (
                         <>
                             <div key={index} className="product-slide">
                                 <div className="product-circle" style={{ backgroundColor: product.bgColor }}>

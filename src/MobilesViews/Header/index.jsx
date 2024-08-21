@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ShoppingCart, AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
-import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton } from '@mui/material';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton, Typography } from '@mui/material';
+// import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Badge from '@mui/material/Badge';
 import Stack from '@mui/material/Stack';
@@ -11,12 +11,18 @@ import './Header.scss';
 import Logo from '../../assets/logo/Maalana-logo.png';
 import { navLinks } from '../../constants/helper.js';
 
+import { useAuth } from '../../context/AuthContext';
+
 const Header = () => {
     const navigate = useNavigate();
     const isMobile = useMediaQuery('(max-width: 899px)');
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [activeLink, setActiveLink] = useState('');
-    const userId = '123';
+
+    const { isUserAuthenticated, userId } = useAuth();
+
+    //  const isLogin = sessionStorage.getItem('isUserAuthenticated');
+    console.log('isUserAuthenticated', isUserAuthenticated);
 
     const handleLinkClick = (link) => {
         setActiveLink(link);
@@ -41,11 +47,6 @@ const Header = () => {
                             <ShoppingCart sx={{ color: '#000 !important' }} />
                         </Link>
                     </Badge>
-                    <Badge badgeContent={4} color="secondary">
-                        <Link className="iconButton">
-                            <FavoriteBorderIcon sx={{ color: '#000 !important' }} />
-                        </Link>
-                    </Badge>
                     <IconButton onClick={() => setDrawerOpen(true)}>
                         <MenuIcon className="menu-icon" />
                     </IconButton>
@@ -57,8 +58,8 @@ const Header = () => {
                         <li key={link.id}>
                             <Link
                                 to={link.link}
-                                className={'active'}
-                            onClick={() => handleLinkClick(link.link)}
+                                className={ link.link === activeLink ? 'active' : 'active'}
+                                onClick={() => handleLinkClick(link.link)}
                             >
                                 {link.title}
                             </Link>
@@ -75,14 +76,13 @@ const Header = () => {
                                 <ShoppingCart />
                             </Link>
                         </Badge>
-                        <Badge badgeContent={4} color="secondary">
-                            <Link to="/wishlist" className="iconButton">
-                                <FavoriteBorderIcon />
-                            </Link>
-                        </Badge>
-                        <Link to={`/profile/${userId}`} className="iconButton">
+                        {isUserAuthenticated ? <Link to={`/profile/${userId}`} className="iconButton">
                             <AccountCircle />
                         </Link>
+                            : <Link to="/login" className="iconButton">
+                                <Typography variant="body1">Login</Typography>
+                            </Link>
+                        }
                     </Stack>
                 </div>
             )}

@@ -9,24 +9,22 @@ import ImliRange from '../../components/ImliRange';
 import Banners from '../../components/Banners';
 import LollipopRange from '../../components/LollipopRange/index'
 import FruitKatliRange from '../../components/FruitKatliRange';
-// import StyledBox from '../../components/StyledBox';
-
-//category filter component
-// import ProductGrid from '../../components/ProductGrid';
-// import ProductList from '../../components/ProductList/index';
+import StyledBox from '../../components/StyledBox';
+import OverlayImage from '../../components/OverlayImage/index'
 
 // fliter components
 import LollipopFliter from '../../components/LollipopFliter/index';
 import FruitkatliFilter from '../../components/FruitkatliFilter/index';
 
-const Products = () => {
+const Products = ({ products }) => {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const banners = [
         { img: require('../../assets/product-banner/img-1.png'), title: "Banner 1" },
         { img: require('../../assets/product-banner/img-2.png'), title: "Banner 2" },
         { img: require('../../assets/product-banner/img-3.png'), title: "Banner 3" },
     ];
-    
+
+console.log('products', products);
     const renderComponent = () => {
         console.log('selectedCategory', selectedCategory);
         if (!selectedCategory) {
@@ -37,8 +35,8 @@ const Products = () => {
                         banners={banners}
                         title="Products"
                     />
-                    <BestSellers />
-                    <ImliRange />
+                    <BestSellers products={products} />
+                    <ImliRange products={products} selectedCategory={''}/>
                     <Banners
                         img={require('../../assets/product-banner/img-2.png')}
                     />
@@ -47,7 +45,8 @@ const Products = () => {
                     <Banners
                         img={require('../../assets/product-banner/img-3.png')}
                     />
-                    {/* <StyledBox /> */}
+                    <StyledBox />
+                    <OverlayImage />
                     <MoreProducts />
                 </>
             )
@@ -75,7 +74,8 @@ const Products = () => {
                         <Banners
                             img={require('../../assets/product-banner/img-3.png')}
                         />
-                        {/* <StyledBox /> */}
+                        <StyledBox />
+                        <OverlayImage />
                         <MoreProducts />
                     </>
                 );

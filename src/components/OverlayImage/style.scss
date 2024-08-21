@@ -1,0 +1,76 @@
+.container {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    margin: 0 auto; // Center the container
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .rounded-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%; // Makes the image round
+    object-fit: contain; // Ensures the image covers the entire container
+  }
+  
+  .centered-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: black;
+    text-align: center;
+  
+    h1 {
+      font-size: 2rem;
+      margin: 0;
+    }
+  
+    p {
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+  
+  // Media queries to handle smaller screen sizes
+  @media screen and (max-width: 768px) {
+    .container {
+        width: 500px;
+        height: 500px;
+    }
+  
+    .rounded-image {
+      border-radius: 50%; // Maintain round shape
+    }
+  
+    .centered-text {
+      h1 {
+        font-size: 1.5rem;
+      }
+  
+      p {
+        font-size: 0.875rem;
+      }
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .container {
+        width: 250px;
+        height: 250px;
+    }
+  
+    .centered-text {
+      h1 {
+        font-size: 1.25rem;
+      }
+  
+      p {
+        font-size: 0.75rem;
+      }
+    }
+  }
+  
