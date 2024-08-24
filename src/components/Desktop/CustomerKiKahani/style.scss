@@ -1,0 +1,38 @@
+.CustomerKiKahani-Desktop {
+    background-color: #D4C1FF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    .CustomerKiKahani-image {
+        width: 100%;
+        // max-width: 1200px;
+        // height: 100vh;
+        object-fit: cover;
+    }
+
+    @media (max-width: 1200px) {
+        padding: 15px;
+
+        .CustomerKiKahani-image {
+            max-width: 100%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 10px;
+
+        .CustomerKiKahani-image {
+            max-width: 100%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        padding: 5px;
+
+        .bannCustomerKiKahanier-image {
+            max-width: 100%;
+        }
+    }
+}

@@ -5,6 +5,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 import Header from './MobilesViews/Header/index.jsx';
+import Footer from './MobilesViews/Footer/index.jsx';
 
 //pages
 import Home from './pages/Home/index.jsx';
@@ -120,6 +121,7 @@ function App() {
               }
             />
           </Routes>
+          {/* <Footer /> */}
         </Router>
       </AuthProvider>
     </>

@@ -12,6 +12,12 @@ import React from "react";
 // desktop views
 import WelcomeBannerDesktop from "../../components/Desktop/WelcomeBannerDesktop/index.jsx";
 import SecondBannerDesktop from "../../components/Desktop/SecondBannerDesktop/index.jsx";
+import Events from "../../components/Desktop/Events/index.jsx";
+import CustomerKiKahani from "../../components/Desktop/CustomerKiKahani/index.jsx";
+import Candies from "../../components/Desktop/Candies/index.jsx";
+import FruitKatli from "../../components/Desktop/FruitKatli/index.jsx";
+import Lollipop from "../../components/Desktop/Lollipop/index.jsx";
+import Imli from "../../components/Desktop/Imli/index.jsx";
 
 const Home = () => {
     // const theme = useTheme();
@@ -36,7 +42,14 @@ const Home = () => {
                 </>
             )} */}
               <WelcomeBannerDesktop />
-              {/* <SecondBannerDesktop /> */}
+                 <SecondBannerDesktop />
+                 <Imli />
+                 <Lollipop />
+                 <FruitKatli />
+                 <Candies />
+                 <Events />
+              <CustomerKiKahani />
+           
         </>
     );
 };

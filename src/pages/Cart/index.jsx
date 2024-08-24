@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 
 import CartItem from '../../components/CartItem/CartItem.jsx';
@@ -6,24 +6,26 @@ import OrderSummary from '../../components/OrderSummary/index.jsx';
 import CouponSection from '../../components/CouponSection/index.jsx';
 import AddressSection from '../../components/AddressSection1/index.jsx';
 
-import Cart1 from '../../assets/product-cate/img-1.png';
+// import Cart1 from '../../assets/product-cate/img-1.png';
+
+import { useAuth } from '../../context/AuthContext.js';
 
 import './Cart.scss';
 
-const cartItems = [
-    { id: 1, img: Cart1, name: 'Orange Fruit Katli', weight: 250, price: 150 },
-    { id: 2, img: Cart1, name: 'Orange Fruit Katli', weight: 250, price: 150 },
-    { id: 3, img: Cart1, name: 'Orange Fruit Katli', weight: 250, price: 150 },
-];
+// const cartItems = [
+//     { id: 1, img: Cart1, name: 'Orange Fruit Katli', weight: 250, price: 150 },
+//     { id: 2, img: Cart1, name: 'Orange Fruit Katli', weight: 250, price: 150 },
+//     { id: 3, img: Cart1, name: 'Orange Fruit Katli', weight: 250, price: 150 },
+// ];
 
-const orderSummary = {
-    subTotal: 398,
-    discount: 302,
-    tax: 0,
-    shipping: 'FREE',
-    total: 398,
-    deliveryDate: 'DD/MM/YY',
-};
+// const orderSummary = {
+//     subTotal: 398,
+//     discount: 302,
+//     tax: 0,
+//     shipping: 'FREE',
+//     total: 398,
+//     deliveryDate: 'DD/MM/YY',
+// };
 
 const addresses = [
     { id: 1, details: '7297, STREET NO 6, 22FT ROAD, DURGA PURI, HADDONKALAN, NEAR BEAM FASHION POINT, LUDHIANA, PUNJAB, 141001', phone: '9501987577' },
@@ -33,13 +35,95 @@ const addresses = [
 const Cart = () => {
     const [page, setPage] = useState(1);
     const itemsPerPage = 5; // Number of items per page
+    const { userId } = useAuth();
+
+    const [cartItems, setCartItems] = useState([]);
+    
+    const [orderSummary, setOrderSummary] = useState({
+        subTotal: 0,
+        discount: 0,
+        tax: 0,
+        shipping: 'FREE',
+        total: 0,
+        deliveryDate: 'DD/MM/YY',
+    });
+
+    useEffect(() => {
+        const fetchCartData = async () => {
+            try {
+                const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                // console.log('Response data:', data);
+
+                // Extract items from all carts
+                const items = data.cart.reduce((acc, cart) => acc.concat(cart.items), []);
+                setCartItems(items);
+            } catch (error) {
+                console.error('Error fetching cart data:', error);
+                setCartItems([]);
+            }
+        };
+
+        fetchCartData();
+    }, [userId]);
+
+    useEffect(() => {
+        const fetchCartData = async () => {
+            try {
+                const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                const items = data.cart.reduce((acc, cart) => acc.concat(cart.items), []);
+                setCartItems(items);
+
+                // Calculate order summary
+                const subTotal = items.reduce((sum, item) => sum + item.productId.price * item.quantity, 0);
+                const total = subTotal; // Adjust as needed for discounts, taxes, etc.
+                
+                setOrderSummary({
+                    subTotal,
+                    discount: 0, // Replace with actual discount if available
+                    tax: 0, // Replace with actual tax if applicable
+                    shipping: 'FREE',
+                    total,
+                    deliveryDate: 'DD/MM/YY',
+                });
+
+            } catch (error) {
+                console.error('Error fetching cart data:', error);
+                setCartItems([]);
+            }
+        };
+
+        fetchCartData();
+    });
+
 
     const handlePageChange = (event, value) => {
         setPage(value);
     };
 
-    const paginatedItems = cartItems.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-
+    const paginatedItems = Array.isArray(cartItems) 
+    ? cartItems.slice((page - 1) * itemsPerPage, page * itemsPerPage)
+    : [];
+    
     return (
         <div className="cart-container">
             <div className="cart-items">

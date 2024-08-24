@@ -6,22 +6,22 @@ export const navLinks = [
     },
     {
       id: 2,
-      title: 'Products',
+      title: 'Dukaan',
       link: '/products'
     },
     {
       id: 3,
-      title: 'About Us',
+      title: 'Kahani',
       link: '/about'
     },
     {
       id: 4,
-      title: 'Contact Us',
+      title: 'Baat Cheet',
       link: '/contact'
     },
     {
       id: 5,
-      title: 'Become a Partner',
+      title: 'Humko join karlo!',
       link: '/become-partner'
     }
   ];

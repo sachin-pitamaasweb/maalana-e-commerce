@@ -13,7 +13,7 @@ const OrderSummary = ({ summary }) => {
                 <p>TOTAL <span>₹{summary.total}</span></p>
             </div>
             <button className="checkout-btn">PROCEED TO CHECKOUT</button>
-            <p className='delivery'>ESTIMATED DELIVERY BY {summary.deliveryDate}</p>
+            {/* <p className='delivery'>ESTIMATED DELIVERY BY {summary.deliveryDate}</p> */}
         </div>
     );
 };

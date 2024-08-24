@@ -15,6 +15,10 @@ import OverlayImage from '../../components/OverlayImage/index'
 // fliter components
 import LollipopFliter from '../../components/LollipopFliter/index';
 import FruitkatliFilter from '../../components/FruitkatliFilter/index';
+import ImliFilter from '../../components/ImliFliter';
+import CandyFilter from '../../components/CandyFilter';
+import AampapadFilter from '../../components/AampapadFilter';
+import FamilycandypackFilter from '../../components/FamilycandypackFilter/index';
 
 const Products = ({ products }) => {
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -24,7 +28,6 @@ const Products = ({ products }) => {
         { img: require('../../assets/product-banner/img-3.png'), title: "Banner 3" },
     ];
 
-console.log('products', products);
     const renderComponent = () => {
         console.log('selectedCategory', selectedCategory);
         if (!selectedCategory) {
@@ -36,12 +39,12 @@ console.log('products', products);
                         title="Products"
                     />
                     <BestSellers products={products} />
-                    <ImliRange products={products} selectedCategory={''}/>
+                    <ImliRange products={products} />
                     <Banners
                         img={require('../../assets/product-banner/img-2.png')}
                     />
-                    <LollipopRange />
-                    <FruitKatliRange />
+                    <LollipopRange products={products} />
+                    <FruitKatliRange products={products} />
                     <Banners
                         img={require('../../assets/product-banner/img-3.png')}
                     />
@@ -53,9 +56,17 @@ console.log('products', products);
         }
         switch (selectedCategory) {
             case "lollipop":
-                return <LollipopFliter filter={'lollipop'} />;
+                return <LollipopFliter filter={'Lollipops'} products={products} />;
             case "Fruit katli":
-                return <FruitkatliFilter filter={'Fruit katli'} />;
+                return <FruitkatliFilter filter={'Fruit katli'} products={products} />;
+            case "Imli Range":
+                return <ImliFilter filter={'Imli Range'} products={products} />
+                case "Candy": 
+                return <CandyFilter filter={'Candy'} products={products} />
+                case "Aam papad": 
+                return <AampapadFilter filter={'Aam papad'} products={products} />
+                case "Family candy pack":
+                   return <FamilycandypackFilter filter={'Family Candy Pack'} products={products} />
             default:
                 return (
                     <>
@@ -64,13 +75,13 @@ console.log('products', products);
                             banners={banners}
                             title="Products"
                         />
-                        <BestSellers />
-                        <ImliRange />
+                        <BestSellers products={products} />
+                        <ImliRange products={products} />
                         <Banners
                             img={require('../../assets/product-banner/img-2.png')}
                         />
-                        <LollipopRange />
-                        <FruitKatliRange />
+                        <LollipopRange products={products} />
+                        <FruitKatliRange products={products} />
                         <Banners
                             img={require('../../assets/product-banner/img-3.png')}
                         />

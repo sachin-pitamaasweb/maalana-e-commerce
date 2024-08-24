@@ -1,0 +1,38 @@
+.Candies-Desktop {
+    background-color: #BDFFAC;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    .Candies-image {
+        width: 100%;
+        height: 103vh;
+        margin-top: -10px;
+        object-fit: cover;
+    }
+
+    @media (max-width: 1200px) {
+        padding: 15px;
+
+        .Candies-image {
+            max-width: 100%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 10px;
+
+        .Candies-image {
+            max-width: 100%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        padding: 5px;
+
+        .Candies-image {
+            max-width: 100%;
+        }
+    }
+}

@@ -44,7 +44,7 @@ const productsCategory = [
 ];
 
 
-const ProductList = ({ products }) => {
+const ProductList = ({ products, filter }) => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(productsCategory.length - 1);
@@ -68,14 +68,14 @@ const ProductList = ({ products }) => {
   return (
     <div className="product-list">
       <div className="filter-bar">
-        <span className="filter-icon" onClick={toggleDrawer(true)}>
+        {/* <span className="filter-icon" onClick={toggleDrawer(true)}>
           <TuneIcon />
-        </span>
+        </span> */}
         {/* <span className="product-count">{`${products.length} Products`}</span> */}
       </div>
       <div className="products-container" onClick={() => handleClick(productsCategory.length - 1)}>
         {products.map((product, index) => (
-          <ProductCard key={index} product={product} />
+          <ProductCard key={index} product={product} filter={filter} />
         ))}
       </div>
       <Drawer

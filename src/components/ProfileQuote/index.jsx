@@ -66,3 +66,27 @@ const ProfileQuote = ({ clientImage, quote, clientName }) => {
 }
 
 export default ProfileQuote;
+
+// import React from 'react';
+// import styles from './ProfileQuote.module.css';
+
+// const ProfileQuote = ({ clientImage, quote, clientName }) => {
+//     return (
+//         <div className={styles.container}>
+//             <div className={styles.imageContainer}>
+//                 <img src={clientImage || "https://via.placeholder.com/400x400"} alt="Naveen Anand" />
+//             </div>
+//             <div className={styles.textContainer}>
+//                 <p>
+//                     "Our Journey: From a single idea to a sweet sensation, Maalana's story is one of passion, creativity, 
+//                     and the love for all things sweet. Join us as we embark on a delicious journey filled with lollipops, 
+//                     candies, and endless moments of joy. Welcome to the Maalana experience, where every step is a sweet 
+//                     adventure!"
+//                 </p>
+//                 <div className={styles.name}>NAVEEN ANAND</div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default ProfileQuote;

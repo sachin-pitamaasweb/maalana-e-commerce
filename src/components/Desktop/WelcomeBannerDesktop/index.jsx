@@ -166,6 +166,7 @@ const WelcomeBannerDesktop = () => {
                 setImageSrc(getDefaultImageSrc(window.innerWidth));
             });
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
