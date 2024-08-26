@@ -125,7 +125,7 @@ const ProductCard = ({ product, filter }) => {
     };
 
     const handleAddToCart = async (product) => {
-  console.log('handleAddToCart', product);
+        console.log('handleAddToCart', product);
         try {
             const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
                 method: 'POST',
@@ -134,9 +134,9 @@ const ProductCard = ({ product, filter }) => {
                 },
                 body: JSON.stringify({
                     productId: product._id,
-                    quantity: 1, 
+                    quantity: 1,
                     shippingPrice: 50,
-                    CoupanCode: 'DISCOUNT10', 
+                    CoupanCode: 'DISCOUNT10',
                     id: userId || '',
                 }),
             });
@@ -163,6 +163,10 @@ const ProductCard = ({ product, filter }) => {
         }
     };
 
+    const handleGotoCart = () => {
+        setDrawerOpen(false);
+        navigate('/cart');
+    }
 
     return (
         <Grid item xs={12} sm={6} md={4} lg={3}>
@@ -176,7 +180,7 @@ const ProductCard = ({ product, filter }) => {
                     <Button
                         variant="contained"
                         className="add-to-cart-btn"
-                        onClick={() =>{
+                        onClick={() => {
                             handleAddToCart(product);
                             setDrawerOpen(true)
                         }}
@@ -206,7 +210,7 @@ const ProductCard = ({ product, filter }) => {
                                 <p className="remove-btn">Remove</p>
                             </div>
                         </div>
-                        <Button variant="contained" className="go-to-cart-btn">
+                        <Button variant="contained" className="go-to-cart-btn" onClick={handleGotoCart}>
                             GO TO CART
                         </Button>
                     </div>
