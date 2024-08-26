@@ -46,7 +46,7 @@ const CommonForm = ({ title = "" }) => {
         }
         try {
             if (title === "Sign Up") {
-                const response = await fetch('http://localhost:8000/api/register-user', {
+                const response = await fetch('https://maalana-backend.onrender.com/api/register-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ const CommonForm = ({ title = "" }) => {
                     setSnackbarMessage('An error occurred. Please try again later.');
                 }
             } else if (title === "Login") {
-                const response = await fetch('http://localhost:8000/api/login-user', {
+                const response = await fetch('https://maalana-backend.onrender.com/api/login-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -140,6 +140,7 @@ const CommonForm = ({ title = "" }) => {
                                     value={formData.firstName}
                                     onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                                     required
+                                    maxLength={100}
                                 />
                             </Tooltip>
                         </Grid>
@@ -162,6 +163,7 @@ const CommonForm = ({ title = "" }) => {
                                     value={formData.lastName}
                                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                                     required
+                                    maxLength={100}
                                 />
                             </Tooltip>
                         </Grid>
@@ -188,6 +190,7 @@ const CommonForm = ({ title = "" }) => {
                                 value={formData.companyName}
                                 onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                                 required
+                                maxLength={100}
                                 />
                             </Tooltip>
                         </Grid>
@@ -211,6 +214,7 @@ const CommonForm = ({ title = "" }) => {
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 required
+                                maxLength={50}
                             />
                         </Tooltip>
                     </Grid>
@@ -234,6 +238,7 @@ const CommonForm = ({ title = "" }) => {
                                     value={formData.phoneNumber}
                                     onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                                     required
+                                    maxLength={10}
                                 />
                             </Tooltip>
                         </Grid>
@@ -256,6 +261,7 @@ const CommonForm = ({ title = "" }) => {
                                     className={`${styles.inputField} ${errors.password ? styles.errorInput : ''}`}
                                     name='password'
                                     value={formData.password}
+                                    // maxLength={8}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                     required
                                 />

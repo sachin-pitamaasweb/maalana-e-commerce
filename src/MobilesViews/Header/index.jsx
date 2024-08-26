@@ -18,8 +18,8 @@ const Header = () => {
     const isMobile = useMediaQuery('(max-width: 899px)');
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [activeLink, setActiveLink] = useState('');
-    const [cartItemCount, setCartItemCount] = useState(0);
-    const { isUserAuthenticated, userId } = useAuth();
+    // const [cartItemCount, setCartItemCount] = useState(0);
+    const { isUserAuthenticated, userId, cartItemCount, updateCartItemCount } = useAuth();
 
     //  const isLogin = sessionStorage.getItem('isUserAuthenticated');
     console.log('isUserAuthenticated', isUserAuthenticated);
@@ -43,7 +43,7 @@ const Header = () => {
 
                     if (data.success) {
                         const totalItems = data.cart.reduce((acc, cartItem) => acc + cartItem.items.length, 0);
-                        setCartItemCount(totalItems);
+                        updateCartItemCount(totalItems);
                     }
                 } catch (error) {
                     console.error('Error fetching cart items:', error);
@@ -52,8 +52,7 @@ const Header = () => {
         };
 
         fetchCartItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [isUserAuthenticated, userId, updateCartItemCount]);
 
     // console.log('productLength', productLength);
     return (

@@ -15,12 +15,18 @@ export const AuthProvider = ({ children }) => {
         return sessionStorage.getItem('userId') || null;
     });
 
-
+    const [cartItemCount, setCartItemCount] = useState(0);
     useEffect(() => {
         // Update sessionStorage whenever isUserAuthenticated changes
         sessionStorage.setItem('isUserAuthenticated', isUserAuthenticated);
         sessionStorage.setItem('userId', userId);
     }, [isUserAuthenticated, userId]);
+
+ // Method to update cart item count
+ const updateCartItemCount = (count) => {
+    setCartItemCount(count);
+};
+
 
     const login = (id) => {
         setIsUserAuthenticated(true);
@@ -32,7 +38,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ isUserAuthenticated, userId, login, logout }}>
+        <AuthContext.Provider value={{ isUserAuthenticated, userId, login, logout,  cartItemCount, updateCartItemCount }}>
             {children}
         </AuthContext.Provider>
     );
