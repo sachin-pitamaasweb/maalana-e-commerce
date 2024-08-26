@@ -27,18 +27,18 @@ import './Cart.scss';
 //     deliveryDate: 'DD/MM/YY',
 // };
 
-const addresses = [
-    { id: 1, details: '7297, STREET NO 6, 22FT ROAD, DURGA PURI, HADDONKALAN, NEAR BEAM FASHION POINT, LUDHIANA, PUNJAB, 141001', phone: '9501987577' },
-    { id: 2, details: '7297, STREET NO 6, 22FT ROAD, DURGA PURI, HADDONKALAN, NEAR BEAM FASHION POINT, LUDHIANA, PUNJAB, 141001', phone: '9501987577sss' },
-];
+// const addresses = [
+//     { id: 1, details: '7297, STREET NO 6, 22FT ROAD, DURGA PURI, HADDONKALAN, NEAR BEAM FASHION POINT, LUDHIANA, PUNJAB, 141001', phone: '9501987577' },
+//     { id: 2, details: '7297, STREET NO 6, 22FT ROAD, DURGA PURI, HADDONKALAN, NEAR BEAM FASHION POINT, LUDHIANA, PUNJAB, 141001', phone: '9501987577sss' },
+// ];
 
 const Cart = () => {
     const [page, setPage] = useState(1);
-    const itemsPerPage = 5; // Number of items per page
-    const { userId } = useAuth();
+    const itemsPerPage = 4; // Number of items per page
+    const { userId,  updateAddresses,addresses } = useAuth();
 
     const [cartItems, setCartItems] = useState([]);
-    
+    // const [addresses, setAddresses] = useState([]);
     const [orderSummary, setOrderSummary] = useState({
         subTotal: 0,
         discount: 0,
@@ -113,7 +113,56 @@ const Cart = () => {
         };
 
         fetchCartData();
-    });
+    }, [userId]);
+
+    useEffect(() => {
+        const fetchAddresses = async () => {
+            try {
+                const response = await fetch(`http://localhost:8000/api/get-my-shiped-address/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    // setAddresses(data.shipedaddress);
+                    updateAddresses(data.shipedaddress);
+                } else {
+                    console.error('Failed to fetch addresses');
+                }
+            } catch (error) {
+                console.error('Error fetching addresses:', error);
+            }
+        };
+
+        fetchAddresses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleAddressUpdate = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/get-my-shiped-address/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                updateAddresses(data.shipedaddress);
+            } else {
+                console.error('Failed to fetch addresses');
+            }
+        } catch (error) {
+            console.error('Error fetching addresses:', error);
+        }
+    };
 
 
     const handlePageChange = (event, value) => {
@@ -123,6 +172,8 @@ const Cart = () => {
     const paginatedItems = Array.isArray(cartItems) 
     ? cartItems.slice((page - 1) * itemsPerPage, page * itemsPerPage)
     : [];
+
+
     
     return (
         <div className="cart-container">
@@ -162,7 +213,7 @@ const Cart = () => {
                         No addresses available. go to profile and click on "MY Address"
                     </p>
                 ) : (
-                    <AddressSection addresses={addresses} />
+                    <AddressSection addresses={addresses} onAddressUpdate={handleAddressUpdate} />
                 )}
             </div>
         </div>

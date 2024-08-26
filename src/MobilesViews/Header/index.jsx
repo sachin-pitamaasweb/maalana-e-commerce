@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ShoppingCart, AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
 import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton, Typography } from '@mui/material';
@@ -19,7 +19,7 @@ const Header = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [activeLink, setActiveLink] = useState('');
     // const [cartItemCount, setCartItemCount] = useState(0);
-    const { isUserAuthenticated, userId, cartItemCount, updateCartItemCount } = useAuth();
+    const { isUserAuthenticated, userId, cartItemCount } = useAuth();
 
     //  const isLogin = sessionStorage.getItem('isUserAuthenticated');
     console.log('isUserAuthenticated', isUserAuthenticated);
@@ -33,26 +33,26 @@ const Header = () => {
         navigate(link)
     };
 
+console.log('cartItemCount', cartItemCount);
+    // useEffect(() => {
+    //     const fetchCartItems = async () => {
+    //         if (isUserAuthenticated) {
+    //             try {
+    //                 const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
+    //                 const data = await response.json();
 
-    useEffect(() => {
-        const fetchCartItems = async () => {
-            if (isUserAuthenticated) {
-                try {
-                    const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
-                    const data = await response.json();
+    //                 if (data.success) {
+    //                     const totalItems = data.cart.reduce((acc, cartItem) => acc + cartItem.items.length, 0);
+    //                     updateCartItemCount(totalItems);
+    //                 }
+    //             } catch (error) {
+    //                 console.error('Error fetching cart items:', error);
+    //             }
+    //         }
+    //     };
 
-                    if (data.success) {
-                        const totalItems = data.cart.reduce((acc, cartItem) => acc + cartItem.items.length, 0);
-                        updateCartItemCount(totalItems);
-                    }
-                } catch (error) {
-                    console.error('Error fetching cart items:', error);
-                }
-            }
-        };
-
-        fetchCartItems();
-    }, [isUserAuthenticated, userId, updateCartItemCount]);
+    //     fetchCartItems();
+    // }, [isUserAuthenticated, userId, updateCartItemCount]);
 
     // console.log('productLength', productLength);
     return (

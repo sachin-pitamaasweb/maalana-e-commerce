@@ -78,7 +78,7 @@ const IncrementDecrementButton = ({ productId }) => {
     return (
         <div className="counter">
             <button className="counter-button decrement" onClick={handleDecrement}>-</button>
-            <span className="counter-value">{count}</span>
+            <span className="counter-value">{ count === 0 ? '1' : count}</span>
             <button className="counter-button increment" onClick={handleIncrement}>+</button>
         </div>
     );

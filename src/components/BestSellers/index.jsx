@@ -593,6 +593,7 @@
 // export default BestSellers;
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './BestSellers.module.css';
 import { useAuth } from '../../context/AuthContext';
 import Drawer from '@mui/material/Drawer';
@@ -601,11 +602,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
 import IncrementDecrementButton from '../IncrementDecrementButton'; // Import your IncrementDecrementButton component
 
+
 const BestSellers = ({ products }) => {
+    const navigate = useNavigate();
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const { userId } = useAuth();
+    const { userId, updateCartItemCount } = useAuth();
 
     useEffect(() => {
         if (products) {
@@ -623,7 +626,7 @@ const BestSellers = ({ products }) => {
         setDrawerOpen(true);
 
         // Perform the fetch request to add the product to the cart
-        const response = await fetch('http://localhost:8000/api/add-to-cart', {
+        const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -637,11 +640,20 @@ const BestSellers = ({ products }) => {
             }),
         });
 
-        // Handle response if needed
-         if(response.ok) {
+        const data = await response.json();
+
+        if (data.success) {
+            // Update cart item count in context
+            const updatedResponse = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
+            const updatedData = await updatedResponse.json();
+            if (updatedData.success) {
+                const totalItems = updatedData.cart.reduce((acc, cartItem) => acc + cartItem.items.length, 0);
+                updateCartItemCount(totalItems);
+            }
+
             console.log('Product added to cart successfully');
         } else {
-            console.error('Failed to add product to cart');
+            console.error('Failed to add product to cart:', data.message);
         }
 
     };
@@ -649,6 +661,10 @@ const BestSellers = ({ products }) => {
     const handleDrawerClose = () => {
         setDrawerOpen(false);
     };
+
+    const handleGotoCart = () => {
+        navigate('/cart');
+    }
 
     if (!userId) {
         return null;
@@ -707,7 +723,7 @@ const BestSellers = ({ products }) => {
                                 <p className="remove-btn">Remove</p>
                             </div>
                         </div>
-                        <Button variant="contained" className="go-to-cart-btn">
+                        <Button variant="contained" className="go-to-cart-btn" onClick={handleGotoCart}>
                             GO TO CART
                         </Button>
                     </div>
