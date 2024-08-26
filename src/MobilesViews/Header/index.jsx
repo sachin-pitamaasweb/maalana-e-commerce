@@ -38,7 +38,7 @@ console.log('cartItemCount', cartItemCount);
     //     const fetchCartItems = async () => {
     //         if (isUserAuthenticated) {
     //             try {
-    //                 const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
+    //                 const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
     //                 const data = await response.json();
 
     //                 if (data.success) {

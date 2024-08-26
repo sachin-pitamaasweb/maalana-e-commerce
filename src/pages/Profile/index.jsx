@@ -92,7 +92,7 @@ const ProfilePage = () => {
     useEffect(() => {
         if (userId) {
             // Fetch user data on component load
-            fetch(`http://localhost:8000/api/get-single-user/${userId}`)
+            fetch(`https://maalana-backend.onrender.com/api/get-single-user/${userId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -126,7 +126,7 @@ const ProfilePage = () => {
     const handleSave = async () => {
         try {
             const response = await axios.put(
-                `http://localhost:8000/api/update-user-by-id/${userId}`,
+                `https://maalana-backend.onrender.com/api/update-user-by-id/${userId}`,
                 {
                     firstName: profile.firstName,
                     lastName: profile.lastName,

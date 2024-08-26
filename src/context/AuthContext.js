@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
         const fetchCartItemCount = async () => {
             if (userId) {
                 try {
-                    const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
+                    const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
                     const data = await response.json();
                     if (data.success) {
                         // Calculate the total number of items in the cart
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
         const fetchAddresses = async () => {
             if (userId) {
                 try {
-                    const response = await fetch(`http://localhost:8000/api/get-my-shiped-address/${userId}`);
+                    const response = await fetch(`https://maalana-backend.onrender.com/api/get-my-shiped-address/${userId}`);
                     const data = await response.json();
                     if (data.success) {
                         setAddresses(data.shipedaddress);

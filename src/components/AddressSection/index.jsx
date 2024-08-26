@@ -40,7 +40,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
     useEffect(() => {
         const fetchShippingAddress = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/get-my-shiped-address/${userId}`);
+                const response = await axios.get(`https://maalana-backend.onrender.com/api/get-my-shiped-address/${userId}`);
                 console.log(response.data.shipedaddress[0]);
                 if (response.status === 200 && response.data.success) {
                     const addressData = response.data.shipedaddress;
@@ -91,7 +91,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
     const handleSave = async () => {
         setLoading(true); 
         try {
-            const response = await fetch(`http://localhost:8000/api/create-shiped-address`, {
+            const response = await fetch(`https://maalana-backend.onrender.com/api/create-shiped-address`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

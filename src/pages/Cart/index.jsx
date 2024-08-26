@@ -51,7 +51,7 @@ const Cart = () => {
     useEffect(() => {
         const fetchCartData = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`, {
+                const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ const Cart = () => {
     useEffect(() => {
         const fetchCartData = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`, {
+                const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ const Cart = () => {
     useEffect(() => {
         const fetchAddresses = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/get-my-shiped-address/${userId}`, {
+                const response = await fetch(`https://maalana-backend.onrender.com/api/get-my-shiped-address/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ const Cart = () => {
 
     const handleAddressUpdate = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/get-my-shiped-address/${userId}`, {
+            const response = await fetch(`https://maalana-backend.onrender.com/api/get-my-shiped-address/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

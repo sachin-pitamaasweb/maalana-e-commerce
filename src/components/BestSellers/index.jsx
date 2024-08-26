@@ -182,7 +182,7 @@
 //         // Fetch the best seller products
 //         const fetchBestSellers = async () => {
 //             try {
-//                 const response = await fetch('http://localhost:8000/api/admin/get-best-seller-product');
+//                 const response = await fetch('https://maalana-backend.onrender.com/api/admin/get-best-seller-product');
 //                 const data = await response.json();
 //                 if (data.success) {
 //                     setProducts(data.data);
@@ -448,7 +448,7 @@
 //     // Fetch the best seller products
 //     const fetchBestSellers = async () => {
 //       try {
-//         const response = await fetch('http://localhost:8000/api/admin/get-best-seller-product');
+//         const response = await fetch('https://maalana-backend.onrender.com/api/admin/get-best-seller-product');
 //         const data = await response.json();
 //         if (data.success) {
 //             setProducts(data.data.map((product, index) => ({
