@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ShoppingCart, AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
 import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton, Typography } from '@mui/material';
@@ -18,7 +18,7 @@ const Header = () => {
     const isMobile = useMediaQuery('(max-width: 899px)');
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [activeLink, setActiveLink] = useState('');
-
+    const [cartItemCount, setCartItemCount] = useState(0);
     const { isUserAuthenticated, userId } = useAuth();
 
     //  const isLogin = sessionStorage.getItem('isUserAuthenticated');
@@ -34,6 +34,27 @@ const Header = () => {
     };
 
 
+    useEffect(() => {
+        const fetchCartItems = async () => {
+            if (isUserAuthenticated) {
+                try {
+                    const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const totalItems = data.cart.reduce((acc, cartItem) => acc + cartItem.items.length, 0);
+                        setCartItemCount(totalItems);
+                    }
+                } catch (error) {
+                    console.error('Error fetching cart items:', error);
+                }
+            }
+        };
+
+        fetchCartItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     // console.log('productLength', productLength);
     return (
         <header className="header">
@@ -42,11 +63,16 @@ const Header = () => {
             </div>
             {isMobile && (
                 <Stack spacing={4} direction="row" alignItems="center">
-                    <Badge badgeContent={4} color="secondary">
+                    {isUserAuthenticated ? <Badge badgeContent={cartItemCount} color="secondary">
                         <Link className="iconButton">
                             <ShoppingCart sx={{ color: '#000 !important' }} />
                         </Link>
                     </Badge>
+                        : <Link className="iconButton">
+                            <ShoppingCart sx={{ color: '#000 !important' }} />
+                        </Link>
+
+                    }
                     <IconButton onClick={() => setDrawerOpen(true)}>
                         <MenuIcon className="menu-icon" />
                     </IconButton>
@@ -58,7 +84,7 @@ const Header = () => {
                         <li key={link.id}>
                             <Link
                                 to={link.link}
-                                className={ link.link === activeLink ? 'active' : 'active'}
+                                className={link.link === activeLink ? 'active' : 'active'}
                                 onClick={() => handleLinkClick(link.link)}
                             >
                                 {link.title}
@@ -71,11 +97,14 @@ const Header = () => {
 
                 <div className="icons">
                     <Stack spacing={4} direction="row">
-                        <Badge badgeContent={4} color="secondary">
+                        {isUserAuthenticated ? <Badge badgeContent={cartItemCount} color="secondary">
                             <Link to="/cart" className="iconButton">
                                 <ShoppingCart />
                             </Link>
-                        </Badge>
+                        </Badge> : <Link to="/cart" className="iconButton">
+                            <ShoppingCart />
+                        </Link>
+                        }
                         {isUserAuthenticated ? <Link to={`/profile/${userId}`} className="iconButton">
                             <AccountCircle />
                         </Link>

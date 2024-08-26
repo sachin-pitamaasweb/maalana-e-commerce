@@ -436,81 +436,285 @@
 
 
 // BestSellers.js
+// import React, { useState, useEffect } from 'react';
+// import styles from './BestSellers.module.css';
+// import { useAuth } from '../../context/AuthContext';
+
+// const BestSellers = () => {
+//   const [products, setProducts] = useState([]);
+//   const { userId } = useAuth();
+
+//   useEffect(() => {
+//     // Fetch the best seller products
+//     const fetchBestSellers = async () => {
+//       try {
+//         const response = await fetch('http://localhost:8000/api/admin/get-best-seller-product');
+//         const data = await response.json();
+//         if (data.success) {
+//             setProducts(data.data.map((product, index) => ({
+//                 ...product,
+//                 price: product.price || '₹150', // Set price from the fetched data
+//                 backgroundColor: getBackgroundColor(index) // Set background color based on index
+//               })));
+//         } else {
+//           console.error('Failed to fetch best sellers');
+//         }
+//       } catch (error) {
+//         console.error('Error fetching best sellers:', error);
+//       }
+//     };
+
+//     fetchBestSellers();
+//   }, []);
+//   console.log(products);
+
+//   // const getBackgroundColor = (index) => {
+//   //   const colors = ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE'];
+//   //   return colors[index % colors.length];
+//   // };
+
+//   const getBackgroundColor = () => {
+//     const randomLightColor = () => Math.floor(Math.random() * 156) + 100; 
+//     return `rgb(${randomLightColor()}, ${randomLightColor()}, ${randomLightColor()})`;
+// };
+
+//   const handleAddtoCart = () => {
+//     console.log('Add to cart clicked');
+//   };
+
+//   if (!userId) {
+//     return null;
+//   }
+
+//   if (products.length === 0) {
+//     return (
+//       <div className={styles.moreProducts}>
+//         <h2 style={{textAlign: 'center'}}>No products found</h2>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className={styles.bestSellers}>
+//       <h2>Our Best Sellers</h2>
+//       <div className={styles.products}>
+//         {products.map((product) => (
+//           <div key={product.id} className={styles.productCard} style={{backgroundColor: product.backgroundColor}}>
+//             <div className={styles.productImage}>
+//               <img src={product.image} alt={product.name} />
+//             </div>
+//             <h3>{product.name}</h3>
+//             <p className={styles.price}>{product.price}</p>
+//             <button className={styles.addToCart} onClick={handleAddtoCart}>ADD TO CART</button>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default BestSellers;
+
+
+// import React, { useState, useEffect } from 'react';
+// import styles from './BestSellers.module.css';
+// import { useAuth } from '../../context/AuthContext';
+
+// const BestSellers = ({ products }) => {
+//     console.log(products);
+//     const [filteredProducts, setFilteredProducts] = useState([]);
+//     const { userId } = useAuth();
+
+//     useEffect(() => {
+//         const fetchImliRange = async () => {
+//             if (products) {
+//                 // const filtered = products.filter(product => product.category === 'Fruit katli');
+//                 setFilteredProducts(products);
+//             }
+//         };
+//         fetchImliRange();
+//     }, [products]);
+
+//     // const getBackgroundColor = (index) => {
+//     //     const colors = ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE'];
+//     //     return colors[index % colors.length];
+//     // };
+
+//     const getBackgroundColor = () => {
+//         const randomLightColor = () => Math.floor(Math.random() * 156) + 100; 
+//         return `rgb(${randomLightColor()}, ${randomLightColor()}, ${randomLightColor()})`;
+//     };
+    
+//     const handleAddtoCart = () => {
+//         console.log('Add to cart clicked');
+//     };
+
+//     if (!userId) {
+//         return null;
+//     }
+
+//     // Display only the first 4 products
+//     console.log('filteredProducts', filteredProducts);
+//     const productsToShow = filteredProducts.slice(0, 4);
+
+//     if (productsToShow.length === 0) {
+//         return (
+//             <div className={styles.moreProducts}>
+//                 <h2 style={{ textAlign: 'center' }}>No products found</h2>
+//             </div>
+//         );
+//     }
+
+//     return (
+//         <div className={styles.bestSellers}>
+//             <h2>Best Sellers</h2>
+//             <div className={styles.products}>
+//                 {productsToShow.map((product, index) => (
+//                     <div
+//                         key={product.id}
+//                         className={styles.productCard}
+//                         style={{ backgroundColor: getBackgroundColor(index) }}
+//                     >
+//                         <div className={styles.productImage}>
+//                             <img src={product.images.mainImage} alt={product.name} />
+//                         </div>
+//                         <h3>{product.name}</h3>
+//                         <p className={styles.price}>₹{product.price}</p> {/* Added rupee symbol */}
+//                         <button className={styles.addToCart} onClick={handleAddtoCart}>
+//                             ADD TO CART
+//                         </button>
+//                     </div>
+//                 ))}
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default BestSellers;
+
 import React, { useState, useEffect } from 'react';
 import styles from './BestSellers.module.css';
 import { useAuth } from '../../context/AuthContext';
+import Drawer from '@mui/material/Drawer';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import CloseIcon from '@mui/icons-material/Close';
+import Button from '@mui/material/Button';
+import IncrementDecrementButton from '../IncrementDecrementButton'; // Import your IncrementDecrementButton component
 
-const BestSellers = () => {
-  const [products, setProducts] = useState([]);
-  const { userId } = useAuth();
+const BestSellers = ({ products }) => {
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const { userId } = useAuth();
 
-  useEffect(() => {
-    // Fetch the best seller products
-    const fetchBestSellers = async () => {
-      try {
-        const response = await fetch('http://localhost:8000/api/admin/get-best-seller-product');
-        const data = await response.json();
-        if (data.success) {
-            setProducts(data.data.map((product, index) => ({
-                ...product,
-                price: product.price || '₹150', // Set price from the fetched data
-                backgroundColor: getBackgroundColor(index) // Set background color based on index
-              })));
-        } else {
-          console.error('Failed to fetch best sellers');
+    useEffect(() => {
+        if (products) {
+            setFilteredProducts(products);
         }
-      } catch (error) {
-        console.error('Error fetching best sellers:', error);
-      }
+    }, [products]);
+
+    const getBackgroundColor = () => {
+        const randomLightColor = () => Math.floor(Math.random() * 156) + 100; 
+        return `rgb(${randomLightColor()}, ${randomLightColor()}, ${randomLightColor()})`;
     };
 
-    fetchBestSellers();
-  }, []);
-  console.log(products);
+    const handleAddtoCart = async (product) => {
+        setSelectedProduct(product);
+        setDrawerOpen(true);
 
-  // const getBackgroundColor = (index) => {
-  //   const colors = ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE'];
-  //   return colors[index % colors.length];
-  // };
+        // Perform the fetch request to add the product to the cart
+        const response = await fetch('http://localhost:8000/api/add-to-cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                productId: product._id,
+                quantity: 1, 
+                shippingPrice: 50,
+                CoupanCode: 'DISCOUNT10', 
+                id: userId || '',
+            }),
+        });
 
-  const getBackgroundColor = () => {
-    const randomLightColor = () => Math.floor(Math.random() * 156) + 100; 
-    return `rgb(${randomLightColor()}, ${randomLightColor()}, ${randomLightColor()})`;
-};
+        // Handle response if needed
+         if(response.ok) {
+            console.log('Product added to cart successfully');
+        } else {
+            console.error('Failed to add product to cart');
+        }
 
-  const handleAddtoCart = () => {
-    console.log('Add to cart clicked');
-  };
+    };
 
-  if (!userId) {
-    return null;
-  }
+    const handleDrawerClose = () => {
+        setDrawerOpen(false);
+    };
 
-  if (products.length === 0) {
-    return (
-      <div className={styles.moreProducts}>
-        <h2>No products found</h2>
-      </div>
-    );
-  }
+    if (!userId) {
+        return null;
+    }
 
-  return (
-    <div className={styles.bestSellers}>
-      <h2>Our Best Sellers</h2>
-      <div className={styles.products}>
-        {products.map((product) => (
-          <div key={product.id} className={styles.productCard} style={{backgroundColor: product.backgroundColor}}>
-            <div className={styles.productImage}>
-              <img src={product.image} alt={product.name} />
+    const productsToShow = filteredProducts.slice(0, 4);
+
+    if (productsToShow.length === 0) {
+        return (
+            <div className={styles.moreProducts}>
+                <h2 style={{ textAlign: 'center' }}>No products found</h2>
             </div>
-            <h3>{product.name}</h3>
-            <p className={styles.price}>{product.price}</p>
-            <button className={styles.addToCart} onClick={handleAddtoCart}>ADD TO CART</button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+        );
+    }
+
+    return (
+        <div className={styles.bestSellers}>
+            <h2>Best Sellers</h2>
+            <div className={styles.products}>
+                {productsToShow.map((product, index) => (
+                    <div
+                        key={product.id}
+                        className={styles.productCard}
+                        style={{ backgroundColor: getBackgroundColor(index) }}
+                    >
+                        <div className={styles.productImage}>
+                            <img src={product.images.mainImage} alt={product.name} />
+                        </div>
+                        <h3>{product.name}</h3>
+                        <p className={styles.price}>₹{product.price}</p> {/* Added rupee symbol */}
+                        <button className={styles.addToCart} onClick={() => handleAddtoCart(product)}>
+                            ADD TO CART
+                        </button>
+                    </div>
+                ))}
+            </div>
+
+            <Drawer
+                anchor="right"
+                open={drawerOpen}
+                onClose={handleDrawerClose}
+                ModalProps={{ keepMounted: true }}
+            >
+                {selectedProduct && (
+                    <div className="add-drawer-container">
+                        <div className="add-drawer">
+                            <ShoppingBagIcon className="add-icon-drawer" />
+                            <CloseIcon className="close-icon" onClick={handleDrawerClose} />
+                        </div>
+                        <div className="drawer-product-info">
+                            <img src={selectedProduct.images.mainImage} alt={selectedProduct.name} />
+                            <div className="drawer-product-details">
+                                <p>{selectedProduct.name}</p>
+                                <p>₹<span>{selectedProduct.price}</span></p>
+                                <IncrementDecrementButton />
+                                <p className="remove-btn">Remove</p>
+                            </div>
+                        </div>
+                        <Button variant="contained" className="go-to-cart-btn">
+                            GO TO CART
+                        </Button>
+                    </div>
+                )}
+            </Drawer>
+        </div>
+    );
 };
 
 export default BestSellers;

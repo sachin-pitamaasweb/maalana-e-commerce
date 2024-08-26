@@ -215,6 +215,7 @@ const ProductCard = ({ product, filter }) => {
                     open={snackbar.open}
                     autoHideDuration={6000}
                     onClose={handleCloseSnackbar}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 >
                     <Alert
                         onClose={handleCloseSnackbar}
