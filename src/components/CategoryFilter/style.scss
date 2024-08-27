@@ -7,7 +7,7 @@
     overflow: hidden;
 
     .category-slider {
-        width: 80%;  // Adjusted width for better responsiveness
+        width: 60%;  // Adjusted width for better responsiveness
         margin: 20px 20px;
 
         .slick-list {
@@ -64,8 +64,8 @@
             width: 90%; // Increase width for tablet screens
             .category-option {
                 .image-container {
-                    width: 80px; // Slightly smaller image container
-                    height: 80px;
+                    width: 85px; // Slightly smaller image container
+                    height: 85px;
                 }
 
                 .category-name {
@@ -79,12 +79,13 @@
 /* Adjustments for mobile devices */
 @media (max-width: 600px) {
     .category-filter {
+        margin-top: 0px;
         .category-slider {
             width: 100%; // Full width for mobile screens
             .category-option {
                 .image-container {
-                    width: 40px; // Smaller image container for mobile
-                    height: 40px;
+                    width: 85px; // Smaller image container for mobile
+                    height: 85px;
                 }
 
                 .category-name {

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ShoppingCart, AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
 import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton, Typography } from '@mui/material';
-// import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Badge from '@mui/material/Badge';
 import Stack from '@mui/material/Stack';
@@ -18,43 +17,16 @@ const Header = () => {
     const isMobile = useMediaQuery('(max-width: 899px)');
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [activeLink, setActiveLink] = useState('');
-    // const [cartItemCount, setCartItemCount] = useState(0);
     const { isUserAuthenticated, userId, cartItemCount } = useAuth();
-
-    //  const isLogin = sessionStorage.getItem('isUserAuthenticated');
-    console.log('isUserAuthenticated', isUserAuthenticated);
 
     const handleLinkClick = (link) => {
         setActiveLink(link);
-        console.log('link', link);
         if (isMobile) {
             setDrawerOpen(false);
         }
         navigate(link)
     };
 
-console.log('cartItemCount', cartItemCount);
-    // useEffect(() => {
-    //     const fetchCartItems = async () => {
-    //         if (isUserAuthenticated) {
-    //             try {
-    //                 const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
-    //                 const data = await response.json();
-
-    //                 if (data.success) {
-    //                     const totalItems = data.cart.reduce((acc, cartItem) => acc + cartItem.items.length, 0);
-    //                     updateCartItemCount(totalItems);
-    //                 }
-    //             } catch (error) {
-    //                 console.error('Error fetching cart items:', error);
-    //             }
-    //         }
-    //     };
-
-    //     fetchCartItems();
-    // }, [isUserAuthenticated, userId, updateCartItemCount]);
-
-    // console.log('productLength', productLength);
     return (
         <header className="header">
             <div className="logo">
