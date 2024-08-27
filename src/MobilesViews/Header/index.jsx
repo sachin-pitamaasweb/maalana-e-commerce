@@ -63,7 +63,7 @@ console.log('cartItemCount', cartItemCount);
             {isMobile && (
                 <Stack spacing={4} direction="row" alignItems="center">
                     {isUserAuthenticated ? <Badge badgeContent={cartItemCount} color="secondary">
-                        <Link className="iconButton">
+                        <Link className="iconButton" to="/cart">
                             <ShoppingCart sx={{ color: '#000 !important' }} />
                         </Link>
                     </Badge>

@@ -227,19 +227,6 @@ import React from 'react';
 import './Cart.css'; // Import your CSS file here
 
 const Cart = () => {
-    // useEffect(() => {
-    //     // Set default body padding
-    //     document.body.style.padding = '20px';
-
-    //     // Scroll to the top of the page
-    //     window.scrollTo(0, 0);
-
-    //     // Clean up by resetting the padding (optional)
-    //     return () => {
-    //       document.body.style.padding = '';
-    //     };
-    //   }, []);
-
     return (
         <>
             <div style={{ padding: '20px' }}>
