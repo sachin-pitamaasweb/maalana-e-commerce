@@ -1,228 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import Pagination from '@mui/material/Pagination';
-
-// import CartItem from '../../components/CartItem/CartItem.jsx';
-// import OrderSummary from '../../components/OrderSummary/index.jsx';
-// import CouponSection from '../../components/CouponSection/index.jsx';
-// import AddressSection from '../../components/AddressSection1/index.jsx';
-
-// // import Cart1 from '../../assets/product-cate/img-1.png';
-
-// import { useAuth } from '../../context/AuthContext.js';
-
-// import './Cart.scss';
-
-// // const cartItems = [
-// //     { id: 1, img: Cart1, name: 'Orange Fruit Katli', weight: 250, price: 150 },
-// //     { id: 2, img: Cart1, name: 'Orange Fruit Katli', weight: 250, price: 150 },
-// //     { id: 3, img: Cart1, name: 'Orange Fruit Katli', weight: 250, price: 150 },
-// // ];
-
-// // const orderSummary = {
-// //     subTotal: 398,
-// //     discount: 302,
-// //     tax: 0,
-// //     shipping: 'FREE',
-// //     total: 398,
-// //     deliveryDate: 'DD/MM/YY',
-// // };
-
-// // const addresses = [
-// //     { id: 1, details: '7297, STREET NO 6, 22FT ROAD, DURGA PURI, HADDONKALAN, NEAR BEAM FASHION POINT, LUDHIANA, PUNJAB, 141001', phone: '9501987577' },
-// //     { id: 2, details: '7297, STREET NO 6, 22FT ROAD, DURGA PURI, HADDONKALAN, NEAR BEAM FASHION POINT, LUDHIANA, PUNJAB, 141001', phone: '9501987577sss' },
-// // ];
-
-// const Cart = () => {
-//     const [page, setPage] = useState(1);
-//     const itemsPerPage = 4; // Number of items per page
-//     const { userId,  updateAddresses,addresses } = useAuth();
-
-//     const [cartItems, setCartItems] = useState([]);
-//     // const [addresses, setAddresses] = useState([]);
-//     const [orderSummary, setOrderSummary] = useState({
-//         subTotal: 0,
-//         discount: 0,
-//         tax: 0,
-//         shipping: 'FREE',
-//         total: 0,
-//         deliveryDate: 'DD/MM/YY',
-//     });
-
-//     useEffect(() => {
-//         const fetchCartData = async () => {
-//             try {
-//                 const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`, {
-//                     method: 'GET',
-//                     headers: {
-//                         'Content-Type': 'application/json',
-//                     },
-//                 });
-//                 if (!response.ok) {
-//                     throw new Error('Network response was not ok');
-//                 }
-
-//                 const data = await response.json();
-//                 // console.log('Response data:', data);
-
-//                 // Extract items from all carts
-//                 const items = data.cart.reduce((acc, cart) => acc.concat(cart.items), []);
-//                 setCartItems(items);
-//             } catch (error) {
-//                 console.error('Error fetching cart data:', error);
-//                 setCartItems([]);
-//             }
-//         };
-
-//         fetchCartData();
-//     }, [userId]);
-
-//     useEffect(() => {
-//         const fetchCartData = async () => {
-//             try {
-//                 const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`, {
-//                     method: 'GET',
-//                     headers: {
-//                         'Content-Type': 'application/json',
-//                     },
-//                 });
-//                 if (!response.ok) {
-//                     throw new Error('Network response was not ok');
-//                 }
-
-//                 const data = await response.json();
-//                 const items = data.cart.reduce((acc, cart) => acc.concat(cart.items), []);
-//                 setCartItems(items);
-
-//                 // Calculate order summary
-//                 const subTotal = items.reduce((sum, item) => sum + item.productId.price * item.quantity, 0);
-//                 const total = subTotal; // Adjust as needed for discounts, taxes, etc.
-
-//                 setOrderSummary({
-//                     subTotal,
-//                     discount: 0, // Replace with actual discount if available
-//                     tax: 0, // Replace with actual tax if applicable
-//                     shipping: 'FREE',
-//                     total,
-//                     deliveryDate: 'DD/MM/YY',
-//                 });
-
-//             } catch (error) {
-//                 console.error('Error fetching cart data:', error);
-//                 setCartItems([]);
-//             }
-//         };
-
-//         fetchCartData();
-//     }, [userId]);
-
-//     useEffect(() => {
-//         const fetchAddresses = async () => {
-//             try {
-//                 const response = await fetch(`https://maalana-backend.onrender.com/api/get-my-shiped-address/${userId}`, {
-//                     method: 'GET',
-//                     headers: {
-//                         'Content-Type': 'application/json',
-//                     },
-//                 });
-//                 if (!response.ok) {
-//                     throw new Error('Network response was not ok');
-//                 }
-
-//                 const data = await response.json();
-//                 if (data.success) {
-//                     // setAddresses(data.shipedaddress);
-//                     updateAddresses(data.shipedaddress);
-//                 } else {
-//                     console.error('Failed to fetch addresses');
-//                 }
-//             } catch (error) {
-//                 console.error('Error fetching addresses:', error);
-//             }
-//         };
-
-//         fetchAddresses();
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//     }, []);
-
-//     const handleAddressUpdate = async () => {
-//         try {
-//             const response = await fetch(`https://maalana-backend.onrender.com/api/get-my-shiped-address/${userId}`, {
-//                 method: 'GET',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//             });
-
-//             const data = await response.json();
-//             if (data.success) {
-//                 updateAddresses(data.shipedaddress);
-//             } else {
-//                 console.error('Failed to fetch addresses');
-//             }
-//         } catch (error) {
-//             console.error('Error fetching addresses:', error);
-//         }
-//     };
-
-
-//     const handlePageChange = (event, value) => {
-//         setPage(value);
-//     };
-
-//     const paginatedItems = Array.isArray(cartItems) 
-//     ? cartItems.slice((page - 1) * itemsPerPage, page * itemsPerPage)
-//     : [];
-
-
-
-//     return (
-//         <div classNameName="cart-container">
-//             <div classNameName="cart-items">
-//                 <h1>Cart</h1>
-//                 <div classNameName="steps">
-//                     <span>1. Cart</span>
-//                     <span>2. Checkout</span>
-//                     <span>3. Payment</span>
-//                 </div>
-//                 {cartItems.length === 0 ? (
-//                     <p>Your cart is empty.</p>
-//                 ) : (
-//                     <>
-//                         {paginatedItems.map(item => (
-//                             <CartItem key={item.id} item={item} />
-//                         ))}
-//                         <Pagination
-//                             count={Math.ceil(cartItems.length / itemsPerPage)}
-//                             page={page}
-//                             onChange={handlePageChange}
-//                             variant="outlined"
-//                             color="primary"
-//                         />
-//                     </>
-//                 )}
-//             </div>
-//             <div classNameName="summary-and-coupon">
-//                 {Object.keys(orderSummary).length === 0 ? (
-//                     <p>Order summary is not available.</p>
-//                 ) : (
-//                     <OrderSummary summary={orderSummary} />
-//                 )}
-//                 <CouponSection />
-//                 {addresses.length === 0 ? (
-//                     <p>
-//                         No addresses available. go to profile and click on "MY Address"
-//                     </p>
-//                 ) : (
-//                     <AddressSection addresses={addresses} onAddressUpdate={handleAddressUpdate} />
-//                 )}
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Cart;
-
-
 import React, { useState, useEffect } from 'react';
 
 import Pagination from '@mui/material/Pagination';
@@ -235,9 +10,10 @@ import { useAuth } from '../../context/AuthContext';
 const Cart = () => {
     const [page, setPage] = useState(1);
     const itemsPerPage = 4; // Number of items per page
-    const { userId, updateAddresses, addresses } = useAuth();
+    const { userId, updateAddresses, addresses, updateCartItemCount  } = useAuth();
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [count, setCount] = useState(1);
     const [orderSummary, setOrderSummary] = useState({
         subTotal: 0,
         discount: 0,
@@ -251,7 +27,7 @@ const Cart = () => {
         const fetchCartData = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`, {
+                const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -264,11 +40,25 @@ const Cart = () => {
                 const data = await response.json();
 
                 // Extract items from all carts
-                const items = data.cart.reduce((acc, cart) => acc.concat(cart.items), []);
+                const items = data.cart.reduce((acc, cart) => {
+                    const userId = cart.userId;
+                    const cartId = cart._id;
+                    const cartItems = cart.items.map(item => ({
+                        ...item,
+                        quantity: item.quantity,
+                        userId,
+                        cartId,
+                        productId: item.productId._id,
+                        cartProducts: item.productId
+                    }));
+                    
+                    return acc.concat(cartItems);
+                }, []);
+                
                 setCartItems(items);
 
                 // Calculate order summary
-                const subTotal = items.reduce((sum, item) => sum + item.productId.price * item.quantity, 0);
+                const subTotal = items.reduce((sum, item) => sum + item.cartProducts.price * item.quantity, 0);
                 const total = subTotal; // Adjust as needed for discounts, taxes, etc.
 
                 setOrderSummary({
@@ -315,11 +105,55 @@ const Cart = () => {
         };
 
         fetchAddresses();
-    }, [userId, updateAddresses]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userId]);
+
+    const updateCart = async (newQuantity, cartId, productId) => {
+        console.log('newQuantity', newQuantity);
+        try {
+          const response = await fetch('http://localhost:8000/api/update-cart', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId: userId,
+              productId: productId,
+              quantity: newQuantity,
+              cartId: cartId,
+            }),
+          });
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+    
+          const data = await response.json();
+          updateCartItemCount(data.numberOfItems);
+    
+          console.log('Cart updated successfully:', data);
+        } catch (error) {
+          console.error('Error updating cart:', error);
+        }
+      };
+    
 
     const handlePageChange = (event, value) => {
         setPage(value);
     };
+
+    const handleIncrement = (cartId, productId) => {
+        const newCount = count + 1;
+        setCount(newCount);
+        updateCart(newCount, cartId, productId);
+      };
+    
+      const handleDecrement = (cartId, productId) => {
+        if (count > 1) {
+          const newCount = count - 1;
+          setCount(newCount);
+          updateCart(newCount, cartId, productId);
+        }
+      };
 
     const paginatedItems = Array.isArray(cartItems)
         ? cartItems.slice((page - 1) * itemsPerPage, page * itemsPerPage)
@@ -354,14 +188,14 @@ const Cart = () => {
                                     {paginatedItems.length > 0 ? (
                                         paginatedItems.map((item) => (
                                             <div className="cart-item" key={item.productId}>
-                                                <img src={item.productId.images.mainImage || 'https://res.cloudinary.com/dtivafy25/image/upload/v1723530547/image/img-2_nj1zsm.png'} alt={item.productId.name} />
+                                                <img src={item.cartProducts.images.mainImage || 'https://res.cloudinary.com/dtivafy25/image/upload/v1723530547/image/img-2_nj1zsm.png'} alt={item.productId.name} />
                                                 <div className="item-details">
-                                                    <h3>{item.productId.name}</h3>
-                                                    <p>₹{item.productId.price}</p>
+                                                    <h3>{item.cartProducts.name}</h3>
+                                                    <p>₹{item.cartProducts.price}</p>
                                                     <div className="item-quantity">
-                                                        <button aria-label="Decrease quantity">-</button>
+                                                        <button aria-label="Decrease quantity" onClick={() => handleDecrement(item.cartId, item.productId)}>-</button>
                                                         <input type="number" value={item.quantity} min="1" aria-label="Quantity" />
-                                                        <button aria-label="Increase quantity">+</button>
+                                                        <button aria-label="Increase quantity" onClick={() => handleIncrement(item.cartId, item.productId)}>+</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -404,7 +238,7 @@ const Cart = () => {
                             </div>
                             <div className="summary-item summary-total">
                                 <span>Total</span>
-                                <span>{orderSummary.total || 0}</span>
+                                <span>₹{orderSummary.total || 0}</span>
                             </div>
                             <a href="shopping-cart" className="checkout-button">Proceed to Checkout</a>
                             <div className="coupon-input">

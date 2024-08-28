@@ -115,6 +115,23 @@
     border-radius: 5px;
 }
 
+.remove-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #f44336; /* Red color for the remove button */
+    transition: color 0.3s;
+}
+
+.remove-button:hover {
+    color: #c62828; /* Darker red on hover */
+}
+
+.remove-icon {
+    width: 24px;
+    height: 24px;
+}
+
 .cart-summary {
     flex: 1;
     min-width: 300px;

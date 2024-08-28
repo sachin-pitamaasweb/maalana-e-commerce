@@ -47,8 +47,8 @@ const Products = ({ products }) => {
             title: "Banner 3",
         },
     ];
-    
-    
+
+
 
     // const renderComponent = () => {
     //     console.log('selectedCategory', selectedCategory);
@@ -118,6 +118,13 @@ const Products = ({ products }) => {
     console.log('selectedCategory', selectedCategory);
 
     const renderComponent = () => {
+        let filteredProducts = products;
+
+        if (selectedCategory !== 'All') {
+            filteredProducts = products.filter(product => product.category === selectedCategory);
+        }
+
+        console.log('filteredProducts', filteredProducts);
         switch (selectedCategory) {
             case "All":
                 return (
@@ -127,11 +134,21 @@ const Products = ({ products }) => {
                             banners={banners}
                             title="Products"
                         />
-                         <BestSellers products={products} />
+                        <BestSellers products={products} />
                     </>
                 );
+                case "Family Candy Pack":
+                return <PrductGridCard products={filteredProducts} />;
+            case "Aam papad":
+                return <PrductGridCard products={filteredProducts} />;
+            case "Candy":
+                return <PrductGridCard products={filteredProducts} />;
+            case "Imli Range":
+                return <PrductGridCard products={filteredProducts} />;
+            case "Lollipops":
+                return <PrductGridCard products={filteredProducts} />;
             default:
-                return <PrductGridCard products={products} />;
+                return <PrductGridCard products={filteredProducts} />;
         }
     };
 

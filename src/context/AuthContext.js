@@ -27,12 +27,11 @@ export const AuthProvider = ({ children }) => {
         const fetchCartItemCount = async () => {
             if (userId) {
                 try {
-                    const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
+                    const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
                     const data = await response.json();
+                    console.log('data', data.numberOfItems);
                     if (data.success) {
-                        // Calculate the total number of items in the cart
-                        const totalItems = data.cart.reduce((acc, cartItem) => acc + cartItem.items.length, 0);
-                        setCartItemCount(totalItems);
+                        setCartItemCount(data.numberOfItems);
                     }
                 } catch (error) {
                     console.error('Failed to fetch cart item count', error);

@@ -62,8 +62,8 @@ const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
 
     const categories = [
         { name: 'Imli Range', img: Img1 },
-        { name: 'Family candy pack', img: Img2 },
-        { name: 'lollipop', img: Img3 },
+        { name: 'Family Candy Pack', img: Img2 },
+        { name: 'Lollipops', img: Img3 },
         { name: 'Candy', img: Img4 },
         { name: 'Aam papad', img: Img5 },
         { name: 'Fruit katli', img: Img6 },
