@@ -144,7 +144,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                     <Grid item xs={12} sm={6}>
                         <TextField
                             label="First Name"
-                            name="firstName"
+                            name="firstname"
                             variant="outlined"
                             fullWidth
                             value={shippingAddress.firstName}
@@ -155,7 +155,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                     <Grid item xs={12} sm={6}>
                         <TextField
                             label="Last Name"
-                            name="lastName"
+                            name="lastname"
                             variant="outlined"
                             fullWidth
                             value={shippingAddress.lastName}
@@ -165,8 +165,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            label="Phone Number"
-                            name="phoneNumber"
+                            label="Phone"
+                            name="phone"
                             variant="outlined"
                             fullWidth
                             value={shippingAddress.phoneNumber}

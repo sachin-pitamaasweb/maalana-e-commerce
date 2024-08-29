@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import Pagination from '@mui/material/Pagination';
 import CircularProgress from '@mui/material/CircularProgress';
+
+import axios from 'axios';
 
 import './Cart.css';
 
 import { useAuth } from '../../context/AuthContext';
 
+import EditAddressModal from '../../components/EditAddressModal';
+
 const Cart = () => {
+    const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const itemsPerPage = 4; // Number of items per page
-    const { userId, updateAddresses, addresses, updateCartItemCount  } = useAuth();
+    const { userId, updateAddresses, addresses, updateCartItemCount, profile } = useAuth();
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [count, setCount] = useState(1);
     const [orderSummary, setOrderSummary] = useState({
         subTotal: 0,
         discount: 0,
@@ -22,23 +28,32 @@ const Cart = () => {
         total: 0,
         deliveryDate: 'DD/MM/YY',
     });
+    const [open, setOpen] = useState(false);
+    const [selectedAddress, setSelectedAddress] = useState(null);
+    const [formData, setFormData] = useState({
+        address: '',
+        pincode: '',
+        country: '',
+        state: '',
+        city: ''
+    });
 
     useEffect(() => {
         const fetchCartData = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+                        const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        });
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
 
                 const data = await response.json();
-
+                // console.log('Cart data:', data);
                 // Extract items from all carts
                 const items = data.cart.reduce((acc, cart) => {
                     const userId = cart.userId;
@@ -51,16 +66,16 @@ const Cart = () => {
                         productId: item.productId._id,
                         cartProducts: item.productId
                     }));
-                    
+
                     return acc.concat(cartItems);
                 }, []);
-                
-                setCartItems(items);
 
+                setCartItems(items);
+                // console.log('items', items);
                 // Calculate order summary
                 const subTotal = items.reduce((sum, item) => sum + item.cartProducts.price * item.quantity, 0);
                 const total = subTotal; // Adjust as needed for discounts, taxes, etc.
-
+                console.log('total', total);
                 setOrderSummary({
                     subTotal,
                     discount: 0, // Replace with actual discount if available
@@ -96,6 +111,7 @@ const Cart = () => {
                 const data = await response.json();
                 if (data.success) {
                     updateAddresses(data.shipedaddress);
+                    setSelectedAddress(data.shipedaddress[0]);
                 } else {
                     console.error('Failed to fetch addresses');
                 }
@@ -105,56 +121,138 @@ const Cart = () => {
         };
 
         fetchAddresses();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userId]);
 
     const updateCart = async (newQuantity, cartId, productId) => {
-        console.log('newQuantity', newQuantity);
         try {
-          const response = await fetch('http://localhost:8000/api/update-cart', {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              userId: userId,
-              productId: productId,
-              quantity: newQuantity,
-              cartId: cartId,
-            }),
-          });
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-    
-          const data = await response.json();
-          updateCartItemCount(data.numberOfItems);
-    
-          console.log('Cart updated successfully:', data);
+            const response = await fetch('http://localhost:8000/api/update-cart', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    productId: productId,
+                    quantity: newQuantity,
+                    cartId: cartId,
+                }),
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            updateCartItemCount(data.totalQuantity);
+            setOrderSummary({
+                ...orderSummary,
+                total: data.totalPrice,
+                subTotal: data.totalPrice    
+            });
+
+            console.log('Cart updated successfully:', data);
         } catch (error) {
-          console.error('Error updating cart:', error);
+            console.error('Error updating cart:', error);
         }
-      };
-    
+    };
+
 
     const handlePageChange = (event, value) => {
         setPage(value);
     };
 
     const handleIncrement = (cartId, productId) => {
-        const newCount = count + 1;
-        setCount(newCount);
-        updateCart(newCount, cartId, productId);
-      };
-    
-      const handleDecrement = (cartId, productId) => {
-        if (count > 1) {
-          const newCount = count - 1;
-          setCount(newCount);
-          updateCart(newCount, cartId, productId);
-        }
-      };
+        const updatedItems = cartItems.map(item => {
+            if (item.cartId === cartId && item.productId === productId) {
+                const newQuantity = item.quantity + 1;
+                updateCart(newQuantity, cartId, productId);
+                return { ...item, quantity: newQuantity };
+            }
+            return item;
+        });
+        setCartItems(updatedItems);
+    };
 
+    const handleDecrement = (cartId, productId) => {
+        const updatedItems = cartItems.map(item => {
+            if (item.cartId === cartId && item.productId === productId && item.quantity > 1) {
+                const newQuantity = item.quantity - 1;
+                updateCart(newQuantity, cartId, productId);
+                return { ...item, quantity: newQuantity };
+            }
+            return item;
+        });
+        setCartItems(updatedItems);
+    };
+
+    const handleEditClick = (address) => {
+        if (address) {
+            setSelectedAddress(address);
+            setFormData({
+                address: address.address,
+                pincode: address.pincode,
+                country: address.country,
+                state: address.state,
+                city: address.city
+            });
+            setOpen(true);
+        } else {
+            console.error('Address is not defined');
+        }
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
+
+    const handleUpdate = async () => {
+        if (!selectedAddress) {
+            console.error('No address selected');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const response = await axios.put(
+                `https://maalana-backend.onrender.com/api/update-shiped-address/${selectedAddress._id}`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            if (response.data.success) {
+                const updatedAddresses = addresses.map((addr) =>
+                    addr._id === selectedAddress._id ? response.data.shipedaddress : addr
+                );
+                updateAddresses(updatedAddresses);
+                setOpen(false);
+            } else {
+                console.error('Failed to update address:', response.data.error);
+            }
+        } catch (error) {
+            console.error('Error updating address:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleCheckout = () => {
+        navigate('/payment', { state: { selectedAddress, cartItems, profile, orderSummary } });
+    }
+
+    console.log('selectedAddress', selectedAddress);
     const paginatedItems = Array.isArray(cartItems)
         ? cartItems.slice((page - 1) * itemsPerPage, page * itemsPerPage)
         : [];
@@ -240,7 +338,7 @@ const Cart = () => {
                                 <span>Total</span>
                                 <span>₹{orderSummary.total || 0}</span>
                             </div>
-                            <a href="shopping-cart" className="checkout-button">Proceed to Checkout</a>
+                            <p className="checkout-button" onClick={handleCheckout}>Proceed to Checkout</p>
                             <div className="coupon-input">
                                 <input type="text" placeholder="Enter coupon code" aria-label="Coupon code" />
                                 <button>Apply</button>
@@ -253,18 +351,18 @@ const Cart = () => {
                                     ) : (
                                         addresses.map((address, index) => (
                                             <div className="address-box" key={index}>
-                                                <input type="radio" id="address2" name="shipping_address" defaultChecked={index === 0} value="address2" />
+                                                <input type="radio" id="address2" name="shipping_address" defaultChecked={index === 0} value="address2" onChange={() => setSelectedAddress(address)} />
                                                 <div className="address-content">
                                                     <label for="address2">
                                                         <div className="address-details">
-                                                            <p>John Doe</p>
+                                                            <p>{profile.firstName} {profile.lastName}</p>
                                                             <p>{address.address}</p>
                                                             <p>{address.city}, {address.state}, {address.country}, {address.pincode}</p>
-                                                            <p>6239443996</p>
+                                                            <p>{profile.phone}</p>
                                                         </div>
                                                     </label>
                                                     <div className="address-actions">
-                                                        <button className="btn" aria-label="Edit address">
+                                                        <button className="btn" aria-label="Edit address" onClick={() => handleEditClick(address)}>
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="btn-icon">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                             </svg>
@@ -287,6 +385,15 @@ const Cart = () => {
                     </div>
                 </div>
             </div>
+            <EditAddressModal
+                open={open}
+                handleClose={handleClose}
+                formData={formData}
+                handleInputChange={handleInputChange}
+                handleUpdate={handleUpdate}
+                loading={loading}
+                selectedAddress={selectedAddress}
+            />
         </>
     );
 }

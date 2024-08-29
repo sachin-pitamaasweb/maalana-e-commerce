@@ -17,6 +17,16 @@ export const AuthProvider = ({ children }) => {
 
     const [cartItemCount, setCartItemCount] = useState(0);
     const [addresses, setAddresses] = useState([]);
+    const [profile, setProfile] = useState({
+        firstName: '',
+        lastName: '',
+        dateOfBirth: '',
+        gender: '',
+        phone: '',
+        email: '',
+        profileImage: '',
+    });
+
     useEffect(() => {
         // Update sessionStorage whenever isUserAuthenticated changes
         sessionStorage.setItem('isUserAuthenticated', isUserAuthenticated);
@@ -29,7 +39,6 @@ export const AuthProvider = ({ children }) => {
                 try {
                     const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
                     const data = await response.json();
-                    console.log('data', data.numberOfItems);
                     if (data.success) {
                         setCartItemCount(data.numberOfItems);
                     }
@@ -61,14 +70,43 @@ export const AuthProvider = ({ children }) => {
         fetchAddresses();
     }, [userId]);
 
- // Method to update cart item count
- const updateCartItemCount = (count) => {
-    setCartItemCount(count);
-};
 
-const updateAddresses = (newAddresses) => {
-    setAddresses(newAddresses);
-};
+    useEffect(() => {
+        if (userId) {
+            // Fetch user data on component load
+            fetch(`https://maalana-backend.onrender.com/api/get-single-user/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        setProfile({
+                            firstName: data.user.firstName || '',
+                            lastName: data.user.lastName || '',
+                            dateOfBirth: formatDate(data.user.dateofbirth) || '',
+                            gender: data.user.gender || '',
+                            phone: data.user.mobileNumber || '',
+                            email: data.user.email || '',
+                            profileImage: data.user.userImage || ''
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching user data:', error));
+        }
+    }, [userId]);
+
+    const formatDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    };
+
+    // Method to update cart item count
+    const updateCartItemCount = (count) => {
+        setCartItemCount(count);
+    };
+
+    const updateAddresses = (newAddresses) => {
+        setAddresses(newAddresses);
+    };
 
     const login = (id) => {
         setIsUserAuthenticated(true);
@@ -77,19 +115,21 @@ const updateAddresses = (newAddresses) => {
 
     const logout = () => {
         setIsUserAuthenticated(false);
+        setUserId(null);
     };
 
     return (
-        <AuthContext.Provider value={{ 
+        <AuthContext.Provider value={{
             isUserAuthenticated,
-             userId, 
-             login, 
-             logout,
-              cartItemCount,
-               updateCartItemCount,
-               updateAddresses,
-               addresses
-               }}>
+            userId,
+            login,
+            logout,
+            cartItemCount,
+            updateCartItemCount,
+            updateAddresses,
+            addresses,
+            profile
+        }}>
             {children}
         </AuthContext.Provider>
     );

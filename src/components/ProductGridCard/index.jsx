@@ -12,48 +12,110 @@ import './style.css';
 
 const ProductGridCard = ({ products }) => {
     const navigate = useNavigate();
-    const { userId } = useAuth();
+    const { userId, updateCartItemCount } = useAuth();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [cartId, setCartId] = useState(null);
 
     const handleDetails = (productId, product) => {
         navigate(`/products-details/${productId}`, { state: { product } });
-    }
+    };
 
     const handleOpenDrawer = async (product) => {
-      
-        try{
+
+        try {
             const response = await fetch('http://localhost:8000/api/add-to-cart', {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                  productId: product._id,
-                  quantity: 1,
-                  shippingPrice: 50,
-                  CoupanCode: 'DISCOUNT10',
-                  id: userId || '',
+                    productId: product._id,
+                    quantity: 1,
+                    shippingPrice: 50,
+                    CoupanCode: 'DISCOUNT10',
+                    id: userId || '',
                 }),
-              });
-          
-              const data = await response.json();
-          console.log(data);
-              if (data.success) {
+            });
+
+            const data = await response.json();
+            console.log(data);
+            if (data.success) {
                 setSelectedProduct(product);
                 setDrawerOpen(true);
                 setCartId(data.cart._id);
+                updateCartItemCount(data.totalQuantity);
                 console.log('Product added to cart successfully');
             } else {
                 console.error('Failed to add product to cart:', data.message);
             }
 
-        } catch(error){
+        } catch (error) {
             console.error(error);
         }
     };
-console.log('cartId', cartId);
+
+
+
+    // const updateCart = async (newQuantity, cartId, productId) => {
+    //     console.log('newQuantity', newQuantity, 'cartId', cartId, 'productId', productId);
+    //     try {
+    //         const response = await fetch('http://localhost:8000/api/update-cart', {
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 userId: userId,
+    //                 productId: productId,
+    //                 quantity: newQuantity,
+    //                 cartId: cartId,
+    //             }),
+    //         });
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+
+    //         const data = await response.json();
+    //         updateCartItemCount(data.totalQuantity);
+    //         setCartItems(data.cart);
+    //     } catch (error) {
+    //         console.error('Error updating cart:', error);
+    //     }
+    // };
+
+    // const handleIncrement = (productId) => {
+    //     const updatedItems = cartItems.map(cartItem => {
+    //         const updatedItems = cartItem.items.map(item => {
+    //             if (item.productId._id === productId) {
+    //                 const newQuantity = item.quantity + 1;
+    //                 console.log('cartItem._id', cartItem._id);
+    //                 updateCart(newQuantity, cartItem._id, productId);
+    //                 return { ...item, quantity: newQuantity };
+    //             }
+    //             return item;
+    //         });
+    //         return { ...cartItem, items: updatedItems };
+    //     });
+    //     setCartItems(updatedItems);
+    // };
+
+    // const handleDecrement = (productId) => {
+    //     const updatedItems = cartItems.map(cartItem => {
+    //         const updatedItems = cartItem.items.map(item => {
+    //             if (item.productId._id === productId && item.quantity > 1) {
+    //                 const newQuantity = item.quantity - 1;
+    //                 console.log('cartItem._id', cartItem._id)
+    //                 updateCart(newQuantity, cartItem._id, productId);
+    //                 return { ...item, quantity: newQuantity };
+    //             }
+    //             return item;
+    //         });
+    //         return { ...cartItem, items: updatedItems };
+    //     });
+    //     setCartItems(updatedItems);
+    // };
+
     return (
         <>
             <div className="container-product-grid">
@@ -74,6 +136,30 @@ console.log('cartId', cartId);
                                     <div className="product-price-cart">
                                         <span className="product-price">₹{product.price || "N/A"}</span>
                                         <button className="add-to-cart-card" onClick={() => handleOpenDrawer(product)}>ADD TO CART</button>
+                                        {/* {!isProductInCart(product._id) ? (
+                                            <div className="item-quantity">
+                                                <button
+                                                    aria-label="Decrease quantity"
+                                                    onClick={() => handleDecrement(product._id)}
+                                                >
+                                                    -
+                                                </button>
+                                                <input
+                                                    type="number"
+                                                    value={getProductQuantityInCart(product._id)}
+                                                    min="1"
+                                                    aria-label="Quantity"
+                                                />
+                                                <button
+                                                    aria-label="Increase quantity"
+                                                    onClick={() => handleIncrement(product._id)}
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <button className="add-to-cart-card" onClick={() => handleOpenDrawer(product)}>ADD TO CART</button>
+                                        )} */}
                                     </div>
                                 </div>
                             </div>
@@ -86,10 +172,10 @@ console.log('cartId', cartId);
                 )}
             </div>
             {selectedProduct && (
-                <ProductDrawer 
-                    drawerOpen={drawerOpen} 
-                    setDrawerOpen={setDrawerOpen} 
-                    product={selectedProduct} 
+                <ProductDrawer
+                    drawerOpen={drawerOpen}
+                    setDrawerOpen={setDrawerOpen}
+                    product={selectedProduct}
                     cartId={cartId}
                 />
             )}

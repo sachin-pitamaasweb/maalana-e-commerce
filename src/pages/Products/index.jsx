@@ -48,75 +48,6 @@ const Products = ({ products }) => {
         },
     ];
 
-
-
-    // const renderComponent = () => {
-    //     console.log('selectedCategory', selectedCategory);
-    //     if (!selectedCategory) {
-    //         return (
-    //             <>
-    //                 <Banner
-    //                     img={require('../../assets/product-banner/img-1.png')}
-    //                     banners={banners}
-    //                     title="Products"
-    //                 />
-    //                 <BestSellers products={products} />
-    //                 <ImliRange products={products} />
-    //                 <Banners
-    //                     img={require('../../assets/product-banner/img-2.png')}
-    //                 />
-    //                 <LollipopRange products={products} />
-    //                 <FruitKatliRange products={products} />
-    //                 <Banners
-    //                     img={require('../../assets/product-banner/img-3.png')}
-    //                 />
-    //                 <StyledBox />
-    //                 <OverlayImage />
-    //                 <MoreProducts />
-    //             </>
-    //         )
-    //     }
-    //     switch (selectedCategory) {
-    //         case "lollipop":
-    //             return <LollipopFliter filter={'Lollipops'} products={products} />;
-    //         case "Fruit katli":
-    //             return <FruitkatliFilter filter={'Fruit katli'} products={products} />;
-    //         case "Imli Range":
-    //             return <ImliFilter filter={'Imli Range'} products={products} />
-    //             case "Candy": 
-    //             return <CandyFilter filter={'Candy'} products={products} />
-    //             case "Aam papad": 
-    //             return <AampapadFilter filter={'Aam papad'} products={products} />
-    //             case "Family candy pack":
-    //                return <FamilycandypackFilter filter={'Family Candy Pack'} products={products} />
-    //         default:
-    //             return (
-    //                 <>
-    //                     <Banner
-    //                         img={require('../../assets/product-banner/img-1.png')}
-    //                         banners={banners}
-    //                         title="Products"
-    //                     />
-    //                     <BestSellers products={products} />
-    //                     <ImliRange products={products} />
-    //                     <Banners
-    //                         img={require('../../assets/product-banner/img-2.png')}
-    //                     />
-    //                     <LollipopRange products={products} />
-    //                     <FruitKatliRange products={products} />
-    //                     <Banners
-    //                         img={require('../../assets/product-banner/img-3.png')}
-    //                     />
-    //                     <StyledBox />
-    //                     <OverlayImage />
-    //                     <MoreProducts />
-    //                 </>
-    //             );
-    //     }
-    // };
-
-    console.log('selectedCategory', selectedCategory);
-
     const renderComponent = () => {
         let filteredProducts = products;
 
@@ -124,7 +55,6 @@ const Products = ({ products }) => {
             filteredProducts = products.filter(product => product.category === selectedCategory);
         }
 
-        console.log('filteredProducts', filteredProducts);
         switch (selectedCategory) {
             case "All":
                 return (
@@ -160,7 +90,6 @@ const Products = ({ products }) => {
                     selectedCategory={selectedCategory}
                 />
                 {renderComponent()}
-                {/* <PrductGridCard /> */}
             </Box>
         </>
     );
