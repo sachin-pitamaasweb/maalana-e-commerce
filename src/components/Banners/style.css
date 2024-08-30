@@ -11,25 +11,3 @@
     object-fit: cover; /* Ensure the image covers the container without distortion */
     margin-top: 100px;
   }
-  
-  /* Desktop and Laptop */
-  @media (min-width: 992px) {
-    .banner {
-      content: url('https://via.placeholder.com/1900x400?text=Desktop+Banner');
-    }
-  }
-  
-  /* Tablet */
-  @media (max-width: 991px) and (min-width: 768px) {
-    .banner {
-      content: url('https://via.placeholder.com/800x400?text=Tablet+Banner');
-    }
-  }
-  
-  /* Mobile */
-  @media (max-width: 767px) {
-    .banner {
-      content: url('https://via.placeholder.com/480x800?text=Mobile+Banner');
-    }
-  }
-  

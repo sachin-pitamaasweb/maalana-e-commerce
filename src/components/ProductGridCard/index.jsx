@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { useNavigate } from 'react-router-dom';
 
-import FilterListIcon from '@mui/icons-material/FilterList';
+// import FilterListIcon from '@mui/icons-material/FilterList';
 
 import ProductDrawer from "../ProductDrawer/index";
 
@@ -10,7 +10,7 @@ import { useAuth } from '../../context/AuthContext';
 
 import './style.css';
 
-const ProductGridCard = ({ products }) => {
+const ProductGridCard = ({ products, title }) => {
     const navigate = useNavigate();
     const { userId, updateCartItemCount } = useAuth();
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -120,7 +120,7 @@ const ProductGridCard = ({ products }) => {
         <>
             <div className="container-product-grid">
                 <div className="header-product-grid">
-                    <button className="filter-button-card-grid"><FilterListIcon /> Show Filter</button>
+                    <button className="filter-button-card-grid">{title}</button>
                     <span className="product-count-product-number">{products.length} Products</span>
                 </div>
                 {products.length > 0 ? (

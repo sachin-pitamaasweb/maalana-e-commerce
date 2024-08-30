@@ -11,13 +11,6 @@ import FruitKatliRange from '../../components/FruitKatliRange';
 import StyledBox from '../../components/StyledBox';
 import OverlayImage from '../../components/OverlayImage/index'
 import MoreProducts from '../../components/MoreProducts';
-// fliter components
-// import LollipopFliter from '../../components/LollipopFliter/index';
-// import FruitkatliFilter from '../../components/FruitkatliFilter/index';
-// import ImliFilter from '../../components/ImliFliter';
-// import CandyFilter from '../../components/CandyFilter';
-// import AampapadFilter from '../../components/AampapadFilter';
-// import FamilycandypackFilter from '../../components/FamilycandypackFilter/index';
 
 import PrductGridCard from '../../components/ProductGridCard';
 
@@ -25,24 +18,24 @@ const Products = ({ products }) => {
     const [selectedCategory, setSelectedCategory] = useState('All');
     const banners = [
         {
-            img: 'https://via.placeholder.com/1920x1080?text=Banner+1+-+Desktop',    // Desktop Image
-            imgLaptop: 'https://via.placeholder.com/1366x768?text=Banner+1+-+Laptop',  // Laptop Image
-            imgTablet: 'https://via.placeholder.com/768x1024?text=Banner+1+-+Tablet',  // Tablet Image
-            imgMobile: 'https://via.placeholder.com/375x667?text=Banner+1+-+Mobile',   // Mobile Image
+            img: 'https://res.cloudinary.com/dtivafy25/image/upload/v1725013325/b-1_mgxyez.png',    // Desktop Image
+            imgLaptop: 'https://res.cloudinary.com/dtivafy25/image/upload/v1725013325/b-1_mgxyez.png',  // Laptop Image
+            imgTablet: 'https://res.cloudinary.com/dtivafy25/image/upload/v1725013325/b-1_mgxyez.png',  // Tablet Image
+            imgMobile: 'https://res.cloudinary.com/dtivafy25/image/upload/v1725013325/b-1_mgxyez.png',   // Mobile Image
             title: "Banner 1",
         },
         {
-            img: 'https://via.placeholder.com/1920x1080?text=Banner+2+-+Desktop',    // Desktop Image
-            imgLaptop: 'https://via.placeholder.com/1366x768?text=Banner+2+-+Laptop',  // Laptop Image
-            imgTablet: 'https://via.placeholder.com/768x1024?text=Banner+2+-+Tablet',  // Tablet Image
-            imgMobile: 'https://via.placeholder.com/375x667?text=Banner+2+-+Mobile',   // Mobile Image
+            img: 'https://res.cloudinary.com/dtivafy25/image/upload/v1725013322/b-2_ger1wf.png',    // Desktop Image
+            imgLaptop: 'https://res.cloudinary.com/dtivafy25/image/upload/v1725013322/b-2_ger1wf.png',  // Laptop Image
+            imgTablet: 'https://res.cloudinary.com/dtivafy25/image/upload/v1725013322/b-2_ger1wf.png',  // Tablet Image
+            imgMobile: 'https://res.cloudinary.com/dtivafy25/image/upload/v1725013322/b-2_ger1wf.png',   // Mobile Image
             title: "Banner 2",
         },
         {
-            img: 'https://via.placeholder.com/1920x1080?text=Banner+3+-+Desktop',    // Desktop Image
-            imgLaptop: 'https://via.placeholder.com/1366x768?text=Banner+3+-+Laptop',  // Laptop Image
-            imgTablet: 'https://via.placeholder.com/768x1024?text=Banner+3+-+Tablet',  // Tablet Image
-            imgMobile: 'https://via.placeholder.com/375x667?text=Banner+3+-+Mobile',   // Mobile Image
+            img: 'https://res.cloudinary.com/dtivafy25/image/upload/v1725013318/b-3_yia19h.png',    // Desktop Image
+            imgLaptop: 'https://res.cloudinary.com/dtivafy25/image/upload/v1725013318/b-3_yia19h.png',  // Laptop Image
+            imgTablet: 'https://res.cloudinary.com/dtivafy25/image/upload/v1725013318/b-3_yia19h.png',  // Tablet Image
+            imgMobile: 'https://res.cloudinary.com/dtivafy25/image/upload/v1725013318/b-3_yia19h.png',   // Mobile Image
             title: "Banner 3",
         },
     ];
@@ -65,13 +58,13 @@ const Products = ({ products }) => {
                             banners={banners}
                             title="Products"
                         />
-                        <BestSellers 
-                        products={products}
-                         title={"Best Sellers"}
-                         />
-                        <ImliRange 
-                        products={imliRange}
-                         title={"Imli Range"}
+                        <BestSellers
+                            products={products}
+                            title={"Best Sellers"}
+                        />
+                        <ImliRange
+                            products={imliRange}
+                            title={"Imli Range"}
                         />
                         <Banners
                             title="lollipops"
@@ -85,27 +78,27 @@ const Products = ({ products }) => {
                             products={fruitKatliRange}
                             title={"Fruit Katli Range"}
                         />
-                         <Banners
-                             title="lollipops"
-                             img='https://res.cloudinary.com/dtivafy25/image/upload/v1725013318/b-3_yia19h.png'
-                         />
-                         <StyledBox />
-                         <OverlayImage />
-                         <MoreProducts />
+                        <Banners
+                            title="lollipops"
+                            img='https://res.cloudinary.com/dtivafy25/image/upload/v1725013318/b-3_yia19h.png'
+                        />
+                        <StyledBox />
+                        <OverlayImage />
+                        <MoreProducts />
                     </>
                 );
-                case "Family Candy Pack":
-                return <PrductGridCard products={filteredProducts} />;
+            case "Family Candy Pack":
+                return <PrductGridCard products={filteredProducts} title={"Family Candy Pack"} />;
             case "Aam papad":
-                return <PrductGridCard products={filteredProducts} />;
+                return <PrductGridCard products={filteredProducts} title={"Aam papad"} />;
             case "Candy":
-                return <PrductGridCard products={filteredProducts} />;
+                return <PrductGridCard products={filteredProducts}  title={"Candy"}/>;
             case "Imli Range":
-                return <PrductGridCard products={filteredProducts} />;
+                return <PrductGridCard products={filteredProducts}  title={"Imli Range"}/>;
             case "Lollipops":
-                return <PrductGridCard products={filteredProducts} />;
+                return <PrductGridCard products={filteredProducts} title={"Lollipops"} />;
             default:
-                return <PrductGridCard products={filteredProducts} />;
+                return <PrductGridCard products={filteredProducts}  title={"Fruit Katli Range"}/>;
         }
     };
 

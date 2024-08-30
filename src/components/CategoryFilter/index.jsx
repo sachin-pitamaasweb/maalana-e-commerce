@@ -22,8 +22,8 @@ const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
         slidesToShow: 6, // Adjust the number of slides based on screen size
         slidesToScroll: 1,
         arrows: false,
-        autoplay: true,
-        autoplaySpeed: 3000,
+        autoplay: false,
+        // autoplaySpeed: 300000,
         centerMode: true, 
         centerPadding: '0', 
         responsive: [
@@ -42,18 +42,26 @@ const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
             {
                 breakpoint: 1025,
                 settings: {
+                    autoplaySpeed: 3000,
+                    autoplay: true,
                     slidesToShow: 4,
                 },
             },
             {
                 breakpoint: 600,
                 settings: {
+                    autoplaySpeed: 3000,
+                    autoplay: true,
                     slidesToShow: 3,
                 },
             },
             {
+
+                
                 breakpoint: 400,
                 settings: {
+                    autoplay: true,
+                    autoplaySpeed: 3000,
                     slidesToShow: 2,
                 },
             },
