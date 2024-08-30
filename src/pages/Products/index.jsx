@@ -4,14 +4,13 @@ import { Box } from '@mui/material';
 import CategoryFilter from '../../components/CategoryFilter';
 import Banner from '../../components/Banner';
 import BestSellers from '../../components/BestSellers';
-// import MoreProducts from '../../components/MoreProducts';
-// import ImliRange from '../../components/ImliRange';
-// import Banners from '../../components/Banners';
-// import LollipopRange from '../../components/LollipopRange/index'
-// import FruitKatliRange from '../../components/FruitKatliRange';
-// import StyledBox from '../../components/StyledBox';
-// import OverlayImage from '../../components/OverlayImage/index'
-
+import ImliRange from '../../components/ImliRange';
+import Banners from '../../components/Banners';
+import LollipopRange from '../../components/LollipopRange/index'
+import FruitKatliRange from '../../components/FruitKatliRange';
+import StyledBox from '../../components/StyledBox';
+import OverlayImage from '../../components/OverlayImage/index'
+import MoreProducts from '../../components/MoreProducts';
 // fliter components
 // import LollipopFliter from '../../components/LollipopFliter/index';
 // import FruitkatliFilter from '../../components/FruitkatliFilter/index';
@@ -54,7 +53,9 @@ const Products = ({ products }) => {
         if (selectedCategory !== 'All') {
             filteredProducts = products.filter(product => product.category === selectedCategory);
         }
-
+        let imliRange = products.filter(product => product.category === 'Imli Range');
+        let lollipopRange = products.filter(product => product.category === 'Lollipops');
+        let fruitKatliRange = products.filter(product => product.category === 'Fruit katli');
         switch (selectedCategory) {
             case "All":
                 return (
@@ -64,7 +65,33 @@ const Products = ({ products }) => {
                             banners={banners}
                             title="Products"
                         />
-                        <BestSellers products={products} />
+                        <BestSellers 
+                        products={products}
+                         title={"Best Sellers"}
+                         />
+                        <ImliRange 
+                        products={imliRange}
+                         title={"Imli Range"}
+                        />
+                        <Banners
+                            title="lollipops"
+                            img='https://res.cloudinary.com/dtivafy25/image/upload/v1725013322/b-2_ger1wf.png'
+                        />
+                        <LollipopRange
+                            products={lollipopRange}
+                            title={"Lollipops"}
+                        />
+                        <FruitKatliRange
+                            products={fruitKatliRange}
+                            title={"Fruit Katli Range"}
+                        />
+                         <Banners
+                             title="lollipops"
+                             img='https://res.cloudinary.com/dtivafy25/image/upload/v1725013318/b-3_yia19h.png'
+                         />
+                         <StyledBox />
+                         <OverlayImage />
+                         <MoreProducts />
                     </>
                 );
                 case "Family Candy Pack":

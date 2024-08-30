@@ -5,7 +5,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 import Header from './MobilesViews/Header/index.jsx';
-// import Footer from './MobilesViews/Footer/index.jsx';
+import Footer from './MobilesViews/Footer/index.jsx';
 
 //pages
 import Home from './pages/Home/index.jsx';
@@ -21,6 +21,7 @@ import ProductDetails from './components/ProductDetails/index.jsx';
 
 // components 
 import Checkout from './components/Checkout/index.jsx';
+import OrderPlaceSuccess from './components/OrderPlaceSuccess/index.jsx';
 
 // Auth and Protected Route
 import { AuthProvider } from './context/AuthContext.js';
@@ -46,10 +47,10 @@ function App() {
         console.error('Failed to fetch products:', err);
       }
     };
-  
+
     fetchProducts();
   }, []); // Empty dependency array ensures this runs only once
-  
+
   return (
     <>
       <AuthProvider>
@@ -129,8 +130,16 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/order-success"
+              element={
+                <ProtectedRoute>
+                  <OrderPlaceSuccess />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
-          {/* <Footer /> */}
+          <Footer />
         </Router>
       </AuthProvider>
     </>

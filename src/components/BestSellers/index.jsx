@@ -1,143 +1,148 @@
+// import React, { useState, useEffect } from "react";
+// import 'owl.carousel/dist/assets/owl.carousel.css';
+// import 'owl.carousel/dist/assets/owl.theme.default.css';
+// import OwlCarousel from 'react-owl-carousel';
+// import './style.css';
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styles from './BestSellers.module.css';
-import { useAuth } from '../../context/AuthContext';
-import Drawer from '@mui/material/Drawer';
-import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
-import CloseIcon from '@mui/icons-material/Close';
-import Button from '@mui/material/Button';
-import IncrementDecrementButton from '../IncrementDecrementButton'; // Import your IncrementDecrementButton component
+// import ProductDrawer from "../ProductDrawer/index";
+// import { useAuth } from '../../context/AuthContext'; // Adjust the import path
+
+// const BestSellers = ({ products, title }) => {
+//     const [filteredProducts, setFilteredProducts] = useState([]);
+//     const [drawerOpen, setDrawerOpen] = useState(false);
+//     const [selectedProduct, setSelectedProduct] = useState(null);
+//     const { userId, updateCartItemCount } = useAuth();
+//     const [cartId, setCartId] = useState(null);
+
+//     useEffect(() => {
+//         if (products) {
+//             setFilteredProducts(products);
+//         }
+//     }, [products]);
+
+//     const options = {
+//         loop: true,
+//         margin: 10,
+//         nav: false,
+//         dots: false,
+//         autoplay: true,
+//         autoplayTimeout: 3000,
+//         responsive: {
+//             0: {
+//                 items: 1,
+//                 margin: 20
+//             },
+//             600: {
+//                 items: 2
+//             },
+//             1000: {
+//                 items: 3
+//             },
+//             1920: {
+//                 items: 4
+//             }
+//         }
+//     };
 
 
-const BestSellers = ({ products }) => {
-    const navigate = useNavigate();
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [drawerOpen, setDrawerOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
-    const { userId, updateCartItemCount } = useAuth();
+//     const colors = ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE'];
 
-    useEffect(() => {
-        if (products) {
-            setFilteredProducts(products);
-        }
-    }, [products]);
+//     const handleAddToCart = async (product) => {
+//         setSelectedProduct(product);
+//         setDrawerOpen(true);
 
-    const getBackgroundColor = () => {
-        const randomLightColor = () => Math.floor(Math.random() * 156) + 100; 
-        return `rgb(${randomLightColor()}, ${randomLightColor()}, ${randomLightColor()})`;
-    };
+//         try {
+//             const response = await fetch('http://localhost:8000/api/add-to-cart', {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 },
+//                 body: JSON.stringify({
+//                     productId: product._id,
+//                     quantity: 1,
+//                     shippingPrice: 50,
+//                     CoupanCode: 'DISCOUNT10',
+//                     id: userId || '',
+//                 }),
+//             });
 
-    const handleAddtoCart = async (product) => {
-        setSelectedProduct(product);
-        setDrawerOpen(true);
+//             const data = await response.json();
+//             if (data.success) {
+//                 setCartId(data.cart._id);
+//                 updateCartItemCount(data.totalQuantity);
+//                 // Update cart item count in context
+//                 console.log('Product added to cart successfully');
+//             } else {
+//                 console.error('Failed to add product to cart:', data.message);
+//             }
+//         } catch (error) {
+//             console.error('Error adding product to cart:', error);
+//         }
+//     };
 
-        // Perform the fetch request to add the product to the cart
-        const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                productId: product._id,
-                quantity: 1, 
-                shippingPrice: 50,
-                CoupanCode: 'DISCOUNT10', 
-                id: userId || '',
-            }),
-        });
+//     if (!userId) {
+//         return null;
+//     }
 
-        const data = await response.json();
+//     const productsToShow = filteredProducts.slice(0, 4);
 
-        if (data.success) {
-            // Update cart item count in context
-            const updatedResponse = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
-            const updatedData = await updatedResponse.json();
-            if (updatedData.success) {
-                const totalItems = updatedData.cart.reduce((acc, cartItem) => acc + cartItem.items.length, 0);
-                updateCartItemCount(totalItems);
-            }
+//     if (productsToShow.length === 0) {
+//         return (
+//             <div className="no-products">
+//                 <h2 style={{ textAlign: 'center' }}>No products found</h2>
+//             </div>
+//         );
+//     }
 
-            console.log('Product added to cart successfully');
-        } else {
-            console.error('Failed to add product to cart:', data.message);
-        }
+//     return (
+//         <div className="best-sellers">
+//             <h2>{title}</h2>
+//             <OwlCarousel {...options} className="products">
+//                 {productsToShow.map((product, index) => (
+//                     <div
+//                         key={product._id}
+//                         className="product-card"
+//                         style={{ backgroundColor: colors[index % colors.length] }}
+//                     >
+//                         <div className="product-image">
+//                             <img src={product.images.mainImage} alt={product.name} /> {/* Ensure `product.imageUrl` and `product.name` exist */}
+//                         </div>
+//                         <h3>{product.name}</h3>
+//                         <p className="price">₹{product.price}</p>
+//                         <div style={{ display: 'flex', justifyContent: 'center' }}>
+//                             <button className="add-to-cart" onClick={() => handleAddToCart(product)}>ADD TO CART</button>
+//                         </div>
+//                     </div>
+//                 ))}
+//             </OwlCarousel>
+//             {selectedProduct && (
+//                 <ProductDrawer
+//                     drawerOpen={drawerOpen}
+//                     setDrawerOpen={setDrawerOpen}
+//                     product={selectedProduct}
+//                     cartId={cartId}
+//                 />
+//             )}
 
-    };
+//         </div>
+//     );
+// };
 
-    const handleDrawerClose = () => {
-        setDrawerOpen(false);
-    };
+// export default BestSellers;
 
-    const handleGotoCart = () => {
-        navigate('/cart');
-    }
 
-    if (!userId) {
-        return null;
-    }
+import React from "react";
 
-    const productsToShow = filteredProducts.slice(0, 4);
+import CommonCard from "../CommonCard/index";
 
-    if (productsToShow.length === 0) {
-        return (
-            <div className={styles.moreProducts}>
-                <h2 style={{ textAlign: 'center' }}>No products found</h2>
-            </div>
-        );
-    }
-
+const BestSellers = ({ products, title }) => {
     return (
-        <div className={styles.bestSellers}>
-            <h2>Best Sellers</h2>
-            <div className={styles.products}>
-                {productsToShow.map((product, index) => (
-                    <div
-                        key={product.id}
-                        className={styles.productCard}
-                        style={{ backgroundColor: getBackgroundColor(index) }}
-                    >
-                        <div className={styles.productImage}>
-                            <img src={product.images.mainImage} alt={product.name} />
-                        </div>
-                        <h3>{product.name}</h3>
-                        <p className={styles.price}>₹{product.price}</p> {/* Added rupee symbol */}
-                        <button className={styles.addToCart} onClick={() => handleAddtoCart(product)}>
-                            ADD TO CART
-                        </button>
-                    </div>
-                ))}
-            </div>
-
-            <Drawer
-                anchor="right"
-                open={drawerOpen}
-                onClose={handleDrawerClose}
-                ModalProps={{ keepMounted: true }}
-            >
-                {selectedProduct && (
-                    <div className="add-drawer-container">
-                        <div className="add-drawer">
-                            <ShoppingBagIcon className="add-icon-drawer" />
-                            <CloseIcon className="close-icon" onClick={handleDrawerClose} />
-                        </div>
-                        <div className="drawer-product-info">
-                            <img src={selectedProduct.images.mainImage} alt={selectedProduct.name} />
-                            <div className="drawer-product-details">
-                                <p>{selectedProduct.name}</p>
-                                <p>₹<span>{selectedProduct.price}</span></p>
-                                <IncrementDecrementButton />
-                                <p className="remove-btn">Remove</p>
-                            </div>
-                        </div>
-                        <Button variant="contained" className="go-to-cart-btn" onClick={handleGotoCart}>
-                            GO TO CART
-                        </Button>
-                    </div>
-                )}
-            </Drawer>
-        </div>
+        <>
+            <CommonCard
+                products={products}
+                title={title}
+            />
+        </>
     );
 };
-
 export default BestSellers;

@@ -1,7 +1,11 @@
+@font-face {
+  font-family: 'MADE-Tommy-Soft-Light-PERSONAL-USE';
+  src: url('./assets/font/MADE-Tommy-Soft-Light-PERSONAL-USE.woff') format('woff2');
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: 'MADE-Tommy-Soft-Light-PERSONAL-USE',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

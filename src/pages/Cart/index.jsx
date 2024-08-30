@@ -256,6 +256,7 @@ const Cart = () => {
     const paginatedItems = Array.isArray(cartItems)
         ? cartItems.slice((page - 1) * itemsPerPage, page * itemsPerPage)
         : [];
+        console.log('paginatedItems', paginatedItems.length);
     return (
         <>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -338,7 +339,7 @@ const Cart = () => {
                                 <span>Total</span>
                                 <span>₹{orderSummary.total || 0}</span>
                             </div>
-                            <p className="checkout-button" onClick={handleCheckout}>Proceed to Checkout</p>
+                            <button className="checkout-button" onClick={handleCheckout} disabled={paginatedItems.length === 0}>Proceed to Checkout</button>
                             <div className="coupon-input">
                                 <input type="text" placeholder="Enter coupon code" aria-label="Coupon code" />
                                 <button>Apply</button>

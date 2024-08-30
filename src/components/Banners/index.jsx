@@ -1,11 +1,12 @@
 import React from "react";
-import './style.scss';
+import './style.css';
 
-const Banners = ({ img = "https://via.placeholder.com/800x400", title = "Sample Banner" }) => {
+const Banners = ({ title = "Sample Banner", img }) => {
+    console.log(img);
     return (
         <div className="banner-container">
             <img 
-                src={img}
+                src='https://res.cloudinary.com/dtivafy25/image/upload/v1725013322/b-2_ger1wf.png'
                 alt={title}
                 className="banner"
             />

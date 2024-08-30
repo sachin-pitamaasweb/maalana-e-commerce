@@ -67,8 +67,8 @@ const MoreProducts = () => {
                         <>
                             <div key={index} className="product-slide">
                                 <div className="product-circle" style={{ backgroundColor: product.bgColor }}>
-                                    <div className='product-center-image'>
-                                        <img src={product.img} alt={product.name} className="product-image" />
+                                    <div className='product-center-image-more-products'>
+                                        <img src={product.img} alt={product.name} className="product-image-more-products" />
                                     </div>
                                     <p className="product-name">{product.name}</p>
                                 </div>

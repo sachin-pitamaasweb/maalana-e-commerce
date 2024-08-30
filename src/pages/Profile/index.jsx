@@ -4,7 +4,7 @@ import {
 } from '@mui/material';
 import { AccountCircle, ShoppingBag, LocationOn, Edit } from '@mui/icons-material';
 // import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+// import FavoriteIcon from '@mui/icons-material/Favorite';
 import InputMask from 'react-input-mask';
 import axios from 'axios';
 
@@ -12,7 +12,7 @@ import './style.scss';
 
 import MyOrdersTable from '../../components/MyOrdersTable';
 import AddressSection from '../../components/AddressSection';
-import WishListSection from '../../components/WishListSection';
+// import WishListSection from '../../components/WishListSection';
 
 import { useAuth } from '../../context/AuthContext'
 
@@ -174,9 +174,9 @@ const ProfilePage = () => {
                         <MenuItem value="My Address">
                             <LocationOn sx={{ marginRight: '8px' }} /> My Address
                         </MenuItem>
-                        <MenuItem value="Wishlist">
+                        {/* <MenuItem value="Wishlist">
                             <FavoriteIcon sx={{ marginRight: '8px' }} /> Wishlist
-                        </MenuItem>
+                        </MenuItem> */}
                     </Select>
                 ) : (
                     <Box className="filter-buttons">
@@ -240,7 +240,7 @@ const ProfilePage = () => {
                         >
                             My Address
                         </Button>
-                        <Button
+                        {/* <Button
                             variant={selectedMenu === 'Wishlist' ? "contained" : "outlined"}
                             startIcon={<FavoriteIcon />}
                             onClick={() => handleMenuClick('Wishlist')}
@@ -259,7 +259,7 @@ const ProfilePage = () => {
                             }}
                         >
                             Wishlist
-                        </Button>
+                        </Button> */}
                     </Box>
                 )}
             </Box>
@@ -449,11 +449,11 @@ const ProfilePage = () => {
                             <AddressSection firstName={profile.firstName} lastName={profile.lastName} phone={profile.phone} />
                         </Box>
                     )}
-                    {selectedMenu === 'Wishlist' && (
+                    {/* {selectedMenu === 'Wishlist' && (
                         <Box className="wishlist-section">
                             <WishListSection />
                         </Box>
-                    )}
+                    )} */}
                 </Box>
             </Box>
         </Box>

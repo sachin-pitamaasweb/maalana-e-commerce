@@ -1,17 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Pagination
 } from '@mui/material';
 import './style.scss'; // Correct the import path if needed
 
-const MyOrdersTable = () => {
-    const [orders] = useState([]);
+import { useAuth } from '../../context/AuthContext';
 
-    const itemsPerPage = 5; // Number of items per page
+const MyOrdersTable = () => {
+    const { userId } = useAuth();
+    const [orders, setOrders] = useState([]);
+    const [productDetails, setProductDetails] = useState([]);
     const [page, setPage] = useState(1);
+    const itemsPerPage = 5; // Number of items per page
+
+    // Fetch orders from the API
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/api/get-orders');
+                if (response.data.success) {
+                    // Filter orders by userId
+                    const filteredOrders = response.data.data.filter(order => order.user === userId);
+                    // Extract product details
+                    const productDetails = filteredOrders.flatMap(order =>
+                        order.cartItems.map(item => ({
+                            productName: item.name,
+                            price: item.price,
+                            deliveryStatus: order.deliveryStatus,
+                            orderDate: new Date(order.createdAt).toLocaleDateString(), // Format order date
+                        }))
+                    );
+
+                    setOrders(filteredOrders);
+                    setProductDetails(productDetails);
+                }
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+            }
+        };
+
+        fetchOrders();
+    }, [userId]);
 
     // Calculate the orders to display based on the current page
-    const paginatedOrders = orders.slice(
+    const paginatedOrders = productDetails.slice(
         (page - 1) * itemsPerPage,
         page * itemsPerPage
     );
@@ -20,6 +53,8 @@ const MyOrdersTable = () => {
     const handlePageChange = (event, value) => {
         setPage(value);
     };
+
+    console.log('productDetails', productDetails);
 
     return (
         <>
@@ -39,7 +74,7 @@ const MyOrdersTable = () => {
                                 <TableRow key={index}>
                                     <TableCell>{order.productName}</TableCell>
                                     <TableCell>{order.orderDate}</TableCell>
-                                    <TableCell>{order.status}</TableCell>
+                                    <TableCell>{order.deliveryStatus}</TableCell>
                                     <TableCell>{order.price}</TableCell>
                                 </TableRow>
                             ))}

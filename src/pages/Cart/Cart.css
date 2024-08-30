@@ -159,7 +159,7 @@
 
 .checkout-button {
     display: block;
-    /* width: 100%; */
+    width: 100%;
     padding: 15px;
     background-color: #B9D514;
     color: white;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -31,8 +31,9 @@ import { useAuth } from '../../context/AuthContext';
 
 const Checkout = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { cartItems, selectedAddress, profile, orderSummary } = location.state || {};
- const { userId } = useAuth();
+ const { userId, updateCartItemCount } = useAuth();
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState('cod');
@@ -62,7 +63,8 @@ const Checkout = () => {
     const orderData = {
       user: userId,
       cartItems: cartItems.map(item => ({
-        product: item.cartProducts.id,
+        name: item.cartProducts.name,
+        product: item.productId,
         quantity: item.quantity,
         price: item.cartProducts.price
       })),
@@ -82,8 +84,10 @@ const Checkout = () => {
       }
     };
 console.log(orderData);
+console.log('here', cartItems[0].productId
+);
     try {
-      const response = await fetch('http://localhost:8000/api/orders', {
+      const response = await fetch('http://localhost:8000/api/create-orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -97,6 +101,9 @@ console.log(orderData);
         setSnackbarSeverity('success');
         // Handle success (e.g., redirect to order confirmation page)
         console.log('Order placed successfully:', result);
+         // Navigate to OrderPlaceSuccess page
+         navigate('/order-success', { state: { result } });
+         updateCartItemCount(0);
       } else {
         setSnackbarMessage('Order placement failed!');
         setSnackbarSeverity('error');
