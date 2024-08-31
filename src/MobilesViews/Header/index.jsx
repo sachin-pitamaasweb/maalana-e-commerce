@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ShoppingCart, AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton, Menu, MenuItem } from '@mui/material';
+import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import Badge from '@mui/material/Badge';
@@ -85,32 +85,40 @@ const Header = () => {
                 <div className="icons">
                     <Stack spacing={4} direction="row">
                         {isUserAuthenticated ? (
-                            <Badge badgeContent={cartItemCount} color="secondary">
+                            <>
+                                <Badge badgeContent={cartItemCount} color="secondary">
+                                    <Link to="/cart" className="iconButton">
+                                        <ShoppingCart />
+                                    </Link>
+                                </Badge>
+                                <IconButton onClick={handleMenuClick} className="iconButton">
+                                    <AccountCircle />
+                                </IconButton>
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleMenuClose}
+                                >
+                                    <MenuItem component={Link} to={`/profile/${userId}`} onClick={handleMenuClose}>
+                                        Profile
+                                    </MenuItem>
+                                    <MenuItem onClick={handleLogout}>
+                                        <LogoutIcon />
+                                        Logout
+                                    </MenuItem>
+                                </Menu>
+                            </>
+                        ) : (
+                            <>
                                 <Link to="/cart" className="iconButton">
                                     <ShoppingCart />
                                 </Link>
-                            </Badge>
-                        ) : (
-                            <Link to="/cart" className="iconButton">
-                                <ShoppingCart />
-                            </Link>
+                                <Typography>
+                                    <Link to="/login">Login</Link>
+                                </Typography>
+                            </>
                         )}
-                        <IconButton onClick={handleMenuClick} className="iconButton">
-                            <AccountCircle />
-                        </IconButton>
-                        <Menu
-                            anchorEl={anchorEl}
-                            open={Boolean(anchorEl)}
-                            onClose={handleMenuClose}
-                        >
-                            <MenuItem component={Link} to={`/profile/${userId}`} onClick={handleMenuClose}>
-                                Profile
-                            </MenuItem>
-                            <MenuItem onClick={handleLogout}>
-                                <LogoutIcon />
-                                Logout
-                            </MenuItem>
-                        </Menu>
+
                     </Stack>
                 </div>
             )}
