@@ -18,6 +18,7 @@
 .cart-header h1 {
     font-size: 28px;
     font-weight: 600;
+    color: #ffffff !important;
 }
 
 .cart-steps {
@@ -175,7 +176,7 @@
 }
 
 .checkout-button:hover {
-    background-color: #45a049;
+    background-color: #B9D514;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
 }
@@ -244,18 +245,18 @@
 }
 
 .btn {
-    background-color: transparent;
+    background-color: transparent !important;
     border: 1px solid #000;
-    color: #000;
-    padding: 5px 10px;
-    border-radius: 5px;
+    color: #000 !important;
+    padding: 5px 10px !important;
+    border-radius: 5px !important;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease !important;
 }
 
 .btn:hover {
-    background-color: #000;
-    color: white;
+    background-color: #000 !important;
+    color: white !important;
 }
 
 .btn-icon {

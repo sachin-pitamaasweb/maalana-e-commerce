@@ -1,25 +1,74 @@
 import React, { useState } from "react";
 
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+
+import { useAuth } from "../../context/AuthContext";
+
 
 import "./style.css";
 
 const ProductDetails = () => {
+    const { userId, updateCartItemCount } = useAuth();
     const location = useLocation();
+    const navigate = useNavigate();
     const { state } = location;
     const { product } = state || {};
-    console.log("product", product);
     const [mainImage, setMainImage] = useState(product.images.mainImage || "https://via.placeholder.com/500x500");
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
     const handleThumbnailClick = (imageUrl) => {
         setMainImage(imageUrl);
+    };
+
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+    };
+
+    const handleAddToCart = async (product) => {
+        try {
+            const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    productId: product._id,
+                    quantity: 1,
+                    shippingPrice: 50,
+                    CoupanCode: 'DISCOUNT10',
+                    id: userId || '',
+                }),
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                updateCartItemCount(data.totalQuantity);
+                // Update cart item count in context
+                navigate('/cart');
+            } else {
+                // console.error('Failed to add product to cart:', data.message);
+                setSnackbarMessage(`Failed to add product to cart: ${data.message}`);
+                setSnackbarSeverity('error');
+            }
+        } catch (error) {
+            // console.error('Error adding product to cart:', error);
+            setSnackbarMessage(`Error adding product to cart: ${error.message}`);
+            setSnackbarSeverity('error');
+        } finally {
+            setSnackbarOpen(true);
+        }
     };
 
     return (
         <>
             <div className="product-grid-card-main">
                 <div className="container-product-details">
-                    <div className="product-image">
+                    <div className="product-image-details">
                         <img src={mainImage} alt="Strawberry Fruit Katli" className="main-image" />
                         <div className="thumbnail-container">
                             {product.images.mainImage && <img
@@ -49,7 +98,7 @@ const ProductDetails = () => {
                         </div>
                     </div>
                     <div className="product-info">
-                        <h1>{product.name || 'N/A'}</h1>
+                        <h1 className="name">{product.name || 'N/A'}</h1>
                         <p className="weight">{product.weight || 'N/A'}</p>
                         <p className="description">
                             {product.description || 'N/A'}
@@ -59,13 +108,13 @@ const ProductDetails = () => {
                         <p className="price">
                             ₹{product.price || 'N/A'} <span style={{ fontSize: "16px" }}>(inclusive of all taxes)</span>
                         </p>
-                        <div className="item-quantity" style={{ marginBottom: "20px" }}>
+                        {/* <div className="item-quantity" style={{ marginBottom: "20px" }}>
                             <button aria-label="Decrease quantity">-</button>
                             <input type="number" value={1} min="1" aria-label="Quantity" />
                             <button aria-label="Increase quantity">+</button>
-                        </div>
-                        <button className="add-to-cart">ADD TO CART</button>
-                        <button className="buy-now">BUY NOW</button>
+                        </div> */}
+                        <button className="add-to-cart" onClick={() => handleAddToCart(product)}>ADD TO CART</button>
+                        {/* <button className="buy-now">BUY NOW</button> */}
                     </div>
                     <div className="product-details">
                         <div className="nutritional-info">
@@ -97,6 +146,20 @@ const ProductDetails = () => {
                     </div>
                 </div>
             </div>
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert
+                    onClose={handleSnackbarClose}
+                    severity={snackbarSeverity}
+                    sx={{ width: '100%' }}
+                >
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </>
     );
 }

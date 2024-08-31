@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import OwlCarousel from 'react-owl-carousel';
@@ -8,10 +9,11 @@ import ProductDrawer from "../ProductDrawer/index";
 import { useAuth } from '../../context/AuthContext'; // Adjust the import path
 
 const CommonCard = ({ products, title }) => {
+    const navigate = useNavigate();
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const { userId, updateCartItemCount } = useAuth();
+    const { userId, updateCartItemCount, isUserAuthenticated } = useAuth();
     const [cartId, setCartId] = useState(null);
 
     useEffect(() => {
@@ -45,14 +47,34 @@ const CommonCard = ({ products, title }) => {
     };
 
 
-    const colors = ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE'];
+// Define colors and background settings for different titles
+const getDynamicStyles = (title) => {
+    switch (title) {
+        case 'Best Sellers':
+            return { backgroundColor: '#FFDCF7', borderColors: ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE'] };
+        case 'Imli Range':
+            return { backgroundColor: '#FEFFDC', borderColors: ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#BEFFCC'] };
+        case 'Lollipops':
+            return { backgroundColor: '#FFD4A8', borderColors: ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE', '#BEFFCC'] };
+        case 'Fruit Katli Range':
+            return { backgroundColor: '#CAFFCF', borderColors: ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE', '#BEFFCC'] };
+        default:
+            return { backgroundColor: '#FFFFFF', borderColors: ['#E0E0E0'] }; // Default case
+    }
+};
 
     const handleAddToCart = async (product) => {
+        if (!isUserAuthenticated) {
+            // Redirect to login page if user is not authenticated
+            navigate('/login');
+            window.scrollTo(0, 0);
+            return;
+        }
         setSelectedProduct(product);
         setDrawerOpen(true);
 
         try {
-            const response = await fetch('http://localhost:8000/api/add-to-cart', {
+            const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -94,18 +116,20 @@ const CommonCard = ({ products, title }) => {
         );
     }
 
+    const { backgroundColor, borderColors } = getDynamicStyles(title);
+    console.log(backgroundColor, borderColors);
     return (
         <div className="best-sellers">
             <h2>{title}</h2>
-            <OwlCarousel {...options} className="products">
+            <OwlCarousel {...options} className="products" style={{ backgroundColor }} >
                 {productsToShow.map((product, index) => (
                     <div
                         key={product._id}
                         className="product-card"
-                        style={{ backgroundColor: colors[index % colors.length] }}
+                        style={{ backgroundColor: borderColors[index % borderColors.length] }}
                     >
                         <div className="product-image">
-                            <img src={product.images.mainImage} alt={product.name} /> {/* Ensure `product.imageUrl` and `product.name` exist */}
+                            <img src={product.images.mainImage} alt={product.name} className="product-image-common" /> {/* Ensure `product.imageUrl` and `product.name` exist */}
                         </div>
                         <h3>{product.name}</h3>
                         <p className="price">₹{product.price}</p>

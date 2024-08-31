@@ -12,3 +12,4 @@ const BecomePartner = () => {
     );
 };
 export default BecomePartner;
+

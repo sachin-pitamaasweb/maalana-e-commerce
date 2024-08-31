@@ -1,12 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './Footer.module.css';
 
 const Footer = () => {
+  const navigate = useNavigate();
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLogo = () => {
+    scrollToTop();
+    navigate('/products');
+  };
+
   return (
     <div className={styles.footer}>
       <div className={styles.footerContainer}>
-        <div className={styles.logo}>
+        <div className={styles.logo} onClick={handleLogo} aria-label="Logo" style={{ cursor: 'pointer' }}>
           <img src="https://res.cloudinary.com/dtivafy25/image/upload/v1724395923/Group_76_wynoom.png" alt="Maalana Logo" />
         </div>
 
@@ -23,17 +33,36 @@ const Footer = () => {
         </div>
 
         <ul className={styles.links}>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/dukaan">Dukaan</Link></li>
-          <li><Link to="/kahani">Kahani</Link></li>
-          <li><Link to="/baat-cheet">Baat Cheet</Link></li>
-          <li><Link to="/join">Humko join karlo!</Link></li>
+          <li><Link to="/" onClick={scrollToTop}>Home</Link></li>
+          <li><Link to="/products" onClick={scrollToTop}>Dukaan</Link></li>
+          <li><Link to="/about" onClick={scrollToTop}>Kahani</Link></li>
+          <li><Link to="/contact" onClick={scrollToTop}>Baat Cheet</Link></li>
+          <li><Link to="/become-partner" onClick={scrollToTop}>Humko join karlo!</Link></li>
         </ul>
 
         <div className={styles.contact}>
-          <p>+91 97645-12486</p>
-          <p>Maalana Foods, Punjab, India 141001</p>
-          <p>maalanafoods@gmail.com</p>
+          <p>
+            <a href="tel:+919764512486" style={{ textDecoration: 'none', color: '#000' }}>+91 97645-12486</a>
+          </p>
+          <p>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=Maalana+Foods,+Punjab,+India+141001"
+              aria-label="Address"
+              style={{ textDecoration: 'none', color: '#000' }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Maalana Foods, Punjab, India 141001
+            </a>
+          </p>
+          <p>
+            <a
+              href="mailto:maalanafoods@gmail.com"
+              style={{ textDecoration: 'none', color: '#000' }}
+            >
+              maalanafoods@gmail.com
+            </a>
+          </p>
         </div>
       </div>
 

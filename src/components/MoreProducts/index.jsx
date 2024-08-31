@@ -4,16 +4,14 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './style.scss';
 
-const MoreProducts = () => {
+const MoreProducts = ({setSelectedCategory}) => {
     const settings = {
         dots: true,
         infinite: true,
         speed: 500,
         slidesToShow: 3,
         slidesToScroll: 1,
-        arrows: true,
-        autoplay: true,
-        autoplaySpeed: 3000,
+        arrows: false,
         responsive: [
             {
                 breakpoint: 1024,
@@ -27,6 +25,8 @@ const MoreProducts = () => {
             {
                 breakpoint: 600,
                 settings: {
+                    autoplay: true,
+                    autoplaySpeed: 3000,
                     slidesToShow: 1,
                     slidesToScroll: 1,
                 },
@@ -34,39 +34,41 @@ const MoreProducts = () => {
         ],
     };
 
-    const products = [
+    const product = [
         {
             name: 'Imli Ladoo',
             img: require('../../assets/more-product/img-5.png'),
             bgColor: '#FFD8B7',
+            cate: 'Imli Range',
         },
         {
             name: 'Green Mango',
             img: require('../../assets/more-product/img-6.png'),
             bgColor: '#E2FFB2',
+            cate: 'Lollipops',
         },
         {
             name: 'Orange Fruit Katli',
             img: require('../../assets/more-product/img-4.png'),
             bgColor: '#FFD191',
+            cate: 'Fruit katli',
         },
-        // {
-        //     name: 'Orange Fruit Katli',
-        //     img: require('../../assets/more-product/img-4.png'),
-        //     bgColor: '#FFD191',
-        // },
-        // Add more products if needed
     ];
+
+    const handleClick = (cate) => {
+        setSelectedCategory(cate);
+        window.scrollTo(0, 0);
+    };
 
     return (
         <div className="more-products">
             <h2>More Products</h2>
             <div className='more'>
                 <Slider {...settings}>
-                    {products.map((product, index) => (
+                    {product.map((product, index) => (
                         <>
                             <div key={index} className="product-slide">
-                                <div className="product-circle" style={{ backgroundColor: product.bgColor }}>
+                                <div className="product-circle" style={{ backgroundColor: product.bgColor, cursor: 'pointer' }}  onClick={() => handleClick(product.cate)}>
                                     <div className='product-center-image-more-products'>
                                         <img src={product.img} alt={product.name} className="product-image-more-products" />
                                     </div>

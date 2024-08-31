@@ -12,7 +12,7 @@ import './style.css';
 
 const ProductGridCard = ({ products, title }) => {
     const navigate = useNavigate();
-    const { userId, updateCartItemCount } = useAuth();
+    const { userId, updateCartItemCount, isUserAuthenticated } = useAuth();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [cartId, setCartId] = useState(null);
@@ -21,10 +21,15 @@ const ProductGridCard = ({ products, title }) => {
         navigate(`/products-details/${productId}`, { state: { product } });
     };
 
-    const handleOpenDrawer = async (product) => {
 
+    const handleOpenDrawer = async (product) => {
+        if (!isUserAuthenticated) {
+            // Redirect to login page if user is not authenticated
+            navigate('/login');
+            return;
+        }
         try {
-            const response = await fetch('http://localhost:8000/api/add-to-cart', {
+            const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

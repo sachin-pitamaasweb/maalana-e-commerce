@@ -31,7 +31,7 @@ console.log(profile);
  // Function to call the API
  const sendOrderDetailsEmail = async () => {
     try {
-        await axios.post('http://localhost:8000/api/send-order-details-email', {
+        await axios.post('https://maalana-backend.onrender.com/api/send-order-details-email', {
             email: profile?.email, // Assuming `user` object has an `email` property
             order: {
                 orderNumber,

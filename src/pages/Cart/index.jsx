@@ -42,7 +42,7 @@ const Cart = () => {
         const fetchCartData = async () => {
             setLoading(true);
             try {
-                        const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`, {
+                        const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`, {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ const Cart = () => {
 
     const updateCart = async (newQuantity, cartId, productId) => {
         try {
-            const response = await fetch('http://localhost:8000/api/update-cart', {
+            const response = await fetch('https://maalana-backend.onrender.com/api/update-cart', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -248,6 +248,30 @@ const Cart = () => {
         }
     };
 
+    // const handleDeleteClick = async () => {
+    //     if (selectedAddress) {
+    //         try {
+    //             // Send DELETE request to the API
+    //             const response = await fetch(`http://localhost:8000/api/delete-shiped-address/${selectedAddress._id}`, {
+    //                 method: 'DELETE',
+    //             });
+    
+    //             if (response.ok) {
+    //                 // Remove the address from the local state if the API call is successful
+    //                 const updatedAddresses = addresses.filter((addr) => addr._id !== selectedAddress._id);
+    //                 updateAddresses(updatedAddresses);
+    //                 setSelectedAddress(null);
+    //             } else {
+    //                 console.error('Failed to delete the address');
+    //             }
+    //         } catch (error) {
+    //             console.error('Error deleting the address:', error);
+    //         }
+    //     } else {
+    //         console.error('No address selected');
+    //     }
+    // }
+    
     const handleCheckout = () => {
         navigate('/payment', { state: { selectedAddress, cartItems, profile, orderSummary } });
     }
@@ -339,11 +363,11 @@ const Cart = () => {
                                 <span>Total</span>
                                 <span>₹{orderSummary.total || 0}</span>
                             </div>
-                            <button className="checkout-button" onClick={handleCheckout} disabled={paginatedItems.length === 0}>Proceed to Checkout</button>
-                            <div className="coupon-input">
+                            <button className="checkout-button" onClick={handleCheckout} disabled={paginatedItems.length === 0 && addresses.length === 0}>Proceed to Checkout</button>
+                            {/* <div className="coupon-input">
                                 <input type="text" placeholder="Enter coupon code" aria-label="Coupon code" />
                                 <button>Apply</button>
-                            </div>
+                            </div> */}
                             <div className="shipping-address">
                                 <h3>Shipping Addresses</h3>
                                 {
@@ -369,12 +393,12 @@ const Cart = () => {
                                                             </svg>
                                                             Edit
                                                         </button>
-                                                        <button className="btn" aria-label="Delete address">
+                                                        {/* <button className="btn" aria-label="Delete address" onClick={() => handleDeleteClick(address)}>
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="btn-icon">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                             </svg>
                                                             Delete
-                                                        </button>
+                                                        </button> */}
                                                     </div>
                                                 </div>
                                             </div>

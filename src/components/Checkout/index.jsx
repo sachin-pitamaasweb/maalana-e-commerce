@@ -87,7 +87,7 @@ console.log(orderData);
 console.log('here', cartItems[0].productId
 );
     try {
-      const response = await fetch('http://localhost:8000/api/create-orders', {
+      const response = await fetch('https://maalana-backend.onrender.com/api/create-orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

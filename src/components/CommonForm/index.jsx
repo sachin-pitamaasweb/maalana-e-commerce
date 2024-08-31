@@ -6,6 +6,8 @@ import styles from './CommonForm.module.scss';
 import { validateForm } from '../../utils/validation.js';
 import { useAuth } from '../../context/AuthContext'; // Import the useAuth hook
 
+import ForgetPasswordModal from '../ForgetPasswordModal/index.jsx';
+
 const CommonForm = ({ title = "" }) => {
     const navigate = useNavigate();
     const { login } = useAuth(); // Destructure the login function from the useAuth hook
@@ -18,6 +20,7 @@ const CommonForm = ({ title = "" }) => {
         password: '',
         message: '',
     });
+    const [modalOpen, setModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -30,6 +33,9 @@ const CommonForm = ({ title = "" }) => {
             document.body.style.backgroundColor = '';
         };
     }, []);
+
+    const handleModalOpen = () => setModalOpen(true);
+    const handleModalClose = () => setModalOpen(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -63,7 +69,7 @@ const CommonForm = ({ title = "" }) => {
                 if (responseData.success) {
                     setSnackbarSeverity('success');
                     setSnackbarMessage('User registered successfully. Please check your email for verification.');
-                    login(responseData.user._id); 
+                    login(responseData.user._id);
                     navigate(`/profile/${responseData.user._id}`, { state: { id: responseData.user._id } });
                 } else {
                     setSnackbarSeverity('error');
@@ -184,13 +190,13 @@ const CommonForm = ({ title = "" }) => {
                             >
                                 <input
                                     type="text"
-                                placeholder="Company name"
-                                className={`${styles.inputField} ${errors.companyName ? styles.errorInput : ''}`}
-                                name='companyName'
-                                value={formData.companyName}
-                                onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                                required
-                                maxLength={100}
+                                    placeholder="Company name"
+                                    className={`${styles.inputField} ${errors.companyName ? styles.errorInput : ''}`}
+                                    name='companyName'
+                                    value={formData.companyName}
+                                    onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                                    required
+                                    maxLength={100}
                                 />
                             </Tooltip>
                         </Grid>
@@ -303,18 +309,22 @@ const CommonForm = ({ title = "" }) => {
                             textAlign: "end",
                             cursor: "pointer",
                             marginRight: "30px"
-                        }}>
+                        }}
+                        onClick={handleModalOpen}
+                    >
                         Forget Password?
                     </Typography>
                 }
-                <Button
-                    type='submit'
-                    variant="outlined"
-                    className={styles.submitButton}
-                    disabled={loading}
-                >
-                    {loading ? 'Submitting...' : 'Submit'}
-                </Button>
+                <Box>
+                    <Button
+                        type='submit'
+                        variant="outlined"
+                        className={styles.submitButtonCommon}
+                        disabled={loading}
+                    >
+                        {loading ? 'Submitting...' : 'Submit'}
+                    </Button>
+                </Box>
                 {title === "Sign Up" &&
                     <Box
                         className={styles.footer}
@@ -322,7 +332,7 @@ const CommonForm = ({ title = "" }) => {
                     >
                         <Typography
                             className={styles.footerText}>
-                            Already have an account? <Button variant='text' onClick={() => navigate('/login')}>Login</Button>
+                            Already have an account? <Button variant='text' onClick={() => navigate('/login')} sx={{ color: "#000 !important" }}>Login</Button>
                         </Typography>
                     </Box>
                 }
@@ -330,7 +340,7 @@ const CommonForm = ({ title = "" }) => {
                     <Box className={styles.footer}
                         sx={{ marginTop: "30px" }}>
                         <Typography className={styles.footerText}>Don't have an account?
-                            <Button variant='text' onClick={() => navigate('/signup')}>Sign Up</Button>
+                            <Button variant='text' onClick={() => navigate('/signup')} sx={{ color: "#000 !important" }}>Sign Up</Button>
                         </Typography>
                     </Box>
                 }
@@ -350,7 +360,9 @@ const CommonForm = ({ title = "" }) => {
                     {snackbarMessage}
                 </Alert>
             </Snackbar>
+           { modalOpen && <ForgetPasswordModal open={modalOpen} handleClose={handleModalClose} />}
         </Box>
+
     );
 };
 

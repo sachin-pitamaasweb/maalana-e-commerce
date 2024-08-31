@@ -109,9 +109,7 @@ function App() {
             <Route
               path="/products"
               element={
-                <ProtectedRoute>
                   <Products products={products} />
-                </ProtectedRoute>
               }
             />
             <Route

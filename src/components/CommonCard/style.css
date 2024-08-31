@@ -52,10 +52,10 @@
     justify-content: center;
   }
   
-  .product-image img {
+  .product-image-common {
     border-radius: 10px;
     width: 200px !important;
-    height: 200px;
+    height: 200px !important;
   }
   
   .product-card h3 {

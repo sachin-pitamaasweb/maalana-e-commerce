@@ -84,7 +84,7 @@ const Products = ({ products }) => {
                         />
                         <StyledBox />
                         <OverlayImage />
-                        <MoreProducts />
+                        <MoreProducts products={products} setSelectedCategory={setSelectedCategory} />
                     </>
                 );
             case "Family Candy Pack":
@@ -97,6 +97,8 @@ const Products = ({ products }) => {
                 return <PrductGridCard products={filteredProducts}  title={"Imli Range"}/>;
             case "Lollipops":
                 return <PrductGridCard products={filteredProducts} title={"Lollipops"} />;
+            case "Fruit katli":
+                return <PrductGridCard products={filteredProducts}  title={"Fruit Katli Range"}/>;
             default:
                 return <PrductGridCard products={filteredProducts}  title={"Fruit Katli Range"}/>;
         }

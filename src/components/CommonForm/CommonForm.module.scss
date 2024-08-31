@@ -138,7 +138,7 @@ $button-text-color: #ffffff;
   font-size: 0.875rem;
 }
 
-.submitButton {
+.submitButtonCommon {
   color: $button-text-color !important;
   background-color: $background-color !important;
   padding: 5px 79px !important;
@@ -154,6 +154,7 @@ $button-text-color: #ffffff;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
   letter-spacing: 1px !important;
   margin: 39px 1px 0px !important;
+  width: 50% !important;
 
   &:hover {
     color: $button-text-color !important;

@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ShoppingCart, AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
-import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton, Typography } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton, Menu, MenuItem } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
+
 import Badge from '@mui/material/Badge';
 import Stack from '@mui/material/Stack';
 
 import './Header.scss';
-import Logo from '../../assets/logo/Maalana-logo.png';
+import Logo from '../../assets/logo/logo-1.png';
 import { navLinks } from '../../constants/helper.js';
 
 import { useAuth } from '../../context/AuthContext';
@@ -17,7 +19,8 @@ const Header = () => {
     const isMobile = useMediaQuery('(max-width: 899px)');
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [activeLink, setActiveLink] = useState('');
-    const { isUserAuthenticated, userId, cartItemCount } = useAuth();
+    const [anchorEl, setAnchorEl] = useState(null);
+    const { isUserAuthenticated, userId, cartItemCount, logout } = useAuth();
 
     const handleLinkClick = (link) => {
         setActiveLink(link);
@@ -25,6 +28,20 @@ const Header = () => {
             setDrawerOpen(false);
         }
         navigate(link)
+    };
+
+    const handleMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleLogout = () => {
+        logout();
+        handleMenuClose();
+        navigate('/login');
     };
 
     return (
@@ -65,24 +82,35 @@ const Header = () => {
                 </ul>
             </nav>
             {!isMobile && (
-
                 <div className="icons">
                     <Stack spacing={4} direction="row">
-                        {isUserAuthenticated ? <Badge badgeContent={cartItemCount} color="secondary">
+                        {isUserAuthenticated ? (
+                            <Badge badgeContent={cartItemCount} color="secondary">
+                                <Link to="/cart" className="iconButton">
+                                    <ShoppingCart />
+                                </Link>
+                            </Badge>
+                        ) : (
                             <Link to="/cart" className="iconButton">
                                 <ShoppingCart />
                             </Link>
-                        </Badge> : <Link to="/cart" className="iconButton">
-                            <ShoppingCart />
-                        </Link>
-                        }
-                        {isUserAuthenticated ? <Link to={`/profile/${userId}`} className="iconButton">
+                        )}
+                        <IconButton onClick={handleMenuClick} className="iconButton">
                             <AccountCircle />
-                        </Link>
-                            : <Link to="/login" className="iconButton">
-                                <Typography variant="body1">Login</Typography>
-                            </Link>
-                        }
+                        </IconButton>
+                        <Menu
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={handleMenuClose}
+                        >
+                            <MenuItem component={Link} to={`/profile/${userId}`} onClick={handleMenuClose}>
+                                Profile
+                            </MenuItem>
+                            <MenuItem onClick={handleLogout}>
+                                <LogoutIcon />
+                                Logout
+                            </MenuItem>
+                        </Menu>
                     </Stack>
                 </div>
             )}
