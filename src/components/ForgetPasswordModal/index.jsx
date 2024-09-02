@@ -16,7 +16,7 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
         setLoading(true);
         setError('');
         try {
-            const response = await fetch('http://localhost:8000/api/new-forgot-password', {
+            const response = await fetch('https://maalana-backend.onrender.com/api/new-forgot-password', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
         try {
              // Ensure otp is converted to a number
         const otpNumber = Number(otp);
-            const response = await fetch('http://localhost:8000/api/otp-verify', {
+            const response = await fetch('https://maalana-backend.onrender.com/api/otp-verify', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
