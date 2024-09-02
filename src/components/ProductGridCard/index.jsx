@@ -29,7 +29,8 @@ const ProductGridCard = ({ products, title }) => {
             return;
         }
         try {
-            const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
+            
+            const response = await fetch('http://localhost:8000/api/add-to-cart  ', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

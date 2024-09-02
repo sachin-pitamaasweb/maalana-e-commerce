@@ -121,7 +121,6 @@ const getDynamicStyles = (title) => {
     }
 
     const { backgroundColor, borderColors } = getDynamicStyles(title);
-    console.log(backgroundColor, borderColors);
     return (
         <div className="best-sellers">
             <h2>{title}</h2>

@@ -38,12 +38,13 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
     };
 
     const handleOtpSubmit = async () => {
-        console.log( typeof otp);
+        console.log(typeof otp);
         setLoading(true);
         setError('');
         try {
-             // Ensure otp is converted to a number
-        const otpNumber = Number(otp);
+            // Ensure otp is converted to a number
+            const otpNumber = Number(otp);
+            console.log( typeof otpNumber);
             const response = await fetch('https://maalana-backend.onrender.com/api/otp-verify', {
                 method: 'POST',
                 headers: {

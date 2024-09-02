@@ -332,7 +332,7 @@ const CommonForm = ({ title = "" }) => {
                     >
                         <Typography
                             className={styles.footerText}>
-                            Already have an account? <Button variant='text' onClick={() => navigate('/login')} sx={{ color: "#000 !important" }}>Login</Button>
+                            Already have an account? <Typography variant='text' onClick={() => navigate('/login')} sx={{ color: "#000 !important",  marginLeft: "5px", cursor: "pointer" }}>Login</Typography>
                         </Typography>
                     </Box>
                 }
@@ -340,7 +340,7 @@ const CommonForm = ({ title = "" }) => {
                     <Box className={styles.footer}
                         sx={{ marginTop: "30px" }}>
                         <Typography className={styles.footerText}>Don't have an account?
-                            <Button variant='text' onClick={() => navigate('/signup')} sx={{ color: "#000 !important" }}>Sign Up</Button>
+                            <Typography variant='text' onClick={() => navigate('/signup')} sx={{ color: "#000 !important", marginLeft: "5px", cursor: "pointer" }}>Sign Up</Typography>
                         </Typography>
                     </Box>
                 }

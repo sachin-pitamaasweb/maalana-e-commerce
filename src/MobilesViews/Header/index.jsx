@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ShoppingCart, AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton, Menu, MenuItem, Button } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import Badge from '@mui/material/Badge';
@@ -89,7 +89,7 @@ const Header = () => {
                     <Stack spacing={4} direction="row">
                         {isUserAuthenticated ? (
                             <>
-                                <Badge badgeContent={cartItemCount} color="secondary">
+                                <Badge badgeContent={cartItemCount} color="secondary" sx={{ marginTop: '10px !important' }}>
                                     <Link to="/cart" className="iconButton">
                                         <ShoppingCart />
                                     </Link>
@@ -116,9 +116,26 @@ const Header = () => {
                                 <Link to="/cart" className="iconButton">
                                     <ShoppingCart />
                                 </Link>
-                                <Typography>
-                                    <Link to="/login">Login</Link>
-                                </Typography>
+                                <Button variant="contained"
+                                    sx={{
+                                        backgroundColor: '#B9D514',
+                                        borderRadius: '10px',
+                                        textTransform: 'capitalize',
+                                        color: '#000',
+                                        transition: 'all 0.3s ease',
+                                        fontFamily: '"MADE-Tommy-Soft-Light-PERSONAL-USE", sans-serif !important',
+                                        '&:hover': {
+                                            backgroundColor: '#B9D514',
+                                            color: '#000',
+                                        },
+                                        '&:active': {
+                                            backgroundColor: '#9cbf12',
+                                            color: '#000',
+                                        },
+                                    }}
+                                    onClick={() => navigate('/login')}>
+                                    Login
+                                </Button>
                             </>
                         )}
 
