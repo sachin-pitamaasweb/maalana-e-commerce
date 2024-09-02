@@ -16,7 +16,7 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
         setLoading(true);
         setError('');
         try {
-            const response = await fetch('https://maalana-backend.onrender.com/api/forgot-password', {
+            const response = await fetch('http://localhost:8000/api/new-forgot-password', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,20 +38,22 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
     };
 
     const handleOtpSubmit = async () => {
+        console.log( typeof otp);
         setLoading(true);
         setError('');
         try {
-            const response = await fetch('https://maalana-backend.onrender.com/api/check-otp', {
+             // Ensure otp is converted to a number
+        const otpNumber = Number(otp);
+            const response = await fetch('http://localhost:8000/api/otp-verify', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, otp }),
+                body: JSON.stringify({ email, otp: otpNumber }),
             });
             const data = await response.json();
             if (data.success) {
                 setResetPasswordMode(true); // Switch to Reset Password mode
-                setError('OTP verified successfully. Please enter your new password.');
             } else {
                 setError(data.message || 'Invalid OTP. Please try again.');
             }
@@ -66,12 +68,12 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
         setLoading(true);
         setError('');
         try {
-            const response = await fetch('https://maalana-backend.onrender.com/api/reset-password', {  // Assuming there's an endpoint for password reset
+            const response = await fetch('https://maalana-backend.onrender.com/api/reset-password-with-otp', {  // Assuming there's an endpoint for password reset
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, otp, newPassword }),
+                body: JSON.stringify({ email, newPassword }),
             });
             const data = await response.json();
             if (data.success) {

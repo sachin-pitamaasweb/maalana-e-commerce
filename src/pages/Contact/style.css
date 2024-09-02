@@ -31,6 +31,7 @@
     overflow: hidden;
     max-width: 1024px;
     width: 100%;
+    margin: 10px;
 }
 
 .content {
@@ -39,7 +40,8 @@
 }
 
 .form-section {
-    padding: 2rem;
+    padding: 0rem;
+    margin: 10px;
 }
 
 h2 {
@@ -64,7 +66,7 @@ form {
 }
 
 .phone-input {
-    width: 100%;
+    /* width: 100%; */
     padding: 0.75rem;
     border: 1px solid #d1d5db;
     border-radius: 0.375rem;
@@ -168,6 +170,17 @@ button:disabled {
     .map-section {
         width: 50%;
     }
+
+
+    
+.phone-input {
+    /* width: 100%; */
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+}
+
 
     /* .map-section {
         height: auto;

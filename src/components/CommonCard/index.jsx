@@ -101,6 +101,10 @@ const getDynamicStyles = (title) => {
             console.error('Error adding product to cart:', error);
         }
     };
+     
+    const handleNavigateToDetails = (productId, product) => {
+        navigate(`/products-details/${productId}`, { state: { product } });
+    };
 
     if (!userId) {
         return null;
@@ -128,7 +132,7 @@ const getDynamicStyles = (title) => {
                         className="product-card"
                         style={{ backgroundColor: borderColors[index % borderColors.length] }}
                     >
-                        <div className="product-image">
+                        <div className="product-image" onClick={() => handleNavigateToDetails(product._id, product)} style={{ cursor: 'pointer' }}>
                             <img src={product.images.mainImage} alt={product.name} className="product-image-common" /> {/* Ensure `product.imageUrl` and `product.name` exist */}
                         </div>
                         <h3>{product.name}</h3>
