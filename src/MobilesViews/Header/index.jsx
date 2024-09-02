@@ -41,6 +41,9 @@ const Header = () => {
     const handleLogout = () => {
         logout();
         handleMenuClose();
+        if (isMobile) {
+            setDrawerOpen(false);
+        }
         navigate('/login');
     };
 
@@ -139,11 +142,25 @@ const Header = () => {
                                         <ListItemText primary={link.title} />
                                     </ListItem>
                                 ))}
-                                <ListItem button component={Link} to={`/profile/${userId}`}>
-                                    <ListItemIcon>
-                                        <AccountCircle />
-                                    </ListItemIcon>
-                                </ListItem>
+                                {
+                                    isUserAuthenticated ?
+                                        <>
+                                            <ListItem button component={Link} to={`/profile/${userId}`}>
+                                                <ListItemIcon>
+                                                    <AccountCircle />
+                                                </ListItemIcon>
+                                            </ListItem>
+                                            <ListItem button onClick={handleLogout}>
+                                                <ListItemIcon>
+                                                    <LogoutIcon />
+                                                </ListItemIcon>
+                                            </ListItem>
+                                        </>
+                                        :
+                                        <ListItem button component={Link} to="/login" onClick={() => setDrawerOpen(false)}>
+                                            <ListItemText primary="Login" />
+                                        </ListItem>
+                                }
                             </List>
                         </div>
                     </Drawer>
