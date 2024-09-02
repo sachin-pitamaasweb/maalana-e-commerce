@@ -113,7 +113,7 @@ const Header = () => {
                             </>
                         ) : (
                             <>
-                                <Link to="/cart" className="iconButton">
+                                <Link to="/cart" className="iconButton" style={{ marginTop: '10px' }}>
                                     <ShoppingCart />
                                 </Link>
                                 <Button variant="contained"

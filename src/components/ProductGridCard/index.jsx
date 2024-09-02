@@ -2,6 +2,9 @@ import React, { useState } from "react";
 
 import { useNavigate } from 'react-router-dom';
 
+import { CircularProgress } from '@mui/material';
+
+
 // import FilterListIcon from '@mui/icons-material/FilterList';
 
 import ProductDrawer from "../ProductDrawer/index";
@@ -16,6 +19,7 @@ const ProductGridCard = ({ products, title }) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [cartId, setCartId] = useState(null);
+    const [loadingProductId, setLoadingProductId] = useState(null);
 
     const handleDetails = (productId, product) => {
         navigate(`/products-details/${productId}`, { state: { product } });
@@ -28,9 +32,10 @@ const ProductGridCard = ({ products, title }) => {
             navigate('/login');
             return;
         }
+        setLoadingProductId(product._id);
         try {
-            
-            const response = await fetch('http://localhost:8000/api/add-to-cart  ', {
+
+            const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,6 +63,8 @@ const ProductGridCard = ({ products, title }) => {
 
         } catch (error) {
             console.error(error);
+        } finally {
+            setLoadingProductId(null);
         }
     };
 
@@ -141,7 +148,14 @@ const ProductGridCard = ({ products, title }) => {
                                     <h2 className="product-name">{product.name || "N/A"}</h2>
                                     <div className="product-price-cart">
                                         <span className="product-price">₹{product.price || "N/A"}</span>
-                                        <button className="add-to-cart-card" onClick={() => handleOpenDrawer(product)}>ADD TO CART</button>
+                                        <button className="add-to-cart-card" 
+                                        disabled={loadingProductId === product._id} onClick={() => handleOpenDrawer(product)}>
+                                            {loadingProductId === product._id ? (
+                                                <CircularProgress size={24} />
+                                            ) : (
+                                                "ADD TO CART"
+                                            )}
+                                        </button>
                                         {/* {!isProductInCart(product._id) ? (
                                             <div className="item-quantity">
                                                 <button

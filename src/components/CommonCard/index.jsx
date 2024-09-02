@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+
+import { CircularProgress } from '@mui/material';
+
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import OwlCarousel from 'react-owl-carousel';
@@ -13,6 +16,7 @@ const CommonCard = ({ products, title }) => {
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [loadingProductId, setLoadingProductId] = useState(null);
     const { userId, updateCartItemCount, isUserAuthenticated } = useAuth();
     const [cartId, setCartId] = useState(null);
 
@@ -27,14 +31,16 @@ const CommonCard = ({ products, title }) => {
         margin: 10,
         nav: false,
         dots: false,
-        autoplay: true,
-        autoplayTimeout: 3000,
         responsive: {
             0: {
+                autoplay: true,
+                autoplayTimeout: 3000,
                 items: 1,
                 margin: 20
             },
             600: {
+                autoplay: true,
+                autoplayTimeout: 3000,
                 items: 2
             },
             1000: {
@@ -47,21 +53,21 @@ const CommonCard = ({ products, title }) => {
     };
 
 
-// Define colors and background settings for different titles
-const getDynamicStyles = (title) => {
-    switch (title) {
-        case 'Best Sellers':
-            return { backgroundColor: '#FFDCF7', borderColors: ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE'] };
-        case 'Imli Range':
-            return { backgroundColor: '#FEFFDC', borderColors: ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#BEFFCC'] };
-        case 'Lollipops':
-            return { backgroundColor: '#FFD4A8', borderColors: ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE', '#BEFFCC'] };
-        case 'Fruit Katli Range':
-            return { backgroundColor: '#CAFFCF', borderColors: ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE', '#BEFFCC'] };
-        default:
-            return { backgroundColor: '#FFFFFF', borderColors: ['#E0E0E0'] }; // Default case
-    }
-};
+    // Define colors and background settings for different titles
+    const getDynamicStyles = (title) => {
+        switch (title) {
+            case 'Best Sellers':
+                return { backgroundColor: '#FFDCF7', borderColors: ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE'] };
+            case 'Imli Range':
+                return { backgroundColor: '#FEFFDC', borderColors: ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#BEFFCC'] };
+            case 'Lollipops':
+                return { backgroundColor: '#FFD4A8', borderColors: ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE', '#BEFFCC'] };
+            case 'Fruit Katli Range':
+                return { backgroundColor: '#CAFFCF', borderColors: ['#E0F2FF', '#E2FFB2', '#FFE4BE', '#FFBEBE', '#BEFFCC'] };
+            default:
+                return { backgroundColor: '#FFFFFF', borderColors: ['#E0E0E0'] }; // Default case
+        }
+    };
 
     const handleAddToCart = async (product) => {
         if (!isUserAuthenticated) {
@@ -70,9 +76,7 @@ const getDynamicStyles = (title) => {
             window.scrollTo(0, 0);
             return;
         }
-        setSelectedProduct(product);
-        setDrawerOpen(true);
-
+        setLoadingProductId(product._id);
         try {
             const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
                 method: 'POST',
@@ -92,6 +96,8 @@ const getDynamicStyles = (title) => {
             if (data.success) {
                 setCartId(data.cart._id);
                 updateCartItemCount(data.totalQuantity);
+                setSelectedProduct(product);
+                setDrawerOpen(true);
                 // Update cart item count in context
                 console.log('Product added to cart successfully');
             } else {
@@ -99,9 +105,11 @@ const getDynamicStyles = (title) => {
             }
         } catch (error) {
             console.error('Error adding product to cart:', error);
+        } finally {
+            setLoadingProductId(null);
         }
     };
-     
+
     const handleNavigateToDetails = (productId, product) => {
         navigate(`/products-details/${productId}`, { state: { product } });
     };
@@ -137,7 +145,13 @@ const getDynamicStyles = (title) => {
                         <h3>{product.name}</h3>
                         <p className="price">₹{product.price}</p>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <button className="add-to-cart" onClick={() => handleAddToCart(product)}>ADD TO CART</button>
+                            <button className="add-to-cart" onClick={() => handleAddToCart(product)}>
+                                {!loadingProductId === product._id ? (
+                                    <CircularProgress size={24} />
+                                ) : (
+                                    "ADD TO CART"
+                                )}
+                            </button>
                         </div>
                     </div>
                 ))}
