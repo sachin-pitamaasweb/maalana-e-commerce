@@ -2,8 +2,15 @@ import React, { useState, useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import Pagination from '@mui/material/Pagination';
 import CircularProgress from '@mui/material/CircularProgress';
+
+import { useTheme, useMediaQuery } from '@mui/material';
+
+// mui icon
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import axios from 'axios';
 
@@ -13,13 +20,20 @@ import { useAuth } from '../../context/AuthContext';
 
 import EditAddressModal from '../../components/EditAddressModal';
 
+// import ShoppingCart from './ShoppingCart';
+
 const Cart = () => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const itemsPerPage = 4; // Number of items per page
     const { userId, updateAddresses, addresses, updateCartItemCount, profile } = useAuth();
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
     const [orderSummary, setOrderSummary] = useState({
         subTotal: 0,
         discount: 0,
@@ -42,15 +56,15 @@ const Cart = () => {
         const fetchCartData = async () => {
             setLoading(true);
             try {
-                        const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`, {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        });
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
+                const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
 
                 const data = await response.json();
                 // console.log('Cart data:', data);
@@ -75,7 +89,6 @@ const Cart = () => {
                 // Calculate order summary
                 const subTotal = items.reduce((sum, item) => sum + item.cartProducts.price * item.quantity, 0);
                 const total = subTotal; // Adjust as needed for discounts, taxes, etc.
-                console.log('total', total);
                 setOrderSummary({
                     subTotal,
                     discount: 0, // Replace with actual discount if available
@@ -147,10 +160,9 @@ const Cart = () => {
             setOrderSummary({
                 ...orderSummary,
                 total: data.totalPrice,
-                subTotal: data.totalPrice    
+                subTotal: data.totalPrice
             });
 
-            console.log('Cart updated successfully:', data);
         } catch (error) {
             console.error('Error updating cart:', error);
         }
@@ -255,7 +267,7 @@ const Cart = () => {
     //             const response = await fetch(`http://localhost:8000/api/delete-shiped-address/${selectedAddress._id}`, {
     //                 method: 'DELETE',
     //             });
-    
+
     //             if (response.ok) {
     //                 // Remove the address from the local state if the API call is successful
     //                 const updatedAddresses = addresses.filter((addr) => addr._id !== selectedAddress._id);
@@ -271,16 +283,69 @@ const Cart = () => {
     //         console.error('No address selected');
     //     }
     // }
-    
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+    };
+
+
+    const handleRemove = async (cartId, productId) => {
+        console.log(cartId, productId, userId);
+        try {
+            setLoading(true);
+            const response = await fetch(`http://malana-backend.onrender.com/api/delete-cart-product`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    productId: productId,
+                    cartId: cartId,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to remove item from cart');
+            }
+
+            const data = await response.json();
+            console.log('data', data);
+            if (data.success) {
+                const updatedItems = cartItems.filter(item => !(item.cartId === cartId && item.productId === productId));
+                setCartItems(updatedItems);
+                updateCartItemCount(data.totalQuantity);
+                setOrderSummary({
+                    ...orderSummary,
+                    total: data.totalPrice,
+                    subTotal: data.totalPrice
+                });
+                setSnackbarMessage('Item removed successfully');
+                setSnackbarSeverity('success');
+                setSnackbarOpen(true);
+            } else {
+                setSnackbarMessage('Failed to remove item');
+                setSnackbarSeverity('error');
+                setSnackbarOpen(true);
+            }
+        } catch (error) {
+            console.error('Error removing item:', error);
+            setSnackbarMessage('Error removing item');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     const handleCheckout = () => {
         navigate('/payment', { state: { selectedAddress, cartItems, profile, orderSummary } });
     }
 
-    console.log('selectedAddress', selectedAddress);
     const paginatedItems = Array.isArray(cartItems)
         ? cartItems.slice((page - 1) * itemsPerPage, page * itemsPerPage)
         : [];
-        console.log('paginatedItems', paginatedItems.length);
     return (
         <>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -311,15 +376,48 @@ const Cart = () => {
                                     {paginatedItems.length > 0 ? (
                                         paginatedItems.map((item) => (
                                             <div className="cart-item" key={item.productId}>
-                                                <img src={item.cartProducts.images.mainImage || 'https://res.cloudinary.com/dtivafy25/image/upload/v1723530547/image/img-2_nj1zsm.png'} alt={item.productId.name} />
+                                                <div>
+                                                    <img src={item.cartProducts.images.mainImage || 'https://res.cloudinary.com/dtivafy25/image/upload/v1723530547/image/img-2_nj1zsm.png'} alt={item.productId.name} />
+                                                </div>
                                                 <div className="item-details">
-                                                    <h3>{item.cartProducts.name}</h3>
-                                                    <p>₹{item.cartProducts.price}</p>
-                                                    <div className="item-quantity">
-                                                        <button aria-label="Decrease quantity" onClick={() => handleDecrement(item.cartId, item.productId)}>-</button>
-                                                        <input type="number" value={item.quantity} min="1" aria-label="Quantity" />
-                                                        <button aria-label="Increase quantity" onClick={() => handleIncrement(item.cartId, item.productId)}>+</button>
-                                                    </div>
+                                                    <h3>{item.cartProducts.name.slice(0, 10)}</h3>
+                                                    <p>₹{item.cartProducts.price * item.quantity}</p>
+                                                    {
+                                                        isMobile ?
+                                                            (
+                                                                <div className='item-controls-for-mobile'>
+                                                                    <div className="item-quantity">
+                                                                        <button aria-label="Decrease quantity" onClick={() => handleDecrement(item.cartId, item.productId)}>-</button>
+                                                                        <input type="number" value={item.quantity} min="1" aria-label="Quantity" />
+                                                                        <button aria-label="Increase quantity" onClick={() => handleIncrement(item.cartId, item.productId)}>+</button>
+                                                                    </div>
+                                                                    <button
+                                                                        aria-label="Remove item from cart"
+                                                                        className="remove-button"
+                                                                        onClick={() => handleRemove(item.cartId, item.productId)}
+                                                                    >
+                                                                        <DeleteIcon />
+                                                                    </button>
+                                                                </div>
+                                                            )
+                                                            :
+                                                            (
+                                                                <>
+                                                                    <div className="item-quantity">
+                                                                        <button aria-label="Decrease quantity" onClick={() => handleDecrement(item.cartId, item.productId)}>-</button>
+                                                                        <input type="number" value={item.quantity} min="1" aria-label="Quantity" />
+                                                                        <button aria-label="Increase quantity" onClick={() => handleIncrement(item.cartId, item.productId)}>+</button>
+                                                                    </div>
+                                                                    <button
+                                                                        aria-label="Remove item from cart"
+                                                                        className="remove-button"
+                                                                        onClick={() => handleRemove(item.cartId, item.productId)}
+                                                                    >
+                                                                        <DeleteIcon />
+                                                                    </button>
+                                                                </>
+                                                            )
+                                                    }
                                                 </div>
                                             </div>
                                         ))
@@ -341,6 +439,13 @@ const Cart = () => {
                                 </>
                             )}
                         </div>
+
+                        {/* <ShoppingCart
+                            cartItems={paginatedItems}
+                            setCartItems={setCartItems}
+                            onIncrement={handleIncrement}
+                            onDecrement={handleDecrement}
+                          /> */}
                         <div className="cart-summary">
                             <h2>Order Summary</h2>
                             <div className="summary-item">
@@ -372,7 +477,7 @@ const Cart = () => {
                                 <h3>Shipping Addresses</h3>
                                 {
                                     addresses.length === 0 ? (
-                                        <p>No addresses available. go to profile and click on "MY Address"</p>
+                                        <p>No addresses available. go to profile and click on "MY Address" </p>
                                     ) : (
                                         addresses.map((address, index) => (
                                             <div className="address-box" key={index}>
@@ -419,6 +524,20 @@ const Cart = () => {
                 loading={loading}
                 selectedAddress={selectedAddress}
             />
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert
+                    onClose={handleSnackbarClose}
+                    severity={snackbarSeverity}
+                    sx={{ width: '100%' }}
+                >
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </>
     );
 }

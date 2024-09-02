@@ -9,7 +9,7 @@ import Badge from '@mui/material/Badge';
 import Stack from '@mui/material/Stack';
 
 import './Header.scss';
-import Logo from '../../assets/logo/logo-1.png';
+// import Logo from '../../assets/logo/logo-1.png';
 import { navLinks } from '../../constants/helper.js';
 
 import { useAuth } from '../../context/AuthContext';
@@ -50,7 +50,7 @@ const Header = () => {
     return (
         <header className="header">
             <div className="logo">
-                <img src={Logo} alt="Landmark Homes" />
+                <img src={'https://res.cloudinary.com/dtivafy25/image/upload/v1725260985/logo-1_rqojr8.png'} alt="MAAlana" />
             </div>
             {isMobile && (
                 <Stack spacing={4} direction="row" alignItems="center">

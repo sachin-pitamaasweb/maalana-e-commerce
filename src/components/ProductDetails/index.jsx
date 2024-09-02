@@ -69,7 +69,9 @@ const ProductDetails = () => {
             <div className="product-grid-card-main">
                 <div className="container-product-details">
                     <div className="product-image-details">
-                        <img src={mainImage} alt="Strawberry Fruit Katli" className="main-image" />
+                        <div className="main-image-container-details">
+                            <img src={mainImage || "https://via.placeholder.com/500x500"} alt="Strawberry Fruit Katli" className="main-image" />
+                        </div>
                         <div className="thumbnail-container">
                             {product.images.mainImage && <img
                                 src={product.images.mainImage || "https://via.placeholder.com/500x500"}
