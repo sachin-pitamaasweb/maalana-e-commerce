@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }) => {
         email: '',
         profileImage: '',
     });
+    const [cartItem, setCartItem] = useState([]);
 
     useEffect(() => {
         // Update sessionStorage whenever isUserAuthenticated changes
@@ -37,9 +38,10 @@ export const AuthProvider = ({ children }) => {
         const fetchCartItemCount = async () => {
             if (userId) {
                 try {
-                    const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
+                    const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
                     const data = await response.json();
                     if (data.success) {
+                        setCartItem(data.cart);
                         setCartItemCount(data.numberOfItems);
                     }
                 } catch (error) {
@@ -47,7 +49,6 @@ export const AuthProvider = ({ children }) => {
                 }
             }
         };
-
         fetchCartItemCount();
     }, [userId]);
 
@@ -128,7 +129,9 @@ export const AuthProvider = ({ children }) => {
             updateCartItemCount,
             updateAddresses,
             addresses,
-            profile
+            profile,
+            cartItem,
+            setCartItem
         }}>
             {children}
         </AuthContext.Provider>

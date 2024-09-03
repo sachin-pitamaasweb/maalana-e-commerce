@@ -72,8 +72,9 @@ const CommonForm = ({ title = "" }) => {
                     login(responseData.user._id);
                     navigate(`/profile/${responseData.user._id}`, { state: { id: responseData.user._id } });
                 } else {
+                    console.error('Error:', responseData);
                     setSnackbarSeverity('error');
-                    setSnackbarMessage('An error occurred. Please try again later.');
+                    setSnackbarMessage(responseData.message || 'An error occurred. Please try again later.');
                 }
             } else if (title === "Login") {
                 const response = await fetch('https://maalana-backend.onrender.com/api/login-user', {
@@ -100,7 +101,7 @@ const CommonForm = ({ title = "" }) => {
         } catch (error) {
             console.error('Error:', error);
             setSnackbarSeverity('error');
-            setSnackbarMessage('An error occurred. Please try again later.');
+            setSnackbarMessage( error.message || 'An error occurred. Please try again later.');
         } finally {
             setSnackbarOpen(true);
             setLoading(false);
@@ -332,7 +333,7 @@ const CommonForm = ({ title = "" }) => {
                     >
                         <Typography
                             className={styles.footerText}>
-                            Already have an account? <Typography variant='text' onClick={() => navigate('/login')} sx={{ color: "#000 !important",  marginLeft: "5px", cursor: "pointer" }}>Login</Typography>
+                            Already have an account? <Typography variant='text' onClick={() => navigate('/login')} sx={{ color: "#000 !important", marginLeft: "5px", cursor: "pointer" }}>Login</Typography>
                         </Typography>
                     </Box>
                 }
@@ -360,7 +361,7 @@ const CommonForm = ({ title = "" }) => {
                     {snackbarMessage}
                 </Alert>
             </Snackbar>
-           { modalOpen && <ForgetPasswordModal open={modalOpen} handleClose={handleModalClose} />}
+            {modalOpen && <ForgetPasswordModal open={modalOpen} handleClose={handleModalClose} />}
         </Box>
 
     );

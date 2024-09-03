@@ -85,9 +85,7 @@ const Checkout = () => {
         total: orderSummary.total
       }
     };
-    console.log(orderData);
-    console.log('here', cartItems[0].productId
-    );
+
     try {
       const response = await fetch('https://maalana-backend.onrender.com/api/create-orders', {
         method: 'POST',
@@ -107,10 +105,10 @@ const Checkout = () => {
         navigate('/order-success', { state: { result } });
         updateCartItemCount(0);
       } else {
-        setSnackbarMessage('Order placement failed!');
+        setSnackbarMessage('Order place failed!');
         setSnackbarSeverity('error');
         // Handle error
-        console.error('Order placement failed:', result);
+        console.error('Order place failed:', result);
       }
     } catch (error) {
       setSnackbarMessage('An error occurred while placing the order!');
@@ -140,7 +138,7 @@ const Checkout = () => {
     <Box className="checkout-container">
       {/* Payment Section */}
       <Box className="payment-section">
-        <Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <IconButton className="back-button" onClick={() => window.history.back()}>
             <ArrowBackIcon />
           </IconButton>
@@ -156,12 +154,11 @@ const Checkout = () => {
           Payment Method
         </Typography>
         <FormControl component="fieldset">
-          <RadioGroup>
+          <RadioGroup value={paymentMethod} onChange={handlePaymentMethodChange}>
             <FormControlLabel
               value="razorpay"
               control={<Radio />}
               label="Razorpay"
-              onChange={handlePaymentMethodChange}
               sx={{
                 '& .MuiTypography-root': {
                   backgroundColor: '#fff',
@@ -175,7 +172,6 @@ const Checkout = () => {
               value="cod"
               control={<Radio />}
               label="Cash on Delivery"
-              onChange={handlePaymentMethodChange}
               sx={{
                 '& .MuiTypography-root': {
                   backgroundColor: '#fff',
@@ -193,11 +189,12 @@ const Checkout = () => {
         <Button
           variant="contained"
           color="primary"
+          sx={{ textTransform: 'capitalize' }}
           className="pay-now-button"
           onClick={handlePayNow}
           disabled={loading} // Disable button while loading
         >
-          {loading ? <CircularProgress size={24} /> : 'PAY NOW'}
+           {loading ? <CircularProgress size={24} /> : (paymentMethod === 'cod' ? 'Place Order' : 'PAY NOW')}
         </Button>
       </Box>
 

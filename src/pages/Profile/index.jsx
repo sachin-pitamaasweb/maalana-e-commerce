@@ -107,8 +107,7 @@ const ProfilePage = () => {
                             profileImage: data.user.userImage || ''
                         });
                     }
-                    console.log('User data:', data.user);
-                    if (data.user.userImage === staticImage && data.user.dateOfBirth === '') {
+                    if (data.user.userImage === staticImage && data.user.dateOfBirth === undefined) {
                         setIsEditable(true);
                     } else {
                         setIsEditable(false);

@@ -18,7 +18,7 @@ const MyOrdersTable = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/get-orders');
+                const response = await axios.get('https://maalana-backend.onrender.com/api/get-orders');
                 if (response.data.success) {
                     // Filter orders by userId
                     const filteredOrders = response.data.data.filter(order => order.user === userId);

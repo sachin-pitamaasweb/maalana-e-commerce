@@ -34,18 +34,17 @@ const AddressSection = ({ firstName, lastName, phone }) => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+    const [addressId, setAddressId] = useState(null);
 
     const { userId } = useAuth();
-
-console.log('billingAddress', billingAddress);
 
     useEffect(() => {
         const fetchShippingAddress = async () => {
             try {
                 const response = await axios.get(`https://maalana-backend.onrender.com/api/get-my-shiped-address/${userId}`);
-                console.log(response.data.shipedaddress[0]);
                 if (response.status === 200 && response.data.success) {
                     const addressData = response.data.shipedaddress;
+                    setAddressId(addressData[0]._id);
                     setShippingAddress({
                         address: addressData[0].address,
                         pincode: addressData[0].pincode,
@@ -55,7 +54,7 @@ console.log('billingAddress', billingAddress);
                     });
                     // If you want to initially use the same address for billing
                     setBillingAddress({
-                        name: `${firstName} ${lastName}`  || '',
+                        name: `${firstName} ${lastName}` || '',
                         phoneNumber: phone || '',
                         address: addressData[0].address,
                         pincode: addressData[0].pincode,
@@ -129,10 +128,43 @@ console.log('billingAddress', billingAddress);
         }
     };
 
+
+    const handleUpdate = async () => {
+        if (!shippingAddress) {
+            console.error('No address data available');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await axios.put(`https://maalana-backend.onrender.com/api/update-shiped-address/${addressId}`, {
+                ...shippingAddress,
+            });
+
+            if (response.data.success) {
+                setShippingAddress(response.data.shipedaddress);
+                setSnackbarMessage('Address updated successfully');
+                setSnackbarSeverity('success');
+            } else {
+                setSnackbarMessage('Error updating address');
+                setSnackbarSeverity('error');
+            }
+        } catch (error) {
+            setSnackbarMessage('Error updating address');
+            setSnackbarSeverity('error');
+            console.error('Error updating shipping address:', error);
+        } finally {
+            setLoading(false);
+            setSnackbarOpen(true);
+            setIsEditable(false);
+        }
+    };
+
     const handleSnackbarClose = () => {
         setSnackbarOpen(false);
     };
 
+    console.log('addressId', addressId);
 
     return (
         <div className="address-section">
@@ -268,7 +300,7 @@ console.log('billingAddress', billingAddress);
                         <Grid item xs={12}>
                             <TextField
                                 name="phoneNumber"
-                                placeholder="Enter your phone number"   
+                                placeholder="Enter your phone number"
                                 variant="outlined"
                                 fullWidth
                                 value={billingAddress.phoneNumber}
@@ -336,7 +368,53 @@ console.log('billingAddress', billingAddress);
                     </Grid>
                 )}
 
-                <Button className="save-button" disabled={!isEditable} onClick={handleSave}> {loading ? <CircularProgress size={24} /> : 'Save'}</Button>
+                <div className="action-buttons">
+                    {isEditable ? (
+                        <>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleUpdate}
+                                sx={{ 
+                                    textTransform: 'capitalize',
+                                    marginRight: '10px',
+                                    width: '48%',
+                                    backgroundColor: '#B9D514 !important',
+                                    color: '#000',
+                                }}
+                                disabled={loading}
+                                startIcon={loading && <CircularProgress size={20} />}
+                            >
+                                {loading ? 'Updating...' : 'Update'}
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                sx={{
+                                    textTransform: 'capitalize',
+                                    width: '48%'
+
+                                }}
+                                onClick={() => setIsEditable(false)}
+                                disabled={loading}
+                            >
+                                Cancel
+                            </Button>
+                        </>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSave}
+                            className="save-button"
+                            disabled={loading}
+                            startIcon={loading && <CircularProgress size={20} />}
+                        >
+                            {loading ? 'Saving...' : 'Save'}
+                        </Button>
+                    )}
+                </div>
+                {/* <Button className="save-button" disabled={!isEditable} onClick={handleSave}> {loading ? <CircularProgress size={24} /> : 'Save'}</Button> */}
                 <Snackbar
                     open={snackbarOpen}
                     autoHideDuration={6000}

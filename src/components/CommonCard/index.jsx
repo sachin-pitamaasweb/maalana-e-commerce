@@ -77,8 +77,6 @@ const CommonCard = ({ products, title }) => {
             return;
         }
         setLoadingProductId(product._id);
-        setSelectedProduct(product);
-        setDrawerOpen(true);    
         try {
             const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
                 method: 'POST',
@@ -96,8 +94,11 @@ const CommonCard = ({ products, title }) => {
 
             const data = await response.json();
             if (data.success) {
+                setSelectedProduct(product);
+                setDrawerOpen(true);
                 setCartId(data.cart._id);
                 updateCartItemCount(data.totalQuantity);
+
                 // Update cart item count in context
                 console.log('Product added to cart successfully');
             } else {

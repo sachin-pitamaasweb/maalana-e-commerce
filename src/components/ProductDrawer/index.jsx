@@ -15,6 +15,7 @@ const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
   const { userId, updateCartItemCount } = useAuth();
   const [count, setCount] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [removeLoading, setRemoveLoading] = useState(false);
 
   useEffect(() => {
     const fetchCartData = async () => {
@@ -50,7 +51,7 @@ const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
   const updateCart = async (newQuantity) => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/update-cart', {
+      const response = await fetch('https://maalana-backend.onrender.com/api/update-cart', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +68,6 @@ const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
       }
 
       const data = await response.json();
-      console.log('Cart updated successfully:', data);
        if(data.success){
         updateCartItemCount(data.totalQuantity);
        }
@@ -77,6 +77,42 @@ const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
       setLoading(false); // Set loading to false when the update is complete
     }
   };
+  
+
+  const handleRemove = async (cartId, productId) => {
+    setRemoveLoading(true);
+    try {
+      const response = await fetch('https://maalana-backend.onrender.com/api/delete-cart-product', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userId,
+          productId: productId,
+          cartId: cartId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log('Product removed from cart:', data);
+
+      if (data.success) {
+        setCount(0); // Optionally, set count to 0 or remove the product from the UI
+        updateCartItemCount(data.totalQuantity); // Update the cart item count
+        setDrawerOpen(false);
+      }
+    } catch (error) {
+      console.error('Error removing product from cart:', error);
+    } finally {
+      setRemoveLoading(false);
+    }
+  };
+
 
   // Handle increment and decrement
   const handleIncrement = () => {
@@ -97,7 +133,7 @@ const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
     setDrawerOpen(false);
     navigate('/cart');
   }
-
+console.log(product);
   return (
     <Drawer
       anchor="right"
@@ -122,7 +158,7 @@ const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
               <input type="number" value={count} min="1" aria-label="Quantity" />
               <button aria-label="Increase quantity" onClick={handleIncrement}>+</button>
             </div>}
-            <p className="remove-btn">Remove</p>
+           { removeLoading ? <CircularProgress size={20} /> : <p className="remove-btn" onClick={() => handleRemove(cartId, product._id)}>Remove</p>}
           </div>
         </div>
         <Button variant="contained" className="go-to-cart-btn" onClick={handleGotoCart}>

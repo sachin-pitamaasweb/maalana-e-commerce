@@ -30,7 +30,7 @@ const Cart = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const itemsPerPage = 4; // Number of items per page
-    const { userId, updateAddresses, addresses, updateCartItemCount, profile } = useAuth();
+    const { userId, updateAddresses, addresses, updateCartItemCount, profile, cartItem } = useAuth();
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -53,6 +53,8 @@ const Cart = () => {
         state: '',
         city: ''
     });
+
+    console.log('cartItem', cartItem);
 
     useEffect(() => {
         const fetchCartData = async () => {
@@ -87,7 +89,6 @@ const Cart = () => {
                 }, []);
 
                 setCartItems(items);
-                // console.log('items', items);
                 // Calculate order summary
                 const subTotal = items.reduce((sum, item) => sum + item.cartProducts.price * item.quantity, 0);
                 const total = subTotal; // Adjust as needed for discounts, taxes, etc.
@@ -269,7 +270,7 @@ const Cart = () => {
         if (selectedAddress) {
             try {
                 // Send DELETE request to the API
-                const response = await fetch(`http://localhost:8000/api/delete-shiped-address/${selectedAddress._id}`, {
+                const response = await fetch(`https://maalana-backend.onrender.com/api/delete-shiped-address/${selectedAddress._id}`, {
                     method: 'DELETE',
                 });
 
@@ -315,7 +316,6 @@ const Cart = () => {
             }
 
             const data = await response.json();
-            console.log('data', data);
             if (data.success) {
                 const updatedItems = cartItems.filter(item => !(item.cartId === cartId && item.productId === productId));
                 setCartItems(updatedItems);
@@ -344,7 +344,6 @@ const Cart = () => {
     };
 
     const handleNavigateToDetails = (productId, product) => {
-        console.log(productId, product);
         navigate(`/products-details/${productId}`, { state: { product } });
     };
 
@@ -356,7 +355,6 @@ const Cart = () => {
     const paginatedItems = Array.isArray(cartItems)
         ? cartItems.slice((page - 1) * itemsPerPage, page * itemsPerPage)
         : [];
-        console.log('paginatedItems', paginatedItems);
     return (
         <>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -389,8 +387,8 @@ const Cart = () => {
                                 <>
                                     {paginatedItems.length > 0 ? (
                                         paginatedItems.map((item) => (
-                                            <div className="cart-item" key={item.productId}  onClick={() => handleNavigateToDetails(item.cartProducts._id, item.cartProducts)}>
-                                                <div>
+                                            <div className="cart-item" key={item.productId}>
+                                                <div onClick={() => handleNavigateToDetails(item.cartProducts._id, item.cartProducts)}>
                                                     <img src={item.cartProducts.images.mainImage || 'https://res.cloudinary.com/dtivafy25/image/upload/v1723530547/image/img-2_nj1zsm.png'} alt={item.productId.name} />
                                                 </div>
                                                 <div className="item-details">

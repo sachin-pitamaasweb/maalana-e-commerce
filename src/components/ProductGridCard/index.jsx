@@ -15,16 +15,17 @@ import './style.css';
 
 const ProductGridCard = ({ products, title }) => {
     const navigate = useNavigate();
-    const { userId, updateCartItemCount, isUserAuthenticated } = useAuth();
+    const { userId, updateCartItemCount, isUserAuthenticated, cartItem, setCartItem } = useAuth();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [cartId, setCartId] = useState(null);
+    const [cartItems, setCartItems] = useState(cartItem || []);
     const [loadingProductId, setLoadingProductId] = useState(null);
-
+    const [countLoading, setCountLoading] = useState(null);
+console.log('cartItems',cartItems);
     const handleDetails = (productId, product) => {
         navigate(`/products-details/${productId}`, { state: { product } });
     };
-
 
     const handleOpenDrawer = async (product) => {
         if (!isUserAuthenticated) {
@@ -53,8 +54,15 @@ const ProductGridCard = ({ products, title }) => {
             if (data.success) {
                 setSelectedProduct(product);
                 setDrawerOpen(true);
-                setCartId(data.cart._id);
+                // setCartId(data.cart._id);
                 updateCartItemCount(data.totalQuantity);
+                // Fetch updated cart items
+                const updatedCartResponse = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
+                const updatedCartData = await updatedCartResponse.json();
+                if (updatedCartData.success) {
+                    setCartItem(updatedCartData.cart);
+                    setCartId(updatedCartData.cart._id);
+                }
             } else {
                 console.error('Failed to add product to cart:', data.message);
             }
@@ -67,65 +75,106 @@ const ProductGridCard = ({ products, title }) => {
     };
 
 
+    // const isProductInCart = (productId) => {
 
-    // const updateCart = async (newQuantity, cartId, productId) => {
-    //     console.log('newQuantity', newQuantity, 'cartId', cartId, 'productId', productId);
-    //     try {
-    //         const response = await fetch('http://localhost:8000/api/update-cart', {
-    //             method: 'PUT',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({
-    //                 userId: userId,
-    //                 productId: productId,
-    //                 quantity: newQuantity,
-    //                 cartId: cartId,
-    //             }),
-    //         });
-    //         if (!response.ok) {
-    //             throw new Error('Network response was not ok');
-    //         }
-
-    //         const data = await response.json();
-    //         updateCartItemCount(data.totalQuantity);
-    //         setCartItems(data.cart);
-    //     } catch (error) {
-    //         console.error('Error updating cart:', error);
-    //     }
+    //     console.log('cartItem', cartItem);
+    //     console.log('productId', productId);
     // };
 
-    // const handleIncrement = (productId) => {
-    //     const updatedItems = cartItems.map(cartItem => {
-    //         const updatedItems = cartItem.items.map(item => {
-    //             if (item.productId._id === productId) {
-    //                 const newQuantity = item.quantity + 1;
-    //                 console.log('cartItem._id', cartItem._id);
-    //                 updateCart(newQuantity, cartItem._id, productId);
-    //                 return { ...item, quantity: newQuantity };
-    //             }
-    //             return item;
-    //         });
-    //         return { ...cartItem, items: updatedItems };
-    //     });
-    //     setCartItems(updatedItems);
-    // };
+    const isProductInCart = (productId) => {
+        // Check if cartItems is an array and has elements
+        if (!Array.isArray(cartItem) || cartItem.length === 0) {
+            return false;
+        }
+         console.log('cartItem', cartItem);
+        // Loop through each cart item
+        return cartItem.some(cart =>
+            cart.items.some(item => item.productId && item.productId._id === productId)
+        );
+    };
 
-    // const handleDecrement = (productId) => {
-    //     const updatedItems = cartItems.map(cartItem => {
-    //         const updatedItems = cartItem.items.map(item => {
-    //             if (item.productId._id === productId && item.quantity > 1) {
-    //                 const newQuantity = item.quantity - 1;
-    //                 console.log('cartItem._id', cartItem._id)
-    //                 updateCart(newQuantity, cartItem._id, productId);
-    //                 return { ...item, quantity: newQuantity };
-    //             }
-    //             return item;
-    //         });
-    //         return { ...cartItem, items: updatedItems };
-    //     });
-    //     setCartItems(updatedItems);
-    // };
+    const getProductQuantityInCart = (productId) => {
+        // Check if cartItem is an array and has elements
+        if (!Array.isArray(cartItem) || cartItem.length === 0) {
+            return 1; // Default quantity if cartItem is empty or not an array
+        }
+
+        // Find the product in the cart
+        const productInCart = cartItem.flatMap(cart =>
+            cart.items.filter(item => item.productId && item.productId._id === productId)
+        ).find(item => item.productId && item.productId._id === productId);
+
+        // Return the quantity of the product if found, otherwise return default quantity
+        return productInCart ? productInCart.quantity : 1;
+    };
+
+    const updateCart = async (newQuantity, cartId, productId) => {
+        if (cartId) {
+            setCountLoading(productId);
+        }
+        try {
+            const response = await fetch('https://maalana-backend.onrender.com/api/update-cart', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    productId: productId,
+                    quantity: newQuantity,
+                    cartId: cartId,
+                }),
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            updateCartItemCount(data.totalQuantity);
+            // Fetch updated cart items
+            const updatedCartResponse = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
+            const updatedCartData = await updatedCartResponse.json();
+            if (updatedCartData.success) {
+                setCartItem(Array.isArray(updatedCartData.cart) ? updatedCartData.cart : []);
+                setCartId(updatedCartData.cart._id);
+            }
+
+        } catch (error) {
+            console.error('Error updating cart:', error);
+        } finally {
+            setCountLoading(null);
+        }
+    };
+
+    const handleIncrement = (productId) => {
+        const updatedItems = cartItem.map(cartItem => {
+            const updatedItems = cartItem.items.map(item => {
+                if (item.productId._id === productId) {
+                    const newQuantity = item.quantity + 1;
+                    updateCart(newQuantity, cartItem._id, productId);
+                    return { ...item, quantity: newQuantity };
+                }
+                return item;
+            });
+            return { ...cartItem, items: updatedItems };
+        });
+        setCartItems(updatedItems);
+    };
+
+    const handleDecrement = (productId) => {
+        const updatedItems = cartItem.map(cartItem => {
+            const updatedItems = cartItem.items.map(item => {
+                if (item.productId._id === productId && item.quantity > 1) {
+                    const newQuantity = item.quantity - 1;
+                    updateCart(newQuantity, cartItem._id, productId);
+                    return { ...item, quantity: newQuantity };
+                }
+                return item;
+            });
+            return { ...cartItem, items: updatedItems };
+        });
+        setCartItems(updatedItems);
+    };
 
     return (
         <>
@@ -146,38 +195,41 @@ const ProductGridCard = ({ products, title }) => {
                                     <h2 className="product-name">{product.name || "N/A"}</h2>
                                     <div className="product-price-cart">
                                         <span className="product-price">₹{product.price || "N/A"}</span>
-                                        <button className="add-to-cart-card" 
-                                        disabled={loadingProductId === product._id} onClick={() => handleOpenDrawer(product)}>
-                                            {loadingProductId === product._id ? (
-                                                <CircularProgress size={24} />
-                                            ) : (
-                                                "ADD TO CART"
-                                            )}
-                                        </button>
-                                        {/* {!isProductInCart(product._id) ? (
+                                        {isProductInCart(product._id) ? (
                                             <div className="item-quantity">
-                                                <button
-                                                    aria-label="Decrease quantity"
-                                                    onClick={() => handleDecrement(product._id)}
-                                                >
-                                                    -
-                                                </button>
-                                                <input
-                                                    type="number"
-                                                    value={getProductQuantityInCart(product._id)}
-                                                    min="1"
-                                                    aria-label="Quantity"
-                                                />
-                                                <button
-                                                    aria-label="Increase quantity"
-                                                    onClick={() => handleIncrement(product._id)}
-                                                >
-                                                    +
-                                                </button>
+                                                { countLoading === product._id  ? <CircularProgress size={24} /> :
+                                                    <>
+                                                        <button
+                                                            aria-label="Decrease quantity"
+                                                            onClick={() => handleDecrement(product._id)}
+                                                        >
+                                                            -
+                                                        </button>
+                                                        <input
+                                                            type="number"
+                                                            value={getProductQuantityInCart(product._id)}
+                                                            min="1"
+                                                            aria-label="Quantity"
+                                                        />
+                                                        <button
+                                                            aria-label="Increase quantity"
+                                                            onClick={() => handleIncrement(product._id)}
+                                                        >
+                                                            +
+                                                        </button>
+                                                    </>
+                                                }
                                             </div>
                                         ) : (
-                                            <button className="add-to-cart-card" onClick={() => handleOpenDrawer(product)}>ADD TO CART</button>
-                                        )} */}
+                                            <button className="add-to-cart-card"
+                                                disabled={loadingProductId === product._id} onClick={() => handleOpenDrawer(product)}>
+                                                {loadingProductId === product._id ? (
+                                                    <CircularProgress size={24} />
+                                                ) : (
+                                                    "ADD TO CART"
+                                                )}
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             </div>
