@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Drawer from '@mui/material/Drawer';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import { CircularProgress } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
 
@@ -11,8 +12,9 @@ import { useAuth } from '../../context/AuthContext';
 
 const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
   const navigate = useNavigate();
-  const { userId } = useAuth();
+  const { userId, updateCartItemCount } = useAuth();
   const [count, setCount] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchCartData = async () => {
@@ -46,7 +48,7 @@ const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
 
   // Update cart on the server
   const updateCart = async (newQuantity) => {
-    console.log('newQuantity', typeof newQuantity);
+    setLoading(true);
     try {
       const response = await fetch('http://localhost:8000/api/update-cart', {
         method: 'PUT',
@@ -65,10 +67,14 @@ const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
       }
 
       const data = await response.json();
-
       console.log('Cart updated successfully:', data);
+       if(data.success){
+        updateCartItemCount(data.totalQuantity);
+       }
     } catch (error) {
       console.error('Error updating cart:', error);
+    } finally {
+      setLoading(false); // Set loading to false when the update is complete
     }
   };
 
@@ -111,12 +117,11 @@ const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
           <div className="drawer-product-details">
             <p>{product.name}</p>
             <p>₹<span>{product.price}</span></p>
-            {/* Assuming IncrementDecrementButton is another component */}
-            <div className="item-quantity" style={{ marginBottom: '20px' }}>
+          { loading ? <CircularProgress size={20} />:  <div className="item-quantity" style={{ marginBottom: '20px' }}>
               <button aria-label="Decrease quantity" onClick={handleDecrement}>-</button>
               <input type="number" value={count} min="1" aria-label="Quantity" />
               <button aria-label="Increase quantity" onClick={handleIncrement}>+</button>
-            </div>
+            </div>}
             <p className="remove-btn">Remove</p>
           </div>
         </div>

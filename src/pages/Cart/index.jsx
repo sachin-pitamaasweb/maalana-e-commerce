@@ -69,7 +69,7 @@ const Cart = () => {
                 }
 
                 const data = await response.json();
-                // console.log('Cart data:', data);
+                console.log('Cart data:', data);
                 // Extract items from all carts
                 const items = data.cart.reduce((acc, cart) => {
                     const userId = cart.userId;
@@ -265,29 +265,29 @@ const Cart = () => {
         }
     };
 
-    // const handleDeleteClick = async () => {
-    //     if (selectedAddress) {
-    //         try {
-    //             // Send DELETE request to the API
-    //             const response = await fetch(`http://localhost:8000/api/delete-shiped-address/${selectedAddress._id}`, {
-    //                 method: 'DELETE',
-    //             });
+    const handleDeleteClick = async () => {
+        if (selectedAddress) {
+            try {
+                // Send DELETE request to the API
+                const response = await fetch(`http://localhost:8000/api/delete-shiped-address/${selectedAddress._id}`, {
+                    method: 'DELETE',
+                });
 
-    //             if (response.ok) {
-    //                 // Remove the address from the local state if the API call is successful
-    //                 const updatedAddresses = addresses.filter((addr) => addr._id !== selectedAddress._id);
-    //                 updateAddresses(updatedAddresses);
-    //                 setSelectedAddress(null);
-    //             } else {
-    //                 console.error('Failed to delete the address');
-    //             }
-    //         } catch (error) {
-    //             console.error('Error deleting the address:', error);
-    //         }
-    //     } else {
-    //         console.error('No address selected');
-    //     }
-    // }
+                if (response.ok) {
+                    // Remove the address from the local state if the API call is successful
+                    const updatedAddresses = addresses.filter((addr) => addr._id !== selectedAddress._id);
+                    updateAddresses(updatedAddresses);
+                    setSelectedAddress(null);
+                } else {
+                    console.error('Failed to delete the address');
+                }
+            } catch (error) {
+                console.error('Error deleting the address:', error);
+            }
+        } else {
+            console.error('No address selected');
+        }
+    }
 
     const handleSnackbarClose = () => {
         setSnackbarOpen(false);
@@ -298,7 +298,7 @@ const Cart = () => {
         console.log(cartId, productId, userId);
         try {
             setLoading(true);
-            const response = await fetch(`http://malana-backend.onrender.com/api/delete-cart-product`, {
+            const response = await fetch(`https://maalana-backend.onrender.com/api/delete-cart-product`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -343,6 +343,11 @@ const Cart = () => {
         }
     };
 
+    const handleNavigateToDetails = (productId, product) => {
+        console.log(productId, product);
+        navigate(`/products-details/${productId}`, { state: { product } });
+    };
+
 
     const handleCheckout = () => {
         navigate('/payment', { state: { selectedAddress, cartItems, profile, orderSummary } });
@@ -351,6 +356,7 @@ const Cart = () => {
     const paginatedItems = Array.isArray(cartItems)
         ? cartItems.slice((page - 1) * itemsPerPage, page * itemsPerPage)
         : [];
+        console.log('paginatedItems', paginatedItems);
     return (
         <>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -383,7 +389,7 @@ const Cart = () => {
                                 <>
                                     {paginatedItems.length > 0 ? (
                                         paginatedItems.map((item) => (
-                                            <div className="cart-item" key={item.productId}>
+                                            <div className="cart-item" key={item.productId}  onClick={() => handleNavigateToDetails(item.cartProducts._id, item.cartProducts)}>
                                                 <div>
                                                     <img src={item.cartProducts.images.mainImage || 'https://res.cloudinary.com/dtivafy25/image/upload/v1723530547/image/img-2_nj1zsm.png'} alt={item.productId.name} />
                                                 </div>
@@ -506,12 +512,12 @@ const Cart = () => {
                                                             </svg>
                                                             Edit
                                                         </button>
-                                                        {/* <button className="btn" aria-label="Delete address" onClick={() => handleDeleteClick(address)}>
+                                                        <button className="btn" aria-label="Delete address" onClick={() => handleDeleteClick(address)}>
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="btn-icon">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                             </svg>
                                                             Delete
-                                                        </button> */}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>

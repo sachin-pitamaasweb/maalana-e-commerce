@@ -50,13 +50,11 @@ const ProductGridCard = ({ products, title }) => {
             });
 
             const data = await response.json();
-            console.log(data);
             if (data.success) {
                 setSelectedProduct(product);
                 setDrawerOpen(true);
                 setCartId(data.cart._id);
                 updateCartItemCount(data.totalQuantity);
-                console.log('Product added to cart successfully');
             } else {
                 console.error('Failed to add product to cart:', data.message);
             }

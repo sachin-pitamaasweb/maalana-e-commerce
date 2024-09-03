@@ -15,7 +15,7 @@ const ProductDetails = () => {
     const navigate = useNavigate();
     const { state } = location;
     const { product } = state || {};
-    const [mainImage, setMainImage] = useState(product.images.mainImage || "https://via.placeholder.com/500x500");
+    const [mainImage, setMainImage] = useState(product.images?.mainImage || "https://via.placeholder.com/500x500");
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
@@ -139,7 +139,7 @@ const ProductDetails = () => {
                             </p>
                             {
                                 <p>
-                                    {product.ingredients.map((ingredient) => (
+                                    {product.ingredients || ['N/A'].map((ingredient) => (
                                         <span key={ingredient}>{ingredient}</span>
                                     ))}
                                 </p>
