@@ -21,7 +21,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
     });
 
     const [billingAddress, setBillingAddress] = useState({
-        name: firstName && lastName ? `${firstName} ${lastName}` : '',
+        name: firstName || '',
         phoneNumber: phone || '',
         address: '',
         pincode: '',
@@ -37,6 +37,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
 
     const { userId } = useAuth();
 
+console.log('billingAddress', billingAddress);
+
     useEffect(() => {
         const fetchShippingAddress = async () => {
             try {
@@ -44,7 +46,6 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                 console.log(response.data.shipedaddress[0]);
                 if (response.status === 200 && response.data.success) {
                     const addressData = response.data.shipedaddress;
-                    console.log(addressData[0]);
                     setShippingAddress({
                         address: addressData[0].address,
                         pincode: addressData[0].pincode,
@@ -54,8 +55,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                     });
                     // If you want to initially use the same address for billing
                     setBillingAddress({
-                        name: `${addressData[0].firstName} ${addressData[0].lastName}`,
-                        phoneNumber: addressData[0].phoneNumber,
+                        name: `${firstName} ${lastName}`  || '',
+                        phoneNumber: phone || '',
                         address: addressData[0].address,
                         pincode: addressData[0].pincode,
                         country: addressData[0].country,
@@ -89,7 +90,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
     };
 
     const handleSave = async () => {
-        setLoading(true); 
+        setLoading(true);
         try {
             const response = await fetch(`https://maalana-backend.onrender.com/api/create-shiped-address`, {
                 method: 'POST',
@@ -107,7 +108,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
             });
             const data = await response.json();
 
-           setShippingAddress({
+            setShippingAddress({
                 address: data.address,
                 pincode: data.pincode,
                 country: data.country,
@@ -143,8 +144,9 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            label="First Name"
-                            name="firstname"
+                            // label="First Name"
+                            name="firstName"
+                            placeholder="Enter your first name"
                             variant="outlined"
                             fullWidth
                             value={shippingAddress.firstName}
@@ -154,8 +156,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            label="Last Name"
                             name="lastname"
+                            placeholder="Enter your last name"
                             variant="outlined"
                             fullWidth
                             value={shippingAddress.lastName}
@@ -165,8 +167,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            label="Phone"
                             name="phone"
+                            placeholder="Enter your phone number"
                             variant="outlined"
                             fullWidth
                             value={shippingAddress.phoneNumber}
@@ -176,8 +178,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            label="Address"
                             name="address"
+                            placeholder="Enter your address"
                             variant="outlined"
                             fullWidth
                             multiline
@@ -189,8 +191,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            label="Pincode"
                             name="pincode"
+                            placeholder='Enter your pincode'
                             variant="outlined"
                             fullWidth
                             value={shippingAddress.pincode}
@@ -200,8 +202,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            label="Country"
                             name="country"
+                            placeholder="Enter your country"
                             variant="outlined"
                             fullWidth
                             value={shippingAddress.country}
@@ -211,8 +213,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            label="State"
                             name="state"
+                            placeholder="Enter your state"
                             variant="outlined"
                             fullWidth
                             value={shippingAddress.state}
@@ -222,8 +224,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            label="City"
                             name="city"
+                            placeholder="Enter your city"
                             variant="outlined"
                             fullWidth
                             value={shippingAddress.city}
@@ -231,7 +233,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                             disabled={!isEditable}
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    {/* <Grid item xs={12}>
                         <TextField
                             label="GST Number"
                             name="gstNumber"
@@ -241,7 +243,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                             onChange={(e) => handleInputChange(e, setBillingAddress)}
                             disabled={!isEditable}
                         />
-                    </Grid>
+                    </Grid> */}
                 </Grid>
 
                 <h3>Billing Address:</h3>
@@ -254,8 +256,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={12}>
                             <TextField
-                                label="Name"
                                 name="name"
+                                placeholder='Enter your name'
                                 variant="outlined"
                                 fullWidth
                                 value={billingAddress.name}
@@ -265,8 +267,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Phone Number"
                                 name="phoneNumber"
+                                placeholder="Enter your phone number"   
                                 variant="outlined"
                                 fullWidth
                                 value={billingAddress.phoneNumber}
@@ -276,8 +278,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Address"
                                 name="address"
+                                placeholder="Enter your address"
                                 variant="outlined"
                                 fullWidth
                                 multiline
@@ -289,8 +291,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                label="Pincode"
                                 name="pincode"
+                                placeholder='Enter your pincode'
                                 variant="outlined"
                                 fullWidth
                                 value={billingAddress.pincode}
@@ -300,8 +302,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                label="Country"
                                 name="country"
+                                placeholder='Enter your country'
                                 variant="outlined"
                                 fullWidth
                                 value={billingAddress.country}
@@ -311,8 +313,8 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                label="State"
                                 name="state"
+                                placeholder='Enter your state'
                                 variant="outlined"
                                 fullWidth
                                 value={billingAddress.state}
@@ -322,22 +324,11 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                label="City"
                                 name="city"
+                                placeholder='Enter your city'
                                 variant="outlined"
                                 fullWidth
                                 value={billingAddress.city}
-                                onChange={(e) => handleInputChange(e, setBillingAddress)}
-                                disabled={!isEditable}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="GST Number"
-                                name="gstNumber"
-                                variant="outlined"
-                                fullWidth
-                                value={billingAddress.gstNumber}
                                 onChange={(e) => handleInputChange(e, setBillingAddress)}
                                 disabled={!isEditable}
                             />

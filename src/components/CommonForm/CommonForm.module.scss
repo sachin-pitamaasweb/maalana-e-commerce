@@ -144,7 +144,7 @@ $button-text-color: #ffffff;
   padding: 5px 79px !important;
   border-radius: 50px !important;
   cursor: pointer !important;
-  transition: background-color 0.3s ease, color 0.3s ease !important;
+  // transition: background-color 0.3s ease, color 0.3s ease !important;
   margin-top: 1rem !important;
   border: 4px solid $button-text-color !important;
   font-family: "Flower of Summer Personal Use", sans-serif !important;
@@ -157,8 +157,9 @@ $button-text-color: #ffffff;
   width: 50% !important;
 
   &:hover {
-    color: $button-text-color !important;
-    border: 2px solid $button-text-color !important;
+    transform: none !important;
+    color: #000 !important;
+    background-color: #ffffff !important;
   }
 }
 

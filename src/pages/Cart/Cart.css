@@ -13,6 +13,9 @@
     background-color: #B9D514;
     padding: 30px;
     color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .cart-header h1 {

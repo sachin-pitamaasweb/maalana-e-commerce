@@ -7,10 +7,12 @@ import Alert from '@mui/material/Alert';
 import Pagination from '@mui/material/Pagination';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { useTheme, useMediaQuery } from '@mui/material';
+
+import { useTheme, useMediaQuery, IconButton } from '@mui/material';
 
 // mui icon
 import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import axios from 'axios';
 
@@ -138,6 +140,7 @@ const Cart = () => {
     }, [userId]);
 
     const updateCart = async (newQuantity, cartId, productId) => {
+        setLoading(true);
         try {
             const response = await fetch('https://maalana-backend.onrender.com/api/update-cart', {
                 method: 'PUT',
@@ -165,6 +168,8 @@ const Cart = () => {
 
         } catch (error) {
             console.error('Error updating cart:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -351,6 +356,9 @@ const Cart = () => {
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 <div className="cart-container">
                     <div className="cart-header">
+                    <IconButton onClick={() => navigate('/products')}>
+                        <ArrowBackIcon />
+                    </IconButton>
                         <h1>Your Shopping Cart</h1>
                     </div>
                     <div className="cart-steps">

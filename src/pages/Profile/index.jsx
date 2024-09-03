@@ -30,6 +30,7 @@ const ProfilePage = () => {
     const [isEditable, setIsEditable] = useState(false);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const staticImage = 'https://media.istockphoto.com/id/1131164548/vector/avatar-5.jpg?s=612x612&w=0&k=20&c=CK49ShLJwDxE4kiroCR42kimTuuhvuo2FH5y_6aSgEo=';
 
     const { userId } = useAuth();
     const fileInputRef = useRef(null);
@@ -106,6 +107,12 @@ const ProfilePage = () => {
                             profileImage: data.user.userImage || ''
                         });
                     }
+                    console.log('User data:', data.user);
+                    if (data.user.userImage === staticImage && data.user.dateOfBirth === '') {
+                        setIsEditable(true);
+                    } else {
+                        setIsEditable(false);
+                    }
                 })
                 .catch(error => console.error('Error fetching user data:', error));
         }
@@ -141,6 +148,7 @@ const ProfilePage = () => {
             if (response.status === 200) {
                 console.log('Profile updated successfully', response.data);
                 setIsEditable(false);
+                setSelectedMenu('My Address');
             } else {
                 console.error('Error updating profile', response);
             }
@@ -153,8 +161,6 @@ const ProfilePage = () => {
     const handleEditClick = () => {
         setIsEditable(true); // Enable edit mode
     };
-
-    const staticImage = 'https://media.istockphoto.com/id/1131164548/vector/avatar-5.jpg?s=612x612&w=0&k=20&c=CK49ShLJwDxE4kiroCR42kimTuuhvuo2FH5y_6aSgEo=';
 
     return (
         <Box className="profile-page-container">
@@ -450,6 +456,7 @@ const ProfilePage = () => {
                                 onClick={handleSave}
                                 className="save-button"
                                 disabled={!isEditable}
+                                sx={{ textTransform: 'capitalize' }}
                             >
                                 Save Changes
                             </Button>

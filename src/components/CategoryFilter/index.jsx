@@ -19,13 +19,13 @@ const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
         dots: false,
         infinite: true,
         speed: 500,
-        slidesToShow: 6, // Adjust the number of slides based on screen size
+        slidesToShow: 7, // Adjust the number of slides based on screen size
         slidesToScroll: 1,
         arrows: false,
         autoplay: false,
         // autoplaySpeed: 300000,
-        centerMode: true, 
-        centerPadding: '0', 
+        centerMode: true,
+        centerPadding: '0',
         responsive: [
             {
                 breakpoint: 1500,
@@ -57,7 +57,7 @@ const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
             },
             {
 
-                
+
                 breakpoint: 400,
                 settings: {
                     autoplay: true,
@@ -69,13 +69,13 @@ const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
     };
 
     const categories = [
+        { name: 'All', img: Img7 },
         { name: 'Imli Range', img: Img1 },
         { name: 'Family Candy Pack', img: Img2 },
         { name: 'Lollipops', img: Img3 },
         { name: 'Candy', img: Img4 },
         { name: 'Aam papad', img: Img5 },
         { name: 'Fruit katli', img: Img6 },
-        {name: 'All', img: Img7},
         // Add more categories as needed
     ];
 
@@ -96,7 +96,7 @@ const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
                             <Box className="image-container">
                                 <img src={category.img} alt={category.name} className="category-image" />
                             </Box>
-                          <Typography variant="body1" className="category-name">
+                            <Typography variant="body1" className="category-name">
                                 {category.name}
                             </Typography>
                         </Box>

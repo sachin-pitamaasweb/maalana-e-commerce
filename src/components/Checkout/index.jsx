@@ -28,12 +28,14 @@ import './style.scss';
 
 import { useAuth } from '../../context/AuthContext';
 
+import AddressSection from './AddressSection';
+
 
 const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { cartItems, selectedAddress, profile, orderSummary } = location.state || {};
- const { userId, updateCartItemCount } = useAuth();
+  const { userId, updateCartItemCount } = useAuth();
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState('cod');
@@ -74,7 +76,7 @@ const Checkout = () => {
         country: selectedAddress.country,
         state: selectedAddress.state,
         city: selectedAddress.city
-      }, 
+      },
       paymentMethod: paymentMethod,
       orderSummary: {
         subTotal: orderSummary.subTotal,
@@ -83,9 +85,9 @@ const Checkout = () => {
         total: orderSummary.total
       }
     };
-console.log(orderData);
-console.log('here', cartItems[0].productId
-);
+    console.log(orderData);
+    console.log('here', cartItems[0].productId
+    );
     try {
       const response = await fetch('https://maalana-backend.onrender.com/api/create-orders', {
         method: 'POST',
@@ -101,9 +103,9 @@ console.log('here', cartItems[0].productId
         setSnackbarSeverity('success');
         // Handle success (e.g., redirect to order confirmation page)
         console.log('Order placed successfully:', result);
-         // Navigate to OrderPlaceSuccess page
-         navigate('/order-success', { state: { result } });
-         updateCartItemCount(0);
+        // Navigate to OrderPlaceSuccess page
+        navigate('/order-success', { state: { result } });
+        updateCartItemCount(0);
       } else {
         setSnackbarMessage('Order placement failed!');
         setSnackbarSeverity('error');
@@ -132,6 +134,8 @@ console.log('here', cartItems[0].productId
     setPaymentMethod(event.target.value);
   };
 
+
+  console.log(paginatedItems);
   return (
     <Box className="checkout-container">
       {/* Payment Section */}
@@ -144,37 +148,8 @@ console.log('here', cartItems[0].productId
             PAYMENT OPTION
           </Typography>
         </Box>
-
         {/* Address Section */}
-        <Typography variant="subtitle1" className="sub-title">
-          Address:
-        </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <TextField fullWidth label="First Name" value={profile?.firstName} disabled={true} variant="outlined" className="text-field" />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField fullWidth label="Last Name" value={profile?.lastName} disabled={true} variant="outlined" className="text-field" />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField fullWidth label="Phone Number" value={profile?.phone} disabled={true} variant="outlined" className="text-field" />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField fullWidth label="Address" value={selectedAddress?.address} disabled={true} variant="outlined" className="text-field" multiline rows={3} />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField fullWidth label="Pincode" value={selectedAddress?.pincode} disabled={true} variant="outlined" className="text-field" />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField fullWidth label="Country" value={selectedAddress?.country} disabled={true} variant="outlined" className="text-field" />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField fullWidth label="State" value={selectedAddress?.state} disabled={true} variant="outlined" className="text-field" />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField fullWidth label="City" value={selectedAddress?.city} disabled={true} variant="outlined" className="text-field" />
-          </Grid>
-        </Grid>
+        <AddressSection profile={profile} selectedAddress={selectedAddress} />
 
         {/* Payment Method Section */}
         <Typography variant="subtitle1" className="sub-title">
@@ -230,7 +205,7 @@ console.log('here', cartItems[0].productId
       <Box className="product-list-section">
         <List>
           {paginatedItems.map((product, index) => (
-            <React.Fragment key={product.id}>
+            <React.Fragment key={product._id}>
               <ListItem
                 secondaryAction={
                   // <IconButton edge="end" aria-label="delete">
@@ -243,9 +218,9 @@ console.log('here', cartItems[0].productId
                 }
               >
                 <ListItemAvatar>
-                  <Avatar src={product.cartProducts.images.mainImage} alt={product.name} />
+                  <Avatar src={product.cartProducts.images.mainImage} alt={product.cartProducts.name} />
                 </ListItemAvatar>
-                <ListItemText primary={product.cartProducts.name} secondary={product.price} />
+                <ListItemText primary={product.cartProducts.name} secondary={product.price}   />
                 {/* <Typography variant="body1">₹{product.cartProducts.price || 0}.00</Typography> */}
               </ListItem>
               {index < cartItems.length - 1 && <Divider variant="inset" component="li" sx={{ marginLeft: 0 }} />}
