@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Modal, Box, Typography, TextField, Button, Divider } from '@mui/material';
+import { Modal, Box, Typography, TextField, Button, Divider, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton } from '@mui/material';
+
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+
 import styles from './ForgetPasswordModal.module.scss';
 
 const ForgetPasswordModal = ({ open, handleClose }) => {
@@ -11,6 +14,19 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
     const [error, setError] = useState('');
     const [otpMode, setOtpMode] = useState(false); // State to track OTP mode
     const [resetPasswordMode, setResetPasswordMode] = useState(false); // State to track Reset Password mode
+
+
+    const [showPassword, setShowPassword] = React.useState(false);
+
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+
+    const handleMouseUpPassword = (event) => {
+        event.preventDefault();
+    };
 
     const handleEmailSubmit = async () => {
         setLoading(true);
@@ -44,7 +60,7 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
         try {
             // Ensure otp is converted to a number
             const otpNumber = Number(otp);
-            console.log( typeof otpNumber);
+            console.log(typeof otpNumber);
             const response = await fetch('https://maalana-backend.onrender.com/api/otp-verify', {
                 method: 'POST',
                 headers: {
@@ -100,17 +116,44 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
                     {resetPasswordMode ? "Enter your new password" : otpMode ? "Enter the OTP sent to your email address" : "No worries, it happens! Just enter your email address below, and we'll send you an OTP to reset your password."}
                 </Typography>
                 {resetPasswordMode ? (
-                    <TextField
-                        label="New Password"
-                        type="password"
-                        variant="outlined"
-                        fullWidth
-                        className={styles.modalInput}
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        error={Boolean(error)}
-                        helperText={error}
-                    />
+                    // <TextField
+                    //     label="New Password"
+                    //     type="password"
+                    //     variant="outlined"
+                    //     fullWidth
+                    //     className={styles.modalInput}
+                    //     value={newPassword}
+                    //     onChange={(e) => setNewPassword(e.target.value)}
+                    //     error={Boolean(error)}
+                    //     helperText={error}
+                    // />
+                    <FormControl sx={{ m: 1, width: '28ch' }} variant="outlined">
+                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-password"
+                            type={showPassword ? 'text' : 'password'}
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            error={Boolean(error)}
+                            className={styles.modalInput}
+                            helperText={error}
+                            fullWidth={true}    
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        onMouseUp={handleMouseUpPassword}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                            label="Password"
+                        />
+                    </FormControl>
                 ) : otpMode ? (
                     <TextField
                         label="OTP"
@@ -144,6 +187,7 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
                                 backgroundColor: loading || (!email && !otp && !newPassword) ? 'gray' : '#B9D514',
                             },
                             color: loading || (!email && !otp && !newPassword) ? 'white' : 'black',
+                            fontSize: '13px',
                         }}
                         onClick={resetPasswordMode ? handleResetPasswordSubmit : otpMode ? handleOtpSubmit : handleEmailSubmit}
                         disabled={loading || (!email && !otp && !newPassword)}

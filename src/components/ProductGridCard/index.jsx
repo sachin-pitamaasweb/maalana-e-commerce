@@ -22,7 +22,6 @@ const ProductGridCard = ({ products, title }) => {
     const [cartItems, setCartItems] = useState(cartItem || []);
     const [loadingProductId, setLoadingProductId] = useState(null);
     const [countLoading, setCountLoading] = useState(null);
-console.log('cartItems',cartItems);
     const handleDetails = (productId, product) => {
         navigate(`/products-details/${productId}`, { state: { product } });
     };
@@ -54,14 +53,14 @@ console.log('cartItems',cartItems);
             if (data.success) {
                 setSelectedProduct(product);
                 setDrawerOpen(true);
-                // setCartId(data.cart._id);
+                setCartId(data.cart._id);
                 updateCartItemCount(data.totalQuantity);
                 // Fetch updated cart items
                 const updatedCartResponse = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
                 const updatedCartData = await updatedCartResponse.json();
                 if (updatedCartData.success) {
                     setCartItem(updatedCartData.cart);
-                    setCartId(updatedCartData.cart._id);
+                    // setCartId(updatedCartData.cart._id);
                 }
             } else {
                 console.error('Failed to add product to cart:', data.message);
@@ -175,7 +174,7 @@ console.log('cartItems',cartItems);
         });
         setCartItems(updatedItems);
     };
-
+console.log('cartItem', cartItem);
     return (
         <>
             <div className="container-product-grid">

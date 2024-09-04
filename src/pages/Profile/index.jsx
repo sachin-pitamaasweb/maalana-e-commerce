@@ -366,7 +366,7 @@ const ProfilePage = () => {
                                 }}
                             />
                             <InputMask
-                                mask="99/99/9999" // or "99-99-9999" if you prefer the "-" format
+                                mask="99/99/9999" 
                                 value={profile.dateOfBirth}
                                 onChange={handleChange}
                                 disabled={!isEditable}

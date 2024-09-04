@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Grid, Button, Box, Typography, Snackbar, Alert, Tooltip } from '@mui/material';
+import { Grid, Button, Box, Typography, Snackbar, Alert, Tooltip, IconButton } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import styles from './CommonForm.module.scss';
 import { validateForm } from '../../utils/validation.js';
@@ -26,6 +27,10 @@ const CommonForm = ({ title = "" }) => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
+
+    const [showPassword, setShowPassword] = useState(false);
+
 
     useEffect(() => {
         document.body.style.backgroundColor = '#B9D514';
@@ -101,7 +106,7 @@ const CommonForm = ({ title = "" }) => {
         } catch (error) {
             console.error('Error:', error);
             setSnackbarSeverity('error');
-            setSnackbarMessage( error.message || 'An error occurred. Please try again later.');
+            setSnackbarMessage(error.message || 'An error occurred. Please try again later.');
         } finally {
             setSnackbarOpen(true);
             setLoading(false);
@@ -121,6 +126,12 @@ const CommonForm = ({ title = "" }) => {
     const handleSnackbarClose = () => {
         setSnackbarOpen(false);
     };
+
+
+    
+    const handleTogglePassword = () => {
+        setShowPassword(!showPassword);
+      };
 
     return (
         <Box className={title === "Humko join karlo!" ? styles.signupFormPartner : styles.signupContainer}>
@@ -251,29 +262,38 @@ const CommonForm = ({ title = "" }) => {
                         </Grid>
                     )}
                     {(title === "Sign Up" || title === "Login") && (
-                        <Grid item xs={12} className={styles.inputGroup}>
-                            <Tooltip
-                                title={errors.password || ''}
-                                open={Boolean(errors.password)}
-                                placement="top"
-                                sx={{
-                                    m: 1,
-                                    backgroundColor: 'red !important'
-                                }}
-                                arrow
-                            >
-                                <input
-                                    type="password"
-                                    placeholder="Password"
-                                    className={`${styles.inputField} ${errors.password ? styles.errorInput : ''}`}
-                                    name='password'
-                                    value={formData.password}
-                                    // maxLength={8}
-                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    required
-                                />
-                            </Tooltip>
-                        </Grid>
+                       <Grid item xs={12} className={styles.inputGroup}>
+                       <Tooltip
+                           title={errors.password || ''}
+                           open={Boolean(errors.password)}
+                           placement="top"
+                           sx={{
+                               m: 1,
+                               backgroundColor: 'red !important'
+                           }}
+                           arrow
+                       >
+                           <div className={styles.passwordContainer}>
+                               <input
+                                   type={showPassword ? 'text' : 'password'}
+                                   placeholder="Password"
+                                   className={`${styles.inputField} ${errors.password ? styles.errorInput : ''}`}
+                                   name='password'
+                                   value={formData.password}
+                                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                   required
+                               />
+                               <IconButton
+                                   aria-label="toggle password visibility"
+                                   onClick={handleTogglePassword}
+                                   edge="end"
+                                   className={styles.passwordToggle}
+                               >
+                                   {showPassword ? <VisibilityOff /> : <Visibility />}
+                               </IconButton>
+                           </div>
+                       </Tooltip>
+                   </Grid>
                     )}
                     {title === "Humko join karlo!" && (
                         <Grid item xs={12} className={styles.inputGroup}>

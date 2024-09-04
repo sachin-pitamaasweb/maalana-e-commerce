@@ -45,6 +45,11 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                 if (response.status === 200 && response.data.success) {
                     const addressData = response.data.shipedaddress;
                     setAddressId(addressData[0]._id);
+                     if(addressData[0]._id === null){
+                        setIsEditable(true);
+                     } else {
+                        setIsEditable(false);
+                     }
                     setShippingAddress({
                         address: addressData[0].address,
                         pincode: addressData[0].pincode,
@@ -114,6 +119,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                 state: data.state,
                 city: data.city,
             });
+             setIsEditable(false);
             setSnackbarMessage('Address saved successfully');
             setSnackbarSeverity('success');
 
@@ -143,6 +149,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
 
             if (response.data.success) {
                 setShippingAddress(response.data.shipedaddress);
+                setIsEditable(false);
                 setSnackbarMessage('Address updated successfully');
                 setSnackbarSeverity('success');
             } else {

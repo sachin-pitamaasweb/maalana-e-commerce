@@ -102,6 +102,33 @@ $button-text-color: #ffffff;
   }
 }
 
+.passwordContainer {
+  position: relative;
+}
+
+.inputField {
+  width: 100%;
+  padding-right: 50px; // Adjust padding to make space for the icon button
+}
+
+.passwordToggle {
+  position: absolute !important;
+  top: 30% !important;
+  right: 25px !important;  
+  z-index: 2 !important;
+  color: #999 !important;
+  transform: none !important;
+
+  &:hover {
+    color: #333 !important;
+  }
+   
+  @media (max-width: 1200px) {
+    top: 15% !important;
+  }
+}
+
+
 .inputField {
   background-color: $input-background;
   border: none;

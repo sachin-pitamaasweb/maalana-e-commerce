@@ -11,6 +11,7 @@ import './style.css';
 import { useAuth } from '../../context/AuthContext';
 
 const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
+  console.log('product', product, 'cartId', cartId);
   const navigate = useNavigate();
   const { userId, updateCartItemCount } = useAuth();
   const [count, setCount] = useState(1);
