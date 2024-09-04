@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { Helmet } from 'react-helmet';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress'; 
@@ -101,6 +101,9 @@ const Contact = () => {
     return (
         <>
             <header className="page-header">
+            <Helmet>
+                <title>Maalana-Contact</title>
+            </Helmet>
                 <h1 className="page-title">Connect with Us</h1>
                 <p className="page-subtitle">Let's Chat Sweetness!</p>
             </header>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -134,6 +135,9 @@ const Checkout = () => {
   console.log(paginatedItems);
   return (
     <Box className="checkout-container">
+       <Helmet>
+                <title>Maalana-Checkout</title>
+            </Helmet>
       {/* Payment Section */}
       <Box className="payment-section">
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

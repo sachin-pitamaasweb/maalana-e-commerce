@@ -28,6 +28,7 @@ import { AuthProvider } from './context/AuthContext.js';
 import ProtectedRoute from './ProtectedRoute/index.jsx';
 
 function App() {
+ 
   const [products, setProducts] = useState([]);
   useEffect(() => {
     AOS.init({

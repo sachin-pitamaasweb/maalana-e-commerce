@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from "react-router-dom";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -67,6 +67,9 @@ const ProductDetails = () => {
     return (
         <>
             <div className="product-grid-card-main">
+            <Helmet>
+                <title>Maalana-Product-Details</title>
+            </Helmet>
                 <div className="container-product-details">
                     <div className="product-image-details">
                         <div className="main-image-container-details">

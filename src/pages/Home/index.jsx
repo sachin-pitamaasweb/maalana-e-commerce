@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 // import { useTheme, useMediaQuery } from "@mui/material";
 
 // mobile views
@@ -41,15 +42,18 @@ const Home = () => {
                   
                 </>
             )} */}
-              <WelcomeBannerDesktop />
-                 <SecondBannerDesktop />
-                 <Imli />
-                 <Lollipop />
-                 <FruitKatli />
-                 <Candies />
-                 <Events />
-              <CustomerKiKahani />
-           
+            <Helmet>
+                <title>Maalana-Home</title>
+            </Helmet>
+            <WelcomeBannerDesktop />
+            <SecondBannerDesktop />
+            <Imli />
+            <Lollipop />
+            <FruitKatli />
+            <Candies />
+            <Events />
+            <CustomerKiKahani />
+
         </>
     );
 };

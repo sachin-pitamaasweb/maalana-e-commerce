@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { Box } from '@mui/material';
 
 import CategoryFilter from '../../components/CategoryFilter';
@@ -106,6 +107,9 @@ const Products = ({ products }) => {
 
     return (
         <>
+            <Helmet>
+                <title>Maalana-Products</title>
+            </Helmet>
             <Box className="products-container">
                 <CategoryFilter
                     setSelectedCategory={setSelectedCategory}

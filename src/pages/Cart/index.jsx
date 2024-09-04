@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 
 import Snackbar from '@mui/material/Snackbar';
@@ -358,6 +358,9 @@ const Cart = () => {
     return (
         <>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                <Helmet>
+                    <title>Maalana-Cart</title>
+                </Helmet>
                 <div className="cart-container">
                     <div className="cart-header">
                     <IconButton onClick={() => navigate('/products')}>

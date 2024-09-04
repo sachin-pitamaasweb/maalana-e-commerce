@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Helmet } from 'react-helmet';
 import {
     Box, Avatar, Button, TextField, RadioGroup, FormControlLabel, Radio, Typography, MenuItem, Select, useMediaQuery, useTheme, IconButton
 } from '@mui/material';
@@ -163,6 +164,9 @@ const ProfilePage = () => {
 
     return (
         <Box className="profile-page-container">
+             <Helmet>
+                <title>Maalana-profile</title>
+            </Helmet>
             <Box className="filter-section">
                 {isMobile ? (
                     <Select
