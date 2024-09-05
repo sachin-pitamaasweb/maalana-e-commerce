@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Box } from '@mui/material';
 
@@ -15,8 +15,14 @@ import MoreProducts from '../../components/MoreProducts';
 
 import PrductGridCard from '../../components/ProductGridCard';
 
+import SpecialOfferModel from '../../components/SpecialOfferModel';
+
+import { useAuth } from '../../context/AuthContext';
+
 const Products = ({ products }) => {
     const [selectedCategory, setSelectedCategory] = useState('All');
+    const [showOffer, setShowOffer] = useState(false); 
+    const { isUserAuthenticated } = useAuth();
     const banners = [
         {
             img: 'https://res.cloudinary.com/dtivafy25/image/upload/v1725013325/b-1_mgxyez.png',    // Desktop Image
@@ -40,6 +46,18 @@ const Products = ({ products }) => {
             title: "Banner 3",
         },
     ];
+
+
+    useEffect(() => {
+        // Check if the offer has been shown before
+        const hasVisited = sessionStorage.getItem('hasVisited');
+        
+        // Only show the offer if the user is not authenticated and hasn't visited the page before
+        if (!isUserAuthenticated && !hasVisited) {
+            setShowOffer(true);
+            sessionStorage.setItem('hasVisited', 'true'); // Mark that the user has visited
+        }
+    }, [isUserAuthenticated]);
 
     const renderComponent = () => {
         let filteredProducts = products;
@@ -110,6 +128,7 @@ const Products = ({ products }) => {
             <Helmet>
                 <title>Maalana-Products</title>
             </Helmet>
+            <SpecialOfferModel open={showOffer} handleClose={() => setShowOffer(false)} />
             <Box className="products-container">
                 <CategoryFilter
                     setSelectedCategory={setSelectedCategory}
@@ -117,6 +136,7 @@ const Products = ({ products }) => {
                 />
                 {renderComponent()}
             </Box>
+            
         </>
     );
 };

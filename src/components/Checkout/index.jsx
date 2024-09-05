@@ -56,7 +56,6 @@ const Checkout = () => {
     currentPage * itemsPerPage
   );
 
-
   const handlePayNow = async () => {
     setLoading(true);
     setSnackbarOpen(false); // Close any previous snackbar
@@ -65,6 +64,7 @@ const Checkout = () => {
       user: userId,
       cartItems: cartItems.map(item => ({
         name: item.cartProducts.name,
+        image: item.cartProducts.images.mainImage,
         product: item.productId,
         quantity: item.quantity,
         price: item.cartProducts.price
@@ -93,13 +93,12 @@ const Checkout = () => {
         },
         body: JSON.stringify(orderData)
       });
-
+console.log('orderData', orderData);
       const result = await response.json();
+      console.log('result', result);
       if (response.ok) {
         setSnackbarMessage('Order placed successfully!');
         setSnackbarSeverity('success');
-        // Handle success (e.g., redirect to order confirmation page)
-        console.log('Order placed successfully:', result);
         // Navigate to OrderPlaceSuccess page
         navigate('/order-success', { state: { result } });
         updateCartItemCount(0);
@@ -131,8 +130,6 @@ const Checkout = () => {
     setPaymentMethod(event.target.value);
   };
 
-
-  console.log(paginatedItems);
   return (
     <Box className="checkout-container">
        <Helmet>

@@ -13,7 +13,7 @@ const OrderPlaceSuccess = () => {
     const location = useLocation();
     const { result } = location.state || {};
     const { order } = result || {};
-    const { createdAt, orderNumber, orderSummary, address } = order || {};
+    const { createdAt, orderNumber, orderSummary, address, cartItems } = order || {};
 
     // Function to format date
     const formatDate = (dateString) => {
@@ -26,7 +26,7 @@ const OrderPlaceSuccess = () => {
 
     const estimatedDeliveryDate = formatDate(new Date(new Date(createdAt).getTime() + 7 * 24 * 60 * 60 * 1000)); // Adding 7 days for estimated delivery
 
-    console.log(profile);
+    console.log(order);
 
     // Function to call the API
     const sendOrderDetailsEmail = async () => {
@@ -38,6 +38,7 @@ const OrderPlaceSuccess = () => {
                     createdAt,
                     orderSummary,
                     address,
+                    cartItems,
                     userName: profile?.firstName + ' ' + profile?.lastName // Assuming `user` object has a `name` property
                 }
             });
@@ -51,7 +52,7 @@ const OrderPlaceSuccess = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             sendOrderDetailsEmail();
-        }, 120000); // 2 minutes in milliseconds
+        }, 1000); // 2 minutes in milliseconds
 
         // Cleanup the timer on component unmount
         return () => clearTimeout(timer);

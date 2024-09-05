@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Checkbox, FormControlLabel, Grid, Snackbar, Alert, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import './style.scss';
@@ -6,6 +7,7 @@ import './style.scss';
 import { useAuth } from '../../context/AuthContext'
 
 const AddressSection = ({ firstName, lastName, phone }) => {
+    const navigate = useNavigate();
     const [useSameAddress, setUseSameAddress] = useState(true);
     const [isEditable, setIsEditable] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -122,6 +124,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
              setIsEditable(false);
             setSnackbarMessage('Address saved successfully');
             setSnackbarSeverity('success');
+            navigate('/products');
 
         } catch (error) {
             setSnackbarMessage('Error saving address');
@@ -152,6 +155,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                 setIsEditable(false);
                 setSnackbarMessage('Address updated successfully');
                 setSnackbarSeverity('success');
+                navigate('/products');
             } else {
                 setSnackbarMessage('Error updating address');
                 setSnackbarSeverity('error');
