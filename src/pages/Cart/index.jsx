@@ -53,8 +53,7 @@ const Cart = () => {
         state: '',
         city: ''
     });
-
-    console.log('cartItem', cartItem);
+    const [couponCode, setCouponCode] = useState('');
 
     useEffect(() => {
         const fetchCartData = async () => {
@@ -352,6 +351,47 @@ const Cart = () => {
         navigate('/payment', { state: { selectedAddress, cartItems, profile, orderSummary } });
     }
 
+    const  handleApplyCoupon = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(`https://maalana-backend.onrender.com/api/apply-coupon`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    couponCode: couponCode
+                }),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to apply coupon');
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                setOrderSummary({
+                    ...orderSummary,
+                    total: data.totalPrice,
+                    subTotal: data.totalPrice
+                });
+                setSnackbarMessage('Coupon applied successfully');
+                setSnackbarSeverity('success');
+                setSnackbarOpen(true);
+            } else {
+                setSnackbarMessage('Failed to apply coupon');
+                setSnackbarSeverity('error');
+                setSnackbarOpen(true);
+            }
+        } catch (error) {
+            console.error('Error applying coupon:', error);
+            setSnackbarMessage( error.message || 'Error applying coupon');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const paginatedItems = Array.isArray(cartItems)
         ? cartItems.slice((page - 1) * itemsPerPage, page * itemsPerPage)
         : [];
@@ -454,13 +494,6 @@ const Cart = () => {
                                 </>
                             )}
                         </div>
-
-                        {/* <ShoppingCart
-                            cartItems={paginatedItems}
-                            setCartItems={setCartItems}
-                            onIncrement={handleIncrement}
-                            onDecrement={handleDecrement}
-                          /> */}
                         <div className="cart-summary">
                             <h2>Order Summary</h2>
                             <div className="summary-item">
@@ -484,10 +517,10 @@ const Cart = () => {
                                 <span>₹{orderSummary.total || 0}</span>
                             </div>
                             <button className="checkout-button" onClick={handleCheckout} disabled={paginatedItems.length === 0 && addresses.length === 0}>Proceed to Checkout</button>
-                            {/* <div className="coupon-input">
-                                <input type="text" placeholder="Enter coupon code" aria-label="Coupon code" />
-                                <button>Apply</button>
-                            </div> */}
+                            <div className="coupon-input">
+                                <input type="text" name='coupon' value={couponCode} onChange={(e) => setCouponCode(e.target.value)} placeholder="Enter coupon code" aria-label="Coupon code" />
+                                <button onClick={() => handleApplyCoupon()}>Apply</button>
+                            </div>
                             <div className="shipping-address">
                                 <h3>Shipping Addresses</h3>
                                 {

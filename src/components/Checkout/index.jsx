@@ -93,9 +93,7 @@ const Checkout = () => {
         },
         body: JSON.stringify(orderData)
       });
-console.log('orderData', orderData);
       const result = await response.json();
-      console.log('result', result);
       if (response.ok) {
         setSnackbarMessage('Order placed successfully!');
         setSnackbarSeverity('success');
@@ -132,9 +130,9 @@ console.log('orderData', orderData);
 
   return (
     <Box className="checkout-container">
-       <Helmet>
-                <title>Maalana-Checkout</title>
-            </Helmet>
+      <Helmet>
+        <title>Maalana-Checkout</title>
+      </Helmet>
       {/* Payment Section */}
       <Box className="payment-section">
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -193,7 +191,7 @@ console.log('orderData', orderData);
           onClick={handlePayNow}
           disabled={loading} // Disable button while loading
         >
-           {loading ? <CircularProgress size={24} /> : (paymentMethod === 'cod' ? 'Place Order' : 'PAY NOW')}
+          {loading ? <CircularProgress size={24} /> : (paymentMethod === 'cod' ? 'Place Order' : 'PAY NOW')}
         </Button>
       </Box>
 
@@ -216,7 +214,7 @@ console.log('orderData', orderData);
                 <ListItemAvatar>
                   <Avatar src={product.cartProducts.images.mainImage} alt={product.cartProducts.name} />
                 </ListItemAvatar>
-                <ListItemText primary={product.cartProducts.name} secondary={product.price}   />
+                <ListItemText primary={product.cartProducts.name} secondary={product.price} />
                 {/* <Typography variant="body1">₹{product.cartProducts.price || 0}.00</Typography> */}
               </ListItem>
               {index < cartItems.length - 1 && <Divider variant="inset" component="li" sx={{ marginLeft: 0 }} />}

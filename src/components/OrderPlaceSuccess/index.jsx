@@ -59,7 +59,9 @@ const OrderPlaceSuccess = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [order]);
 
-
+    const handleContinueShopping = () => {
+        window.location.reload();
+    };
 
     return (
         <>
@@ -79,7 +81,7 @@ const OrderPlaceSuccess = () => {
                         <p><strong>Estimated Delivery:</strong> {estimatedDeliveryDate || ''}</p>
                     </div>
                     <p>We'll send you an email with your order details and tracking information once your package has shipped.</p>
-                    <Link to="/products" className="btn-primary">Continue Shopping</Link>
+                    <Link to="/products" className="btn-primary" onClick={handleContinueShopping}>Continue Shopping</Link>
                 </div>
             </div>
         </>
