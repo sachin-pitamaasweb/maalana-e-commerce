@@ -369,10 +369,14 @@ const Cart = () => {
 
             const data = await response.json();
             if (data.success) {
+                const discountPercentage = Number(data.coupon.discount); // 10% discount
+                const discountedPrice = orderSummary.subTotal - (orderSummary.subTotal * (discountPercentage / 100));
+    
                 setOrderSummary({
                     ...orderSummary,
-                    total: data.totalPrice,
-                    subTotal: data.totalPrice
+                    total: discountedPrice,
+                    subTotal: orderSummary.subTotal, // Keeping the original subTotal
+                    discountApplied: discountPercentage, // Optional: track discount percentage applied
                 });
                 setSnackbarMessage('Coupon applied successfully');
                 setSnackbarSeverity('success');
