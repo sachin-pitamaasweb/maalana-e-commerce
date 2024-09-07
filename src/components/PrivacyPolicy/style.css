@@ -1,0 +1,45 @@
+/* Main container styling */
+.privacy-container {
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+  /* Main content area styling */
+  .content-wrapper {
+    flex-grow: 1;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  
+  /* Headings */
+  .page-title, .page-subtitle {
+    color: #333;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'MADE-Tommy-Soft-Light-PERSONAL-USE';
+  }
+  
+  /* Text paragraphs and list styling */
+  .page-paragraph, .page-ul {
+    text-align: justify;
+  }
+  
+  /* Responsive media query */
+  @media (max-width: 768px) {
+    .privacy-container {
+      flex-direction: column;
+    }
+  
+    .nav-placeholder {
+      width: 100%;
+      height: 60px;
+    }
+  
+    .content {
+      padding: 15px;
+    }
+  }
+  

@@ -190,7 +190,7 @@ const Contact = () => {
                                 loading="lazy"
                                 title="Google Map"
                             ></iframe>
-                            <div className="map-pin"></div>
+                            {/* <div className="map-pin"></div> */}
                         </section>
                     </div>
                 </div>

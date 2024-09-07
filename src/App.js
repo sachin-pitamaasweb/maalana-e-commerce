@@ -26,9 +26,12 @@ import OrderPlaceSuccess from './components/OrderPlaceSuccess/index.jsx';
 // Auth and Protected Route
 import { AuthProvider } from './context/AuthContext.js';
 import ProtectedRoute from './ProtectedRoute/index.jsx';
+import PrivacyPolicy from './components/PrivacyPolicy/index.jsx';
+import ShippingProcess from './components/ShippingProcess/index.jsx';
+import TermsAndConditions from './components/TermsAndConditions/index.jsx';
 
 function App() {
- 
+
   const [products, setProducts] = useState([]);
   useEffect(() => {
     AOS.init({
@@ -110,7 +113,7 @@ function App() {
             <Route
               path="/products"
               element={
-                  <Products products={products} />
+                <Products products={products} />
               }
             />
             <Route
@@ -135,6 +138,24 @@ function App() {
                 <ProtectedRoute>
                   <OrderPlaceSuccess />
                 </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/privacy-policy"
+              element={
+                <PrivacyPolicy />
+              }
+            />
+              <Route
+              path="/shipping-process"
+              element={
+                <ShippingProcess />
+              }
+            />
+            <Route
+              path="/terms-and-conditions"
+              element={
+               <TermsAndConditions />
               }
             />
           </Routes>

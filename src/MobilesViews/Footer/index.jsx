@@ -38,6 +38,9 @@ const Footer = () => {
           <li><Link to="/about" onClick={scrollToTop}>Kahani</Link></li>
           <li><Link to="/contact" onClick={scrollToTop}>Baat Cheet</Link></li>
           <li><Link to="/become-partner" onClick={scrollToTop}>Humko join karlo!</Link></li>
+          <li><Link to="/privacy-policy" onClick={scrollToTop}>Privacy Policy</Link></li>
+          <li><Link to="/shipping-process" onClick={scrollToTop}>Shipping Process</Link></li>
+          <li><Link to="/terms-and-conditions" onClick={scrollToTop}>Terms and Conditionss</Link></li>
         </ul>
 
         <div className={styles.contact}>
