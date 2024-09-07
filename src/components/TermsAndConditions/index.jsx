@@ -102,7 +102,7 @@ const TermsAndConditions = () => {
         <p className='page-paragraph'>
           By using our website, you agree to our Privacy Policy, which governs
           the collection, storage, and use of your personal information. For
-          more details, please review our Privacy Policy [link to Privacy Policy].
+          more details, please review our Privacy Policy <a href='https://maalana-e-commerce.vercel.app/privacy-policy'>here</a>.
         </p>
 
         <h2 className='page-subtitle'>12. Governing Law</h2>
