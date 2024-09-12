@@ -382,16 +382,19 @@ const Cart = () => {
                 setSnackbarMessage('Coupon applied successfully');
                 setSnackbarSeverity('success');
                 setSnackbarOpen(true);
+                setCouponCode('');
             } else {
                 setSnackbarMessage('Coupon code has already been used');
                 setSnackbarSeverity('error');
                 setSnackbarOpen(true);
+                setCouponCode('');
             }
         } catch (error) {
             console.error('Error applying coupon:', error);
             console.log(error.response.data.messageor);
             setSnackbarMessage( error.response.data.message || 'Coupon code has already been used');
             setSnackbarSeverity('error');
+            setCouponCode('');
             setSnackbarOpen(true);
         } finally {
             setLoading(false);
