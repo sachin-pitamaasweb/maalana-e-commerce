@@ -2,13 +2,14 @@ import React, { useEffect } from "react";
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from "../../context/AuthContext";
 
 import './style.css';
 
 const OrderPlaceSuccess = () => {
+    const navigate = useNavigate();
     const { profile } = useAuth();
     const location = useLocation();
     const { result } = location.state || {};
@@ -52,7 +53,7 @@ const OrderPlaceSuccess = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             sendOrderDetailsEmail();
-        }, 1000); // 2 minutes in milliseconds
+        }, 100); // 2 minutes in milliseconds
 
         // Cleanup the timer on component unmount
         return () => clearTimeout(timer);
@@ -60,7 +61,7 @@ const OrderPlaceSuccess = () => {
     }, [order]);
 
     const handleContinueShopping = () => {
-        window.location.reload();
+        navigate('/products');
     };
 
     return (
