@@ -6,19 +6,19 @@ import './style.css';  // Import simple CSS
 const SpecialOfferModel = ({ open, handleClose }) => {
 
   const [isLaunching, setIsLaunching] = useState(false);  // State to trigger the rocket launch
-  const [email, setEmail] = useState();  // State to handle email input
+  const [email, setEmail] = useState('');  // State to handle email input
   const [error, setError] = useState('');  // State for handling validation error
   const [loading, setLoading] = useState(false);  // State for handling loading state
 
   const handleButtonClick = async () => {
-    if (!email) {
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setError('Please enter a valid email address.');  // Set error if email is empty
       return;  // Do not proceed if the email is not provided
-    }
+    } 
 
     setError('');  // Clear any existing error if email is provided
-    setIsLaunching(true);  // Start the rocket animation when the button is clicked
     setLoading(true);  // Set loading state to true
+    setIsLaunching(false);  // Set rocket to ready state but don't launch yet
 
     try {
       // Make HTTP POST request to generate coupon
@@ -27,16 +27,20 @@ const SpecialOfferModel = ({ open, handleClose }) => {
         discount: 10
       });
 
-      // Simulate an action and close the modal after 5 seconds (duration of rocket animation)
+      // Simulate an action and launch the rocket after loading is done
       setTimeout(() => {
-        handleClose();  // Close the dialog after a delay
-        setIsLaunching(false);  // Stop the rocket animation
-        setLoading(false);  // Reset loading state
-      }, 5000);
+        setIsLaunching(true);  // Trigger rocket launch after successful submission
+        setLoading(false);  // Reset loading state after the request is successful
+
+        // Close the dialog after 3 more seconds (after the rocket animation)
+        setTimeout(() => {
+          handleClose();
+          setIsLaunching(false);  // Reset rocket state after closing
+        }, 3000);
+      }, 2000);  // Delay for showing loading state
     } catch (error) {
       console.error('Error generating coupon:', error);
-      setError('Failed to generate coupon. Please try again later.');
-      setIsLaunching(false);  // Stop the rocket animation
+      setError( error.response.data.message ||'Failed to generate coupon. Please try again later.');
       setLoading(false);  // Reset loading state
     }
   };
@@ -48,7 +52,7 @@ const SpecialOfferModel = ({ open, handleClose }) => {
           <img
             src={require('../../assets/offer/rocket.png')}  // Dummy image for the rocket
             alt="Rocket"
-            className={`top-left-image ${isLaunching ? 'rocket-launch' : ''}`}  // Add the launch class based on state
+            className={`top-left-image ${loading ? 'rocket-ready' : isLaunching ? 'rocket-launch' : ''}`}  // Different class for ready and launch states
           />
           <img
             src={require('../../assets/logo/logo-1.png')}  // Dummy logo image

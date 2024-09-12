@@ -363,18 +363,19 @@ const Cart = () => {
                     couponCode: couponCode
                 }),
             });
-            if (!response.ok) {
-                throw new Error('Failed to apply coupon');
-            }
+            // if (!response.ok) {
+            //     throw new Error('Failed to apply coupon');
+            // }
 
             const data = await response.json();
             if (data.success) {
                 const discountPercentage = Number(data.coupon.discount); // 10% discount
                 const discountedPrice = orderSummary.subTotal - (orderSummary.subTotal * (discountPercentage / 100));
-    
+                console.log(discountedPrice);
                 setOrderSummary({
                     ...orderSummary,
                     total: discountedPrice,
+                    discount: discountPercentage,
                     subTotal: orderSummary.subTotal, // Keeping the original subTotal
                     discountApplied: discountPercentage, // Optional: track discount percentage applied
                 });
@@ -382,13 +383,14 @@ const Cart = () => {
                 setSnackbarSeverity('success');
                 setSnackbarOpen(true);
             } else {
-                setSnackbarMessage('Failed to apply coupon');
+                setSnackbarMessage('Coupon code has already been used');
                 setSnackbarSeverity('error');
                 setSnackbarOpen(true);
             }
         } catch (error) {
             console.error('Error applying coupon:', error);
-            setSnackbarMessage( error.message || 'Error applying coupon');
+            console.log(error.response.data.messageor);
+            setSnackbarMessage( error.response.data.message || 'Coupon code has already been used');
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         } finally {
@@ -506,7 +508,7 @@ const Cart = () => {
                             </div>
                             <div className="summary-item">
                                 <span>Discount</span>
-                                <span>{orderSummary.discount || 0}</span>
+                                <span>{orderSummary.discount || 0}%</span>
                             </div>
                             <div className="summary-item">
                                 <span>Tax</span>
