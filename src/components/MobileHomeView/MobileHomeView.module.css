@@ -1,0 +1,327 @@
+.container{
+    display: flex;flex-direction: column;
+    max-width: 450px;
+    min-height: 100vh;
+    /* background: #000; */
+  overflow: hidden;
+   margin:0 auto;
+  }
+  .topBanner{
+    height: 100%;
+    height: 400px;
+    /* padding: 13% 0; */
+    width: 100%;
+    background: rgb(25,116,127);
+  background: linear-gradient(90deg, rgba(25,116,127,1) 0%, rgba(236,239,180,1) 100%);
+  
+  }
+  .topBannerImg1{
+  
+  display: flex;align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 90%;
+  margin: auto;
+  
+  }
+  .textBanner img{
+    width: 100%;
+  }
+  .sourLmli {
+  z-index: 6;
+  
+  }
+  .sourLmli img{
+  width: 50%;
+    /* width: 100%; */
+    position: absolute;
+    top: 50%;
+    right: 2%;
+  }
+  
+  /* ============white banner======= */
+  .whiteBanner{
+      position: relative;
+      z-index: 5;
+      overflow: hidden;
+  }
+  .whiteBannerImg img{
+    width: 100%;
+  
+  }
+  .whiteBannerContent{
+    position: absolute;
+    width: 100%;
+    display: flex;justify-content: space-between;
+    top: 0;
+    
+  }
+  .whiteBannerContent h2{
+    font-size: 4.5vw;
+       white-space: nowrap;
+       margin-left: 3%;
+       margin-top:14%;
+       color: #9BCE2B;
+  }
+  .sourFruit {
+    margin-top: 50%;
+  
+  }
+  .sourFruit img{
+    width: 80%;
+    margin-left: 15%;
+  }
+  .line1{
+    
+    position: absolute;
+    top: 7%;
+    width: 100%;
+    display: flex;justify-content: center;
+    left: 8%;
+  }
+  .line1 img{
+    width: 78%;
+  
+  }
+  
+  
+  /* ==========yellow banner========= */
+  .yellowBanner{
+    position: relative;
+    z-index: 4;
+  }
+  .yellowBannerImg img{
+  width: 100%;
+  margin-top: -95%;
+  }
+  
+  .yellowBannerContainer{
+    display: flex;flex-direction: column;
+    position: absolute;
+    top: -45%;
+  }
+  .yellowBannerContainer h2{
+    margin-top: -18%;
+    margin-left: 35%;
+    color: #440603;
+    font-size: 5vw;
+  }
+  .mangoBox {
+    z-index: 1;
+  }
+  .mangoBox img{
+  width: 75%;
+  z-index: 2;
+  }
+  .mangoKid{
+    margin-left: 70%;
+    margin-top: -6%;
+  }
+  .mangoKid img{
+    width: 100%;
+  }
+  .line2{
+    position: absolute;
+    top: 5%;
+    width: 100%;
+    display: flex;justify-content: center;
+    /* left: -5%; */
+  }
+  .line2 img{
+    width: 78%;
+  
+  }
+  
+  
+  /* ==========Purple banner========= */
+  .purpleBanner{
+    position: relative;
+    z-index: 3;
+  }
+  .purpleBannerImg img{
+    width: 100%;
+    margin-top: -36%;
+  }
+  .purpleBannerContainer{
+    position: absolute;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    top: -20%;
+    z-index: 1;
+  }
+  .purpleBannerLeft{
+    display: flex;flex-direction: column;
+  }
+  .purpleBannerLeft h2{
+    font-size: 4.5vw;
+       white-space: nowrap;
+       margin-left: 3%;
+       margin-top:-5%;
+       color: #fff;
+  }
+  .jamun{
+    margin-top: 10%;
+  }
+  .jamun img{
+    width: 90%;
+  }
+  .lollipop{
+    margin-top: 30%;
+  }
+  .lollipop img{
+    width: 100%;
+  }
+  .line3{
+    
+    position: absolute;
+    top: 35%;
+    width: 100%;
+    display: flex;justify-content: center;
+    left: 0%;
+  }
+  .line3 img{
+    width: 60%;
+  
+  }
+  
+  
+  /* ==========Pink banner========= */
+  .pinkBanner{
+    position: relative;
+    z-index: 2;
+    
+  }
+  .pinkBannerImg img{
+    width: 100%;
+    margin-top: -60%;
+    
+  }
+  .pinkBannerContainer{
+    position: absolute;
+    display: flex;flex-direction: column;
+    top: -25%;
+  }
+  .pinkBannerLeft{
+    display: flex;
+    width: 100%;
+    z-index: 1;
+    /* justify-content: space-between; */
+  }
+  .pinkBannerLeft h2{
+      font-size: 4.5vw;
+       white-space: nowrap;
+       margin-top:25%;
+       padding-right: 5%;
+       color: #B800DB;
+  }
+  
+  .candy1 img{
+    width: 100%;
+  }
+  .mixedFruit{
+    margin-top: 02%;
+    margin-left: 30%;
+  }
+  .mixedFruit img{
+    width: 50%;
+  }
+  .line4{
+    
+    position: absolute;
+    top: -8%;
+    width: 100%;
+    display: flex;justify-content: center;
+    left: 0%;
+  }
+  .line4 img{
+    width: 80%;
+  
+  }
+  
+  /* ==========Green banner========= */
+  .greenBanner{
+    position: relative;
+    z-index: 1;
+  }
+  .greenBannerImg img{
+    width: 100%;
+    margin-top: -60%;
+  }
+  .greenBannerContainer{
+    display: flex;flex-direction: column;
+    position: absolute;
+    top: -30%;
+    
+  }
+  .greenBannerContainer h2{
+    margin-left: 10%;
+    margin-top: -6%;
+      font-size: 4.5vw;
+       white-space: nowrap;
+    color: #EF052B;
+  }
+  .greenBannerLeft{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .candy2{
+   margin-left: 35%;
+   margin-top: -30%;
+    z-index: 5;
+  
+  }
+  .candy2 img{
+    width:95%;
+    z-index: 5;
+  }
+  
+  .mixedFruit2{
+  margin-top: -20%;
+  }
+  .mixedFruit2 img{
+    width: 44%;
+  }
+  
+  
+  /* ==========shatter========= */
+  .shatterContainer{
+    position: relative;
+  }
+  .shatterImg img{
+  width: 100%;
+  height: 60%;
+  }
+  .roof{
+    position: absolute;
+    top: 0;
+  }
+  .roof img{
+    width: 100%;
+  }
+  
+  .shatter {
+      cursor: pointer;
+      transition: transform 0.5s ease-in-out;
+  }
+  
+  .shatterClicked {
+      transform: translateY(-100%);
+  }
+  
+  .shatterImg {
+      position: relative;
+  }
+  
+  .roof {
+      position: absolute;
+      top: 0;
+      left: 0;
+    z-index: 1;
+  }
+  
+  .homeComponent{
+  position: absolute;
+  top: 10%;
+  }

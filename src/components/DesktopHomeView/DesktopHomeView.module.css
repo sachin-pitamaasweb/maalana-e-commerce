@@ -1,0 +1,447 @@
+.container{
+    display: flex;flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    /* background: #000; */
+    overflow: hidden;
+  }
+  .topBanner{
+    height: 100%;
+    padding: 13% 0;
+    width: 100%;
+    background: rgb(25,116,127);
+  background: linear-gradient(90deg, rgba(25,116,127,1) 0%, rgba(236,239,180,1) 100%);
+  
+  }
+  .topBannerImg1{
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin-left: 50px;
+  }
+  .topBanner img:first-child{
+  
+  width: 36%;
+  }
+  .topBanner img:last-child{
+    position: absolute;
+    width: 34%;
+    right: 12%;
+    top: 8%;
+    z-index: 6;
+  }
+  
+  /* ========white banner starts======== */
+  
+  .whiteBanner{
+  position: relative;
+  z-index: 5;
+  }
+  .whiteBannerImg1 img{
+    width: 100%;
+  }
+  .whiteBannerContent{
+    /* top: 10%; */
+  }
+  .whiteBannerContent h2{
+    top: 12%;
+    position: absolute;
+  left: 10%;
+  font-size: 3vw;
+  color: #9BCE2B;
+  }
+  .whiteBannerContentimg {
+  
+  display: flex;align-items: end;
+  justify-content: end;
+  margin-top: -30%;
+  padding-right: 100px;
+  }
+  .whiteBannerContentimg img{
+      width: 30%;
+  }
+  .line1{
+    position: absolute;
+    top: -24%;
+    width: 100%;
+    display: flex;justify-content: center;
+  }
+  .line1 img{
+    width: 75%;
+  
+  }
+  
+  /* ========white banner ends======== */
+  
+  
+  /* ==========yellowBanner starts========= */
+  
+  .yellowBanner{
+      position: relative;
+      z-index: 4;
+  }
+  .yellowBanner img{
+    width: 100%;
+    margin-top: -35%;
+  
+  }
+  .yellowBannerContent{
+   
+    display: flex;justify-content: space-between;
+    width: 100%;
+  
+  }
+  .yellowBannerContent .manogBoxImg{
+    margin-top: -150px;
+    margin-top: -25%;
+    z-index: 1;
+  }
+  .yellowBannerContent .manogBoxImg img{
+  width: 80%;
+    
+  }
+  .yellowBannerContent h2{
+    color: #440603;
+    /* max-width: 500px; */
+     white-space: nowrap;
+     margin-top: -30%;
+     margin-left: -10%;
+    font-size: 3vw;
+  
+  }
+  
+  .yellowBannerContent .manogkid{
+    margin-top: -120px;
+    margin-top: -19%;
+    /* margin-right: -80px; */
+  }
+  .yellowBannerContent .manogkid img{
+    width: 60%;
+    margin-left: 90px;
+  }
+  .line2{
+    position: absolute;
+    bottom: -60%;
+    width: 100%;
+    display: flex;justify-content: center;
+    left: -5%;
+  }
+  .line2 img{
+    width: 60%;
+  
+  }
+  /* ==========yellowBanner ends========= */
+  
+  
+  /* ==========purpleBanner starts========= */
+  
+  .purpleBanner{
+    position: relative;
+    z-index: 3;
+  }
+  .purpleBannerImg1 img{
+  width: 100%;
+    margin-top: -20%;
+  
+  }
+  .purpleBannerContent{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  
+  .purpleBannerContentleft{
+    display: flex;flex-direction: column;
+    width: 100%;
+  }
+  .purpleBannerContentleft h2{
+    margin-left: 23%;
+    margin-top: 7%;
+    font-size: 3vw;
+     white-space: nowrap;
+  color: #fff;
+  }
+  .jamun{
+    margin-top: -10%;
+  }
+  .jamun img{
+    width: 54%;
+  }
+  .lollipop{
+    z-index: 1;
+  }
+  .lollipop img{
+    width: 80%;
+    z-index: 1;
+   
+  }
+  
+  .line3{
+    position: absolute;
+    bottom: -15%;
+    width: 100%;
+    display: flex;justify-content: center;
+    left: -5%;
+  }
+  .line3 img{
+    width: 60%;
+  
+  }
+  /* ==========purpleBanner ends========= */
+  
+  
+  /* ==========PinkBanner starts========= */
+  .pinkBanner{
+    position: relative;
+    z-index: 2;
+  }
+  .pinkBannerImg1 img{
+    width: 100%;
+    margin-top: -26%;
+  
+  }
+  .pinkBannerContent{
+    position: absolute;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    top: 0;
+  }
+  .candy1 {
+    margin-top: 80px;
+    margin-right: -50px;
+    z-index: 1;
+  }
+  .candy1 img{
+    width: 70%;
+  }
+  .pinkBannerContentRight{
+    display: flex;flex-direction: column;
+  }
+  .pinkBannerContentRight h2{
+    color: #B800DB;
+    margin-left: 50px;
+    font-size: 3vw;
+    margin-top: -5%;
+  }
+  .mixfruits1{
+    display: flex;align-items: end;
+    justify-content: end;
+    margin-right: 80px;
+    margin-top: -20%;
+  }
+  .mixfruits1 img{
+    width: 70%;
+  }
+  
+  .line4{
+    position: absolute;
+    bottom: -10%;
+    width: 100%;
+    display: flex;justify-content: center;
+    left: 0%;
+  }
+  .line4 img{
+    width: 60%;
+  
+  }
+  /* ==========PinkBanner ends========= */
+  
+  
+  /* ==========LightGreenBanner starts========= */
+  .greenBanner{
+    position: relative;
+    z-index: 1;
+  }
+  .greenBannerImg1{
+    margin-top: -28%;
+  }
+  .greenBannerImg1 img{
+    width: 100%;
+  }
+  .greenBannerContent{
+    position: absolute;
+    top: 0;
+    display: flex;justify-content: space-between;
+    width: 100%;
+  }
+  .greenBannerContent h2{
+    margin: auto;
+     white-space: nowrap;
+  margin-top: 7%;
+  font-size: 3vw;
+  margin-left: 5%;
+  color: #EF052B;
+  }
+  .mixFruit2{
+  margin-left: 5%;
+  }
+  .mixFruit2 img{
+    width: 100%;
+  }
+  .candies2{
+  display: flex;justify-content: end;
+  margin-right: 5%;
+  }
+  .candies2 img{
+    width: 100%;
+  } 
+  /* ==========LightGreenBanner endss========= */
+  
+  /* ==========shatter starts========= */
+  .shatterContainer{
+    position: relative;
+  }
+  .shatterImg img{
+  width: 100%;
+  }
+  .roof{
+    position: absolute;
+    top: 0;
+  }
+  .roof img{
+    width: 100%;
+  }
+  
+  @media(max-width:1300px){
+    .lollipop{
+    z-index: 1;
+    display: flex;justify-content: end;
+    margin-right: 5%;
+  }
+  .lollipop img{
+    width: 70%;
+    z-index: 1;
+   
+  }
+  }
+  @media(max-width:1000px){
+    .lollipop{
+    z-index: 1;
+    display: flex;justify-content: end;
+    margin-right: 5%;
+    margin-top: -5%;
+  }
+  .lollipop img{
+    width: 60%;
+    z-index: 1;
+   
+  }
+  }
+  @media(max-width:700px){
+    .whiteBannerContentimg {
+    margin-top: -30%;
+    padding-right: 50px;
+  
+  }
+  .whiteBannerContentimg img{
+      width: 33%;
+  }
+    
+    .line1{
+    top: -20%;
+  }
+  .line1 img{
+    width: 68%;
+  
+  }
+  
+  .yellowBannerContent .manogBoxImg{
+    margin-top: -33%;
+    z-index: 1;
+  }
+  .yellowBannerContent .manogBoxImg img{
+    width: 90%;
+  }
+  .yellowBannerContent h2{
+     margin-top: -25%;
+     margin-right: -5%;
+    font-size: 3vw;
+  
+  }
+  
+  
+  .yellowBannerContent .manogkid{
+    margin-top: -22%;
+  }
+  .yellowBannerContent .manogkid img{
+    width: 70%;
+    margin-left: 30px;
+  }
+  
+  
+  .jamun{
+    margin-top: -10%;
+  }
+  .jamun img{
+    width: 80%;
+  }
+  .lollipop{
+    z-index: 1;
+    /* margin-top: 10px; */
+  }
+  .lollipop img{
+    width: 56%;
+    z-index: 1;
+   
+  }
+  
+  
+  .candy1 {
+    margin-top: 3%;
+  
+  }
+  .candy1 img{
+    width: 75%;
+  }
+  
+  .pinkBannerContentRight h2{
+    margin-left: 0px;
+    font-size: 3vw;
+    margin-top: -10%;
+  }
+  .mixfruits1{
+    display: flex;align-items: end;
+    justify-content: end;
+    margin-right: 20px;
+    margin-top: -12%;
+  }
+  .mixfruits1 img{
+    width: 60%;
+  }
+  
+  
+  }
+  /* 
+  .container {
+      position: relative;
+      overflow: hidden;
+  } */
+  
+  .shatter {
+      cursor: pointer;
+      transition: transform 0.5s ease-in-out;
+  }
+  
+  .shatterClicked {
+      transform: translateY(-100%);
+  }
+  
+  .shatterImg {
+      position: relative;
+  }
+  
+  .roof {
+      position: absolute;
+      top: 0;
+      left: 0;
+    z-index: 1;
+  }
+  
+  .homeComponent{
+  position: absolute;
+  top: 36%;
+  }
