@@ -352,7 +352,7 @@ const Checkout = () => {
         
         // Open Razorpay Checkout
         const options = {
-          key: 'rzp_test_DaA1MMEW2IUUYe', // Enter your Razorpay Key ID
+          key: 'rzp_test_mQ80OF7C7GfnTU', // Enter your Razorpay Key ID
           amount: amount.toString(),
           currency: currency,
           name: 'Maalana',
