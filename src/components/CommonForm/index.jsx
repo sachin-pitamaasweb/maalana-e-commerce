@@ -97,7 +97,8 @@ const CommonForm = ({ title = "" }) => {
                     setSnackbarSeverity('success');
                     setSnackbarMessage('Login successful!');
                     login(responseData.user._id); // Mark the user as authenticated
-                    navigate(`/profile/${responseData.user._id}`, { state: { id: responseData.user._id } });
+                    // navigate(`/profile/${responseData.user._id}`, { state: { id: responseData.user._id } });
+                    navigate('/products');
                 } else {
                     setSnackbarSeverity('error');
                     setSnackbarMessage('Invalid credentials. Please try again.');

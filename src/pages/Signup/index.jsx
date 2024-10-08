@@ -5,9 +5,9 @@ import CommonForm from '../../components/CommonForm/index.jsx';
 const Signup = () => {
   return (
     <>
-     <Helmet>
-                <title>Maalana-Signup</title>
-            </Helmet>
+      <Helmet>
+        <title>Maalana-Signup</title>
+      </Helmet>
       <CommonForm
         title='Sign Up'
       />

@@ -27,7 +27,7 @@ const OrderPlaceSuccess = () => {
 
     const estimatedDeliveryDate = formatDate(new Date(new Date(createdAt).getTime() + 7 * 24 * 60 * 60 * 1000)); // Adding 7 days for estimated delivery
 
-    console.log(order);
+    console.log('order', order);
 
     // Function to call the API
     const sendOrderDetailsEmail = async () => {

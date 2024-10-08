@@ -21,7 +21,7 @@ import { useAuth } from '../../context/AuthContext';
 
 const Products = ({ products }) => {
     const [selectedCategory, setSelectedCategory] = useState('All');
-    const [showOffer, setShowOffer] = useState(false); 
+    const [showOffer, setShowOffer] = useState(false);
     const { isUserAuthenticated } = useAuth();
     const banners = [
         {
@@ -51,7 +51,7 @@ const Products = ({ products }) => {
     useEffect(() => {
         // Check if the offer has been shown before
         const hasVisited = sessionStorage.getItem('hasVisited');
-        
+
         // Only show the offer if the user is not authenticated and hasn't visited the page before
         if (!isUserAuthenticated && !hasVisited) {
             setShowOffer(true);
@@ -97,10 +97,10 @@ const Products = ({ products }) => {
                             products={fruitKatliRange}
                             title={"Fruit Katli Range"}
                         />
-                        <Banners
+                        {/* <Banners
                             title="lollipops"
                             img='https://res.cloudinary.com/dtivafy25/image/upload/v1725013318/b-3_yia19h.png'
-                        />
+                        /> */}
                         <StyledBox />
                         <OverlayImage />
                         <MoreProducts products={products} setSelectedCategory={setSelectedCategory} />
@@ -111,15 +111,15 @@ const Products = ({ products }) => {
             case "Aam papad":
                 return <PrductGridCard products={filteredProducts} title={"Aam papad"} />;
             case "Candy":
-                return <PrductGridCard products={filteredProducts}  title={"Candy"}/>;
+                return <PrductGridCard products={filteredProducts} title={"Candy"} />;
             case "Imli Range":
-                return <PrductGridCard products={filteredProducts}  title={"Imli Range"}/>;
+                return <PrductGridCard products={filteredProducts} title={"Imli Range"} />;
             case "Lollipops":
                 return <PrductGridCard products={filteredProducts} title={"Lollipops"} />;
             case "Fruit katli":
-                return <PrductGridCard products={filteredProducts}  title={"Fruit Katli Range"}/>;
+                return <PrductGridCard products={filteredProducts} title={"Fruit Katli Range"} />;
             default:
-                return <PrductGridCard products={filteredProducts}  title={"Fruit Katli Range"}/>;
+                return <PrductGridCard products={filteredProducts} title={"Fruit Katli Range"} />;
         }
     };
 
@@ -136,7 +136,7 @@ const Products = ({ products }) => {
                 />
                 {renderComponent()}
             </Box>
-            
+
         </>
     );
 };

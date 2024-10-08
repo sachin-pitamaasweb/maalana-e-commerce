@@ -49,7 +49,7 @@ const Header = () => {
 
     return (
         <header className="header">
-            <div className="logo">
+            <div className="logo" onClick={() => handleLinkClick('/')}>
                 <img src={'https://res.cloudinary.com/dtivafy25/image/upload/v1725260985/logo-1_rqojr8.png'} alt="MAAlana" />
             </div>
             {isMobile && (
@@ -165,11 +165,13 @@ const Header = () => {
                                             <ListItem button component={Link} to={`/profile/${userId}`}>
                                                 <ListItemIcon>
                                                     <AccountCircle />
+                                                    <ListItemText primary="Account" />
                                                 </ListItemIcon>
                                             </ListItem>
                                             <ListItem button onClick={handleLogout}>
                                                 <ListItemIcon>
                                                     <LogoutIcon />
+                                                    <ListItemText primary="Logout" />
                                                 </ListItemIcon>
                                             </ListItem>
                                         </>
