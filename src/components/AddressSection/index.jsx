@@ -47,11 +47,11 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                 if (response.status === 200 && response.data.success) {
                     const addressData = response.data.shipedaddress;
                     setAddressId(addressData[0]._id);
-                     if(addressData[0]._id === null){
+                    if (addressData[0]._id === null) {
                         setIsEditable(true);
-                     } else {
+                    } else {
                         setIsEditable(false);
-                     }
+                    }
                     setShippingAddress({
                         address: addressData[0].address,
                         pincode: addressData[0].pincode,
@@ -83,12 +83,35 @@ const AddressSection = ({ firstName, lastName, phone }) => {
         setUseSameAddress(!useSameAddress);
     };
 
-    const handleInputChange = (e, setAddress) => {
+    const handleInputChange = async (e, setAddress) => {
         const { name, value } = e.target;
         setAddress(prevState => ({
             ...prevState,
-            [name]: value
+            [name]: value,
         }));
+
+        if (name === 'pincode' && value.length === 6) {
+            console.log("pincode", value);
+            try {
+                const response = await fetch(`https://api.postalpincode.in/pincode/${value}`);
+                const data = await response.json();
+                if (data && data.length > 0 && data[0].Status === "Success") {
+                    const postOffice = data[0].PostOffice[0];
+                    setAddress(prevState => ({
+                        ...prevState,
+                        city: postOffice.District,
+                        state: postOffice.State,
+                        country: postOffice.Country,
+                    }));
+                } else {
+                    setSnackbarMessage('Invalid pincode');
+                    setSnackbarSeverity('error');
+                    setSnackbarOpen(true);
+                }
+            } catch (error) {
+                console.error('Error fetching pincode details:', error);
+            }
+        }
     };
 
     const handleEditClick = () => {
@@ -121,7 +144,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                 state: data.state,
                 city: data.city,
             });
-             setIsEditable(false);
+            setIsEditable(false);
             setSnackbarMessage('Address saved successfully');
             setSnackbarSeverity('success');
             navigate('/products');
@@ -136,7 +159,6 @@ const AddressSection = ({ firstName, lastName, phone }) => {
             setIsEditable(false);
         }
     };
-
 
     const handleUpdate = async () => {
         if (!shippingAddress) {
@@ -182,7 +204,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
             <div className="address-form">
                 <div className="shipping-header">
                     <h3>Shipping Address:</h3>
-                    <Button className="edit-button" onClick={handleEditClick}>Edit</Button>
+                    { !isEditable && <Button className="edit-button" onClick={handleEditClick}>Edit</Button>}
                 </div>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
@@ -386,7 +408,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
                                 variant="contained"
                                 color="primary"
                                 onClick={handleUpdate}
-                                sx={{ 
+                                sx={{
                                     textTransform: 'capitalize',
                                     marginRight: '10px',
                                     width: '48%',

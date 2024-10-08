@@ -130,7 +130,7 @@ const Cart = () => {
     const handleRemove = async (cartId, productId) => {
         try {
             setLoading(true);
-            const response = await axios.delete(`http://localhost:8000/api/delete-cart-product`, {
+            const response = await axios.delete(`https://maalana-backend.onrender.com/api/delete-cart-product`, {
                 data: { userId, productId, cartId }
             });
 

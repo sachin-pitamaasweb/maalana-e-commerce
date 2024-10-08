@@ -1,15 +1,11 @@
 import React, { useEffect } from "react";
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
-
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from "../../context/AuthContext";
-
 import './style.css';
 
 const OrderPlaceSuccess = () => {
-    const navigate = useNavigate();
     const { profile } = useAuth();
     const location = useLocation();
     const { result } = location.state || {};
@@ -33,14 +29,14 @@ const OrderPlaceSuccess = () => {
     const sendOrderDetailsEmail = async () => {
         try {
             await axios.post('https://maalana-backend.onrender.com/api/send-order-details-email', {
-                email: profile?.email, // Assuming `user` object has an `email` property
+                email: profile?.email,
                 order: {
                     orderNumber,
                     createdAt,
                     orderSummary,
                     address,
                     cartItems,
-                    userName: profile?.firstName + ' ' + profile?.lastName // Assuming `user` object has a `name` property
+                    userName: profile?.firstName + ' ' + profile?.lastName
                 }
             });
             console.log('Order details email sent successfully');
@@ -51,17 +47,14 @@ const OrderPlaceSuccess = () => {
 
     // Call the API when the component mounts
     useEffect(() => {
-        const timer = setTimeout(() => {
+        if (order) {
             sendOrderDetailsEmail();
-        }, 100); // 2 minutes in milliseconds
-
-        // Cleanup the timer on component unmount
-        return () => clearTimeout(timer);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }
     }, [order]);
 
+    // Function to reload the page and navigate to products
     const handleContinueShopping = () => {
-        navigate('/products');
+        window.location.href = '/products';
     };
 
     return (

@@ -77,7 +77,7 @@ const Checkout = () => {
       }
 
       // Create Razorpay order using API call
-      const response = await fetch('http://localhost:8000/api/create-order-online', {
+      const response = await fetch('https://maalana-backend.onrender.com/api/create-order-online', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,11 +99,6 @@ const Checkout = () => {
           order_id: order_id,
           handler: async (response) => {
             // Call your server to save the transaction
-            console.log("Complete Razorpay Response: ", response);
-            console.log("Razorpay Payment ID:", response.razorpay_payment_id);
-            console.log("Razorpay Order ID:", razorpayOrderId);
-            console.log("Razorpay Signature:", response.razorpay_signature);
-            console.log(response);
             const paymentData = {
               user: orderData.user,
               razorpay_payment_id: response.razorpay_payment_id,
@@ -115,18 +110,19 @@ const Checkout = () => {
               orderSummary: orderData.orderSummary,
             };
 
-            const paymentResult = await fetch('http://localhost:8000/api/payment-verification', {
+            const paymentResult = await fetch('https://maalana-backend.onrender.com/api/payment-verification', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify(paymentData),
             });
+
             console.log('paymentResult', paymentResult);
             if (paymentResult.ok) {
               setSnackbarMessage('Order placed successfully!');
               setSnackbarSeverity('success');
-              navigate('/order-success', { state: { result: paymentData } });
+              navigate('/order-success', { state: { result: result } });
               updateCartItemCount(0);
             } else {
               setSnackbarMessage('Payment verification failed!');
@@ -207,6 +203,7 @@ const Checkout = () => {
           body: JSON.stringify(orderData)
         });
         const result = await response.json();
+        console.log('response', result);
         if (response.ok) {
           setSnackbarMessage('Order placed successfully!');
           setSnackbarSeverity('success');

@@ -164,7 +164,7 @@ const ProfilePage = () => {
 
     return (
         <Box className="profile-page-container">
-             <Helmet>
+            <Helmet>
                 <title>Maalana-profile</title>
             </Helmet>
             <Box className="filter-section">
@@ -370,7 +370,7 @@ const ProfilePage = () => {
                                 }}
                             />
                             <InputMask
-                                mask="99/99/9999" 
+                                mask="99/99/9999"
                                 value={profile.dateOfBirth}
                                 onChange={handleChange}
                                 disabled={!isEditable}
