@@ -21,9 +21,10 @@ const ProductGridCard = ({ products, title }) => {
     const [cartId, setCartId] = useState(null);
     const [cartItems, setCartItems] = useState(cartItem || []);
     const [loadingProductId, setLoadingProductId] = useState(null);
-    const [countLoading, setCountLoading] = useState(null);
+    const [countLoading, setCountLoading] = useState(null)  ;
     const handleDetails = (productId, product) => {
-        navigate(`/products-details/${productId}`, { state: { product } });
+        navigate(`/products-details/${productId}`, { state: { product, productId } });
+        window.scrollTo(0, 0);
     };
 
     const handleOpenDrawer = async (product) => {

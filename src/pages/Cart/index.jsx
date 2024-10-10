@@ -151,6 +151,8 @@ const Cart = () => {
                 }));
                 setSnackbarMessage('Item removed successfully');
                 setSnackbarSeverity('success');
+                // Reload the entire website to reflect changes
+                window.location.reload();
             } else {
                 setSnackbarMessage('Failed to remove item');
                 setSnackbarSeverity('error');
@@ -179,17 +181,39 @@ const Cart = () => {
         setCartItems(updatedItems);
     };
 
+    // const handleDecrement = (cartId, productId) => {
+    //     const updatedItems = cartItems.map(item => {
+    //         if (item.cartId === cartId && item.productId === productId && item.quantity > 1) {
+    //             const newQuantity = item.quantity - 1;
+    //             updateCart(newQuantity, cartId, productId);
+    //             return { ...item, quantity: newQuantity };
+    //         }
+    //         return item;
+    //     });
+    //     setCartItems(updatedItems);
+    // };
+
     const handleDecrement = (cartId, productId) => {
         const updatedItems = cartItems.map(item => {
-            if (item.cartId === cartId && item.productId === productId && item.quantity > 1) {
-                const newQuantity = item.quantity - 1;
-                updateCart(newQuantity, cartId, productId);
-                return { ...item, quantity: newQuantity };
+            if (item.cartId === cartId && item.productId === productId) {
+                // If the quantity is 1 and the decrement button is clicked, remove the item from the cart
+                if (item.quantity === 1) {
+                    // Remove the item from the cart
+                    handleRemove(cartId, productId); // Call handleRemove to remove the item
+                } else {
+                    const newQuantity = item.quantity - 1;
+                    updateCart(newQuantity, cartId, productId); // Update the quantity in the cart
+                    return { ...item, quantity: newQuantity };
+                }
             }
             return item;
         });
-        setCartItems(updatedItems);
+
+        // Update the local cart items state, this will also handle the case when an item is removed
+        const filteredItems = updatedItems.filter(item => item.quantity > 0); // Remove items with 0 quantity
+        setCartItems(filteredItems);
     };
+
 
     const handleCheckout = () => navigate('/payment', { state: { selectedAddress, cartItems, profile, orderSummary } });
 
@@ -227,10 +251,6 @@ const Cart = () => {
     };
 
     const paginatedItems = cartItems.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-    console.log('selectedAddress', selectedAddress);
-    console.log('cartItems', cartItems);
-    console.log(' profile', profile);
-    console.log('orderSummary', orderSummary);
     return (
         <>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>

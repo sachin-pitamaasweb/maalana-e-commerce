@@ -1,0 +1,138 @@
+:root {
+    --primary-color: #B9D514;
+    --text-color: #000;
+    --bg-color: #fff;
+  }
+  
+  .order-details-container {
+    font-family: Arial, sans-serif;
+    /* background-color: var(--primary-color); */
+    color: var(--text-color);
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  
+  .order-details-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .order-details-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+  
+  .order-details-card {
+    background-color: var(--bg-color);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+  }
+  
+  .order-details-card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .order-status-badges .badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-right: 0.5rem;
+  }
+  
+  .badge-pending {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+  }
+  
+  .badge-unpaid {
+    background-color: #EF4444;
+    color: var(--bg-color);
+  }
+  
+  .badge-not-delivered {
+    background-color: #F59E0B;
+    color: var(--text-color);
+  }
+  
+  .item-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #E5E7EB;
+  }
+  
+  .item img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 0.375rem;
+  }
+  
+  .item-details {
+    flex-grow: 1;
+  }
+  
+  .item-name {
+    font-weight: 600;
+  }
+  
+  .item-price {
+    font-weight: 600;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  
+  .btn-order-details {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+  
+  .btn-order-details:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .summary-total {
+    font-weight: bold;
+    border-top: 1px solid #E5E7EB;
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  @media (min-width: 1024px) {
+    .order-details-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+  

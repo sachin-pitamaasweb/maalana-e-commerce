@@ -18,6 +18,7 @@ import Contact from './pages/Contact/index.jsx';
 import Products from './pages/Products/index.jsx';
 import Cart from './pages/Cart/index.jsx'
 import ProductDetails from './components/ProductDetails/index.jsx';
+import OrderDetails from './components/OrderDetails/index.jsx';
 
 // components 
 import Checkout from './components/Checkout/index.jsx';
@@ -133,6 +134,14 @@ function App() {
               }
             />
             <Route
+              path="/order-details/:orderNumber"
+              element={
+                <ProtectedRoute>
+                  <OrderDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/order-success"
               element={
                 <ProtectedRoute>
@@ -159,6 +168,7 @@ function App() {
               }
             />
           </Routes>
+         
           <Footer />
         </Router>
       </AuthProvider>

@@ -26,11 +26,18 @@ const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
         // autoplaySpeed: 300000,
         centerMode: true,
         centerPadding: '0',
+        draggable: true,
+        swipe: true,
         responsive: [
             {
                 breakpoint: 1500,
                 settings: {
+                    
                     slidesToShow: 5,
+                    arrows: false,
+                    autoplay: false,
+                    // autoplaySpeed: 300000,
+                    centerMode: true,
                 },
             },
             {

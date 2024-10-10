@@ -1,196 +1,65 @@
-// import React, { useState } from "react";
-// import { Helmet } from 'react-helmet';
-// import { useLocation, useNavigate } from "react-router-dom";
-// import Snackbar from '@mui/material/Snackbar';
-// import Alert from '@mui/material/Alert';
-
-// import { useAuth } from "../../context/AuthContext";
-
-// import "./style.css";
-
-// const ProductDetails = () => {
-//     const { userId, updateCartItemCount } = useAuth();
-//     const location = useLocation();
-//     const navigate = useNavigate();
-//     const { state } = location;
-//     const { product } = state || {};
-//     const [mainImage, setMainImage] = useState(product?.images?.mainImage || "https://via.placeholder.com/500x500");
-//     const [snackbarOpen, setSnackbarOpen] = useState(false);
-//     const [snackbarMessage, setSnackbarMessage] = useState("");
-//     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-
-//     const handleThumbnailClick = (imageUrl) => {
-//         setMainImage(imageUrl);
-//     };
-
-//     const handleSnackbarClose = () => {
-//         setSnackbarOpen(false);
-//     };
-
-//     const handleAddToCart = async (product) => {
-//         try {
-//             const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify({
-//                     productId: product._id,
-//                     quantity: 1,
-//                     shippingPrice: 50,
-//                     CoupanCode: 'DISCOUNT10',
-//                     id: userId || '',
-//                 }),
-//             });
-
-//             const data = await response.json();
-//             if (data.success) {
-//                 updateCartItemCount(data.totalQuantity);
-//                 navigate('/cart');
-//             } else {
-//                 setSnackbarMessage(`Failed to add product to cart: ${data.message}`);
-//                 setSnackbarSeverity('error');
-//             }
-//         } catch (error) {
-//             setSnackbarMessage(`Error adding product to cart: ${error.message}`);
-//             setSnackbarSeverity('error');
-//         } finally {
-//             setSnackbarOpen(true);
-//         }
-//     };
-
-//     // Add a check to display a loading or error message if product is not available
-//     if (!product) {
-//         return <div>Loading Product Details...</div>;
-//     }
-
-//     return (
-//         <>
-//             <div className="product-grid-card-main">
-//                 <Helmet>
-//                     <title>Maalana-Product-Details</title>
-//                 </Helmet>
-//                 <div className="container-product-details">
-//                     <div className="product-image-details">
-//                         <div className="main-image-container-details">
-//                             <img
-//                                 src={mainImage}
-//                                 alt={product.name || "Product Image"}
-//                                 className="main-image"
-//                             />
-//                         </div>
-//                         <div className="thumbnail-container">
-//                             {product.images?.mainImage && (
-//                                 <img
-//                                     src={product.images.mainImage}
-//                                     alt="Thumbnail 1"
-//                                     className="thumbnail"
-//                                     onClick={() => handleThumbnailClick(product.images.mainImage)}
-//                                 />
-//                             )}
-//                             {product.images?.backImage && (
-//                                 <img
-//                                     src={product.images.backImage}
-//                                     alt="Thumbnail 2"
-//                                     className="thumbnail"
-//                                     onClick={() => handleThumbnailClick(product.images.backImage)}
-//                                 />
-//                             )}
-//                             {product.images?.frontImage && (
-//                                 <img
-//                                     src={product.images.frontImage}
-//                                     alt="Thumbnail 3"
-//                                     className="thumbnail"
-//                                     onClick={() => handleThumbnailClick(product.images.frontImage)}
-//                                 />
-//                             )}
-//                             {product.images?.leftImage && (
-//                                 <img
-//                                     src={product.images.leftImage}
-//                                     alt="Thumbnail 4"
-//                                     className="thumbnail"
-//                                     onClick={() => handleThumbnailClick(product.images.leftImage)}
-//                                 />
-//                             )}
-//                         </div>
-//                     </div>
-//                     <div className="product-info">
-//                         <h1 className="name">{product.name || 'N/A'}</h1>
-//                         <p className="weight">{product.weight || 'N/A'}</p>
-//                         <p className="description">
-//                             {product.description || 'N/A'}
-//                         </p>
-//                         <div className="rating">★★★★★</div>
-//                         <p className="reviews">(548 Reviews)</p>
-//                         <p className="price">
-//                             ₹{product.price || 'N/A'} <span style={{ fontSize: "16px" }}>(inclusive of all taxes)</span>
-//                         </p>
-//                         <button className="add-to-cart" onClick={() => handleAddToCart(product)}>ADD TO CART</button>
-//                     </div>
-//                     <div className="product-details">
-//                         <div className="nutritional-info">
-//                             <h2>NUTRITIONAL INFORMATION</h2>
-//                             <table>
-//                                 {product.nutritionalInfo && Object.entries(product.nutritionalInfo).map(([key, value]) => (
-//                                     <tr key={key}>
-//                                         <td>{key}</td>
-//                                         <td>{value}</td>
-//                                     </tr>
-//                                 ))}
-//                             </table>
-//                         </div>
-//                         <div className="ingredients">
-//                             <h2>INGREDIENTS</h2>
-//                             <p>
-//                                 {product.ingredients && product.ingredients.join(", ")}
-//                             </p>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-//             <Snackbar
-//                 open={snackbarOpen}
-//                 autoHideDuration={6000}
-//                 onClose={handleSnackbarClose}
-//                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-//             >
-//                 <Alert
-//                     onClose={handleSnackbarClose}
-//                     severity={snackbarSeverity}
-//                     sx={{ width: '100%' }}
-//                 >
-//                     {snackbarMessage}
-//                 </Alert>
-//             </Snackbar>
-//         </>
-//     );
-// };
-
-// export default ProductDetails;
-
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from 'react-helmet';
+import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-
+import CircularProgress from '@mui/material/CircularProgress'; // Import CircularProgress for loader
 import { useAuth } from "../../context/AuthContext";
 import './style.css';
 
 const ProductDetails = () => {
-    const { userId, updateCartItemCount } = useAuth();
+    const { userId, updateCartItemCount, cartItem, setCartItem } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const { state } = location;
-    const { product } = state || {}; // Destructure product from state if available
-
+    const { product, productId } = state || {}; // Destructure product from state if available
+    // console.log('cartItem',  cartItem);
     // State Variables
     const [mainImage, setMainImage] = useState(product?.images?.mainImage || "https://via.placeholder.com/500x500");
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
+
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
     const [activeTab, setActiveTab] = useState('nutrition');
+    const [quantity, setQuantity] = useState(1); // Quantity state
+    const [isAddedToCart, setIsAddedToCart] = useState(false); // Track if the product is added to the cart
+    const [loading, setLoading] = useState(false);
+    const [cartId, setCartId] = useState(null);
+    useEffect(() => {
+        // Check if cartItem is defined and is an array
+        if (cartItem && Array.isArray(cartItem)) {
+            console.log('cartItem is an array:', cartItem);
+
+            // Flatten the items from all objects in the cartItem array
+            const allItems = cartItem.reduce((acc, currentItem) => {
+                if (Array.isArray(currentItem.items)) {
+                    return [...acc, ...currentItem.items];
+                }
+                return acc;
+            }, []);
+
+            console.log('All items from cartItem:', allItems);
+
+            // Check if any item's productId._id matches the target productId
+            const foundItem = allItems.find(item => item.productId._id === productId);
+
+            // If a matching item is found, set the cartId and set isAddedToCart to true
+            if (foundItem) {
+                const cartWithProduct = cartItem.find(cart => cart.items.some(item => item.productId._id === productId));
+                if (cartWithProduct) {
+                    setCartId(cartWithProduct._id);
+                    setQuantity(foundItem.quantity);
+                }
+                setIsAddedToCart(true);
+            } else {
+                setIsAddedToCart(false);
+                setCartId(null);
+            }
+        } else {
+            console.error('cartItem is not an array or is undefined');
+        }
+    }, [cartItem, productId]);
 
     // Handle Thumbnail Click
     const handleThumbnailClick = (imageUrl) => {
@@ -202,8 +71,59 @@ const ProductDetails = () => {
         setSnackbarOpen(false);
     };
 
+    // Handle Increment Quantity
+    const handleIncrement = () => {
+        if (!loading) {
+            const newQuantity = quantity + 1;
+            updateCart(newQuantity); // Update the cart with new quantity
+            setQuantity(newQuantity);
+        }
+    };
+
+    // // Handle Decrement Quantity
+    // const handleDecrement = () => {
+    //     if (!loading && quantity > 1) {
+    //         const newQuantity = quantity - 1;
+    //         updateCart(newQuantity); // Update the cart with new quantity
+    //         setQuantity(newQuantity);
+    //     }
+    // };
+
+    // Handle Decrement Quantity
+    const handleDecrement = async () => {
+        if (!loading && quantity === 1) {
+            setLoading(true);
+            try {
+                // Call the delete API if quantity is 1 (i.e., last item)
+                const response = await axios.delete('https://maalana-backend.onrender.com/api/delete-cart-product', {
+                    data: { userId, productId, cartId }
+                });
+
+                if (response.status === 200) {
+                    updateCartItemCount(response.data.totalQuantity);
+                    setQuantity(1); // Reset to default quantity
+                    setIsAddedToCart(false);
+                    setCartId(null);
+                    setCartItem(prevItems => prevItems.filter(item => item.productId !== productId)); // Remove from UI
+                }
+            } catch (error) {
+                console.error('Error removing item from cart', error);
+                setSnackbarMessage(`Error removing item from cart: ${error.message}`);
+                setSnackbarSeverity('error');
+                setSnackbarOpen(true);
+            } finally {
+                setLoading(false);
+            }
+        } else if (!loading && quantity > 1) {
+            const newQuantity = quantity - 1;
+            updateCart(newQuantity); // Update the cart with new quantity
+            setQuantity(newQuantity);
+        }
+    };
+
     // Handle Add to Cart
     const handleAddToCart = async () => {
+        setLoading(true); // Start loading state
         try {
             const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
                 method: 'POST',
@@ -212,7 +132,7 @@ const ProductDetails = () => {
                 },
                 body: JSON.stringify({
                     productId: product._id,
-                    quantity: 1,
+                    quantity: quantity,
                     shippingPrice: 50,
                     CoupanCode: 'DISCOUNT10',
                     id: userId || '',
@@ -224,7 +144,7 @@ const ProductDetails = () => {
                 updateCartItemCount(data.totalQuantity);
                 setSnackbarMessage("Product added to cart successfully!");
                 setSnackbarSeverity('success');
-                navigate('/cart');
+                setIsAddedToCart(true); // Show "Go to Cart" button after adding to cart
             } else {
                 setSnackbarMessage(`Failed to add product to cart: ${data.message}`);
                 setSnackbarSeverity('error');
@@ -233,7 +153,45 @@ const ProductDetails = () => {
             setSnackbarMessage(`Error adding product to cart: ${error.message}`);
             setSnackbarSeverity('error');
         } finally {
+            setLoading(false); // End loading state
             setSnackbarOpen(true);
+        }
+    };
+
+    // Update Cart with Increment/Decrement
+    const updateCart = async (newQuantity) => {
+        setLoading(true); // Start loading state
+        try {
+            const response = await fetch('https://maalana-backend.onrender.com/api/update-cart', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    productId: productId,
+                    quantity: newQuantity,
+                    cartId: cartId,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            updateCartItemCount(data.totalQuantity);
+            // Fetch updated cart items
+            const updatedCartResponse = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
+            const updatedCartData = await updatedCartResponse.json();
+            if (updatedCartData.success) {
+                setCartItem(Array.isArray(updatedCartData.cart) ? updatedCartData.cart : []);
+                setCartId(updatedCartData.cart._id);
+            }
+        } catch (error) {
+            console.error('Error updating cart:', error);
+        } finally {
+            setLoading(false); // End loading state
         }
     };
 
@@ -241,7 +199,7 @@ const ProductDetails = () => {
     if (!product) {
         return <div>Loading Product Details...</div>;
     }
-console.log('product', product);
+
     return (
         <div className="ProductDetails-container">
             {/* Add Helmet for better SEO */}
@@ -251,7 +209,7 @@ console.log('product', product);
             </Helmet>
 
             <header className="ProductDetails-header">
-                <button className="ProductDetails-back-button" onClick={() => navigate(-1)}>←</button>
+                <button className="ProductDetails-back-button" onClick={() => window.history.back()}>←</button>
                 <h1 className="ProductDetails-product-title">Product Details</h1>
             </header>
 
@@ -284,7 +242,28 @@ console.log('product', product);
                             ₹{product.price} <span className="ProductDetails-price-note">(inclusive of all taxes)</span>
                         </div>
 
-                        <button className="ProductDetails-add-to-cart" onClick={handleAddToCart}>ADD TO CART</button>
+                        {!isAddedToCart ? (
+                            loading ? (
+                                <CircularProgress size={24} /> // Show loader instead of button
+                            ) : (
+                                <button className="ProductDetails-add-to-cart" onClick={handleAddToCart}>ADD TO CART</button>
+                            )
+                        ) : (
+                            <div className="ProductDetails-cart-controls">
+                                <div className="item-quantity" style={{ marginBottom: '10px' }}>
+                                    <button aria-label="Decrease quantity" onClick={handleDecrement} disabled={loading}>-</button>
+                                    {loading ? (
+                                        <CircularProgress size={24} />
+                                    ) : (
+                                        <input type="number" value={quantity} readOnly min="1" aria-label="Quantity" />
+                                    )}
+                                    <button aria-label="Increase quantity" onClick={handleIncrement} disabled={loading}>+</button>
+                                </div>
+                                <button className="ProductDetails-go-to-cart" onClick={() => navigate('/cart')} disabled={loading}>
+                                    Go to Cart
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
 

@@ -54,8 +54,6 @@ const MyOrdersTable = () => {
         setPage(value);
     };
 
-    console.log('productDetails', productDetails);
-
     return (
         <>
             <TableContainer component={Paper} className="table-container">
@@ -71,7 +69,7 @@ const MyOrdersTable = () => {
                     {orders.length > 0 ? (
                         <TableBody>
                             {paginatedOrders.map((order, index) => (
-                                <TableRow key={index}>
+                                <TableRow key={index} sx={{cursor: 'pointer'}}>
                                     <TableCell>{order.productName}</TableCell>
                                     <TableCell>{order.orderDate}</TableCell>
                                     <TableCell>{order.deliveryStatus}</TableCell>
@@ -100,3 +98,4 @@ const MyOrdersTable = () => {
 };
 
 export default MyOrdersTable;
+

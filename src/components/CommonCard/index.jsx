@@ -17,7 +17,7 @@ const CommonCard = ({ products, title }) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [loadingProductId, setLoadingProductId] = useState(null);
-    const { userId, updateCartItemCount, isUserAuthenticated } = useAuth();
+    const { userId, updateCartItemCount, isUserAuthenticated, cartItem } = useAuth();
     const [cartId, setCartId] = useState(null);
 
     useEffect(() => {
