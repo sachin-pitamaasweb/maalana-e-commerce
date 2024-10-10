@@ -26,14 +26,14 @@ const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
         // autoplaySpeed: 300000,
         centerMode: true,
         centerPadding: '0',
-        draggable: true,
-        swipe: true,
+        draggable: false,  // Disable dragging
+        swipe: false,      // Disable swiping
         responsive: [
             {
                 breakpoint: 1500,
                 settings: {
                     
-                    slidesToShow: 5,
+                    slidesToShow: 7,
                     arrows: false,
                     autoplay: false,
                     // autoplaySpeed: 300000,
@@ -43,7 +43,7 @@ const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
             {
                 breakpoint: 1300,
                 settings: {
-                    slidesToShow: 4,
+                    slidesToShow: 7,
                 },
             },
             {
@@ -52,6 +52,8 @@ const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
                     autoplaySpeed: 3000,
                     autoplay: true,
                     slidesToShow: 4,
+                    draggable: true,  // Disable dragging
+                    swipe: true,      // Disable swiping
                 },
             },
             {
@@ -60,6 +62,8 @@ const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
                     autoplaySpeed: 3000,
                     autoplay: true,
                     slidesToShow: 3,
+                    draggable: true,  // Disable dragging
+                    swipe: true,      // Disable swiping
                 },
             },
             {
@@ -70,6 +74,8 @@ const CategoryFilter = ({ setSelectedCategory, selectedCategory }) => {
                     autoplay: true,
                     autoplaySpeed: 3000,
                     slidesToShow: 2,
+                    draggable: true,  // Disable dragging
+                    swipe: true,      // Disable swiping
                 },
             },
         ],
