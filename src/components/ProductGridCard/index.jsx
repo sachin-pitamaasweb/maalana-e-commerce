@@ -74,13 +74,6 @@ const ProductGridCard = ({ products, title }) => {
         }
     };
 
-
-    // const isProductInCart = (productId) => {
-
-    //     console.log('cartItem', cartItem);
-    //     console.log('productId', productId);
-    // };
-
     const isProductInCart = (productId) => {
         // Check if cartItems is an array and has elements
         if (!Array.isArray(cartItem) || cartItem.length === 0) {
@@ -175,7 +168,7 @@ const ProductGridCard = ({ products, title }) => {
         });
         setCartItems(updatedItems);
     };
-console.log('cartItem', cartItem);
+
     return (
         <>
             <div className="container-product-grid">
