@@ -21,7 +21,7 @@ const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
   useEffect(() => {
     const fetchCartData = async () => {
       try {
-        const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`, {
+        const response = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
   const updateCart = async (newQuantity) => {
     setLoading(true);
     try {
-      const response = await fetch('https://maalana-backend.onrender.com/api/update-cart', {
+      const response = await fetch('https://maalana.ritaz.in/api/update-cart', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const ProductDrawer = ({ drawerOpen, setDrawerOpen, product, cartId }) => {
   const handleRemove = async (cartId, productId) => {
     setRemoveLoading(true);
     try {
-      const response = await fetch('https://maalana-backend.onrender.com/api/delete-cart-product', {
+      const response = await fetch('https://maalana.ritaz.in/api/delete-cart-product', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

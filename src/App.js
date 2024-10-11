@@ -44,7 +44,7 @@ function App() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('https://maalana-backend.onrender.com/api/admin/get-all-products');
+        const response = await fetch('https://maalana.ritaz.in/api/admin/get-all-products');
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         setProducts(data);

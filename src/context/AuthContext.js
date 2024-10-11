@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
         const fetchCartItemCount = async () => {
             if (userId) {
                 try {
-                    const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
+                    const response = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
                     const data = await response.json();
                     if (data.success) {
                         setCartItem(data.cart);
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
         const fetchAddresses = async () => {
             if (userId) {
                 try {
-                    const response = await fetch(`https://maalana-backend.onrender.com/api/get-my-shiped-address/${userId}`);
+                    const response = await fetch(`https://maalana.ritaz.in/api/get-my-shiped-address/${userId}`);
                     const data = await response.json();
                     if (data.success) {
                         setAddresses(data.shipedaddress);
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         if (userId) {
             // Fetch user data on component load
-            fetch(`https://maalana-backend.onrender.com/api/get-single-user/${userId}`)
+            fetch(`https://maalana.ritaz.in/api/get-single-user/${userId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {

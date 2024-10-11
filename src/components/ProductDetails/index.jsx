@@ -95,7 +95,7 @@ const ProductDetails = () => {
             setLoading(true);
             try {
                 // Call the delete API if quantity is 1 (i.e., last item)
-                const response = await axios.delete('https://maalana-backend.onrender.com/api/delete-cart-product', {
+                const response = await axios.delete('https://maalana.ritaz.in/api/delete-cart-product', {
                     data: { userId, productId, cartId }
                 });
 
@@ -125,7 +125,7 @@ const ProductDetails = () => {
     const handleAddToCart = async () => {
         setLoading(true); // Start loading state
         try {
-            const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
+            const response = await fetch('https://maalana.ritaz.in/api/add-to-cart', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ const ProductDetails = () => {
     const updateCart = async (newQuantity) => {
         setLoading(true); // Start loading state
         try {
-            const response = await fetch('https://maalana-backend.onrender.com/api/update-cart', {
+            const response = await fetch('https://maalana.ritaz.in/api/update-cart', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -182,7 +182,7 @@ const ProductDetails = () => {
             const data = await response.json();
             updateCartItemCount(data.totalQuantity);
             // Fetch updated cart items
-            const updatedCartResponse = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
+            const updatedCartResponse = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
             const updatedCartData = await updatedCartResponse.json();
             if (updatedCartData.success) {
                 setCartItem(Array.isArray(updatedCartData.cart) ? updatedCartData.cart : []);

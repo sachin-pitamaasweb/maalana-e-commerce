@@ -78,7 +78,7 @@
 //         }
 //         setLoadingProductId(product._id);
 //         try {
-//             const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
+//             const response = await fetch('https://maalana.ritaz.in/api/add-to-cart', {
 //                 method: 'POST',
 //                 headers: {
 //                     'Content-Type': 'application/json',
@@ -202,7 +202,7 @@ const CommonCard = React.memo(({ products, title }) => {
 
         setLoading(true); // Show loader while fetching cart data
         try {
-            const response = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
+            const response = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
             const data = await response.json();
             if (data.success) {
                 setCartItem(Array.isArray(data.cart) ? data.cart : []);
@@ -275,7 +275,7 @@ const CommonCard = React.memo(({ products, title }) => {
 
         setLoading(true); // Show loader when adding to cart
         try {
-            const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
+            const response = await fetch('https://maalana.ritaz.in/api/add-to-cart', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -299,7 +299,7 @@ const CommonCard = React.memo(({ products, title }) => {
     const updateCart = async (newQuantity, cartId, productId) => {
         setLoading(true); // Show loader when updating cart
         try {
-            const response = await fetch('https://maalana-backend.onrender.com/api/update-cart', {
+            const response = await fetch('https://maalana.ritaz.in/api/update-cart', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

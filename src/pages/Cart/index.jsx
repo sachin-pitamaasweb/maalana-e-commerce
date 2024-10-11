@@ -11,6 +11,8 @@ import './Cart.css';
 import { useAuth } from '../../context/AuthContext';
 import EditAddressModal from '../../components/EditAddressModal';
 
+
+
 const Cart = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -47,7 +49,7 @@ const Cart = () => {
     const fetchCartData = useCallback(async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
+            const response = await axios.get(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
             const data = response.data;
 
             if (data.cart) {
@@ -87,7 +89,7 @@ const Cart = () => {
 
     const fetchAddresses = async () => {
         try {
-            const response = await axios.get(`https://maalana-backend.onrender.com/api/get-my-shiped-address/${userId}`);
+            const response = await axios.get(`https://maalana.ritaz.in/api/get-my-shiped-address/${userId}`);
             const data = response.data;
 
             if (data.success) {
@@ -106,7 +108,7 @@ const Cart = () => {
     const updateCart = async (newQuantity, cartId, productId) => {
         try {
             setLoading(true);
-            const response = await axios.put(`https://maalana-backend.onrender.com/api/update-cart`, {
+            const response = await axios.put(`https://maalana.ritaz.in/api/update-cart`, {
                 userId,
                 productId,
                 quantity: newQuantity,
@@ -130,7 +132,7 @@ const Cart = () => {
     const handleRemove = async (cartId, productId) => {
         try {
             setLoading(true);
-            const response = await axios.delete(`https://maalana-backend.onrender.com/api/delete-cart-product`, {
+            const response = await axios.delete(`https://maalana.ritaz.in/api/delete-cart-product`, {
                 data: { userId, productId, cartId }
             });
 
@@ -220,7 +222,7 @@ const Cart = () => {
     const handleApplyCoupon = async () => {
         try {
             setLoading(true);
-            const response = await axios.post(`https://maalana-backend.onrender.com/api/apply-coupon`, {
+            const response = await axios.post(`https://maalana.ritaz.in/api/apply-coupon`, {
                 couponCode
             });
 

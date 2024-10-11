@@ -36,7 +36,7 @@ const ProductGridCard = ({ products, title }) => {
         setLoadingProductId(product._id);
         try {
 
-            const response = await fetch('https://maalana-backend.onrender.com/api/add-to-cart', {
+            const response = await fetch('https://maalana.ritaz.in/api/add-to-cart', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const ProductGridCard = ({ products, title }) => {
                 setCartId(data.cart._id);
                 updateCartItemCount(data.totalQuantity);
                 // Fetch updated cart items
-                const updatedCartResponse = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
+                const updatedCartResponse = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
                 const updatedCartData = await updatedCartResponse.json();
                 if (updatedCartData.success) {
                     setCartItem(updatedCartData.cart);
@@ -106,7 +106,7 @@ const ProductGridCard = ({ products, title }) => {
             setCountLoading(productId);
         }
         try {
-            const response = await fetch('https://maalana-backend.onrender.com/api/update-cart', {
+            const response = await fetch('https://maalana.ritaz.in/api/update-cart', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ const ProductGridCard = ({ products, title }) => {
             const data = await response.json();
             updateCartItemCount(data.totalQuantity);
             // Fetch updated cart items
-            const updatedCartResponse = await fetch(`https://maalana-backend.onrender.com/api/get-all-cart-by-user/${userId}`);
+            const updatedCartResponse = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
             const updatedCartData = await updatedCartResponse.json();
             if (updatedCartData.success) {
                 setCartItem(Array.isArray(updatedCartData.cart) ? updatedCartData.cart : []);

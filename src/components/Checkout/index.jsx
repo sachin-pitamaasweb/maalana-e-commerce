@@ -77,7 +77,7 @@
 //       }
 
 //       // Create Razorpay order using API call
-//       const response = await fetch('https://maalana-backend.onrender.com/api/create-order-online', {
+//       const response = await fetch('https://maalana.ritaz.in/api/create-order-online', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -110,7 +110,7 @@
 //               orderSummary: orderData.orderSummary,
 //             };
 
-//             const paymentResult = await fetch('https://maalana-backend.onrender.com/api/payment-verification', {
+//             const paymentResult = await fetch('https://maalana.ritaz.in/api/payment-verification', {
 //               method: 'POST',
 //               headers: {
 //                 'Content-Type': 'application/json',
@@ -195,7 +195,7 @@
 //       handleRazorpayPayment(orderData);
 //     } else {
 //       try {
-//         const response = await fetch('https://maalana-backend.onrender.com/api/create-orders', {
+//         const response = await fetch('https://maalana.ritaz.in/api/create-orders', {
 //           method: 'POST',
 //           headers: {
 //             'Content-Type': 'application/json',
@@ -392,7 +392,7 @@ export default function CheckoutPage() {
         throw new Error('Razorpay SDK failed to load. Are you online?');
       }
 
-      const response = await fetch('https://maalana-backend.onrender.com/api/create-order-online', {
+      const response = await fetch('https://maalana.ritaz.in/api/create-order-online', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -422,7 +422,7 @@ export default function CheckoutPage() {
               orderSummary: orderData.orderSummary,
             };
 
-            const paymentResult = await fetch('https://maalana-backend.onrender.com/api/payment-verification', {
+            const paymentResult = await fetch('https://maalana.ritaz.in/api/payment-verification', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

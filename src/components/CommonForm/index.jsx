@@ -9,6 +9,9 @@ import { useAuth } from '../../context/AuthContext'; // Import the useAuth hook
 
 import ForgetPasswordModal from '../ForgetPasswordModal/index.jsx';
 
+import { registerUser, loginUser } from '../../utils/apis.js';
+
+
 const CommonForm = ({ title = "" }) => {
     const navigate = useNavigate();
     const { login } = useAuth(); // Destructure the login function from the useAuth hook
@@ -56,21 +59,16 @@ const CommonForm = ({ title = "" }) => {
             return;
         }
         try {
+            let responseData;
             if (title === "Sign Up") {
-                const response = await fetch('https://maalana-backend.onrender.com/api/register-user', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        firstName: formData.firstName,
-                        lastName: formData.lastName,
-                        email: formData.email,
-                        mobileNumber: formData.phoneNumber,
-                        password: formData.password,
-                    }),
+                responseData = await registerUser({
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    email: formData.email,
+                    mobileNumber: formData.phoneNumber,
+                    password: formData.password,
                 });
-                const responseData = await response.json();
+
                 if (responseData.success) {
                     setSnackbarSeverity('success');
                     setSnackbarMessage('User registered successfully. Please check your email for verification.');
@@ -82,17 +80,10 @@ const CommonForm = ({ title = "" }) => {
                     setSnackbarMessage(responseData.message || 'An error occurred. Please try again later.');
                 }
             } else if (title === "Login") {
-                const response = await fetch('https://maalana-backend.onrender.com/api/login-user', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email: formData.email,
-                        password: formData.password,
-                    }),
+                responseData = await loginUser({
+                    email: formData.email,
+                    password: formData.password,
                 });
-                const responseData = await response.json();
                 if (responseData.success) {
                     setSnackbarSeverity('success');
                     setSnackbarMessage('Login successful!');
@@ -129,10 +120,10 @@ const CommonForm = ({ title = "" }) => {
     };
 
 
-    
+
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
-      };
+    };
 
     return (
         <Box className={title === "Humko join karlo!" ? styles.signupFormPartner : styles.signupContainer}>
@@ -263,38 +254,38 @@ const CommonForm = ({ title = "" }) => {
                         </Grid>
                     )}
                     {(title === "Sign Up" || title === "Login") && (
-                       <Grid item xs={12} className={styles.inputGroup}>
-                       <Tooltip
-                           title={errors.password || ''}
-                           open={Boolean(errors.password)}
-                           placement="top"
-                           sx={{
-                               m: 1,
-                               backgroundColor: 'red !important'
-                           }}
-                           arrow
-                       >
-                           <div className={styles.passwordContainer}>
-                               <input
-                                   type={showPassword ? 'text' : 'password'}
-                                   placeholder="Password"
-                                   className={`${styles.inputField} ${errors.password ? styles.errorInput : ''}`}
-                                   name='password'
-                                   value={formData.password}
-                                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                   required
-                               />
-                               <IconButton
-                                   aria-label="toggle password visibility"
-                                   onClick={handleTogglePassword}
-                                   edge="end"
-                                   className={styles.passwordToggle}
-                               >
-                                   {showPassword ? <VisibilityOff /> : <Visibility />}
-                               </IconButton>
-                           </div>
-                       </Tooltip>
-                   </Grid>
+                        <Grid item xs={12} className={styles.inputGroup}>
+                            <Tooltip
+                                title={errors.password || ''}
+                                open={Boolean(errors.password)}
+                                placement="top"
+                                sx={{
+                                    m: 1,
+                                    backgroundColor: 'red !important'
+                                }}
+                                arrow
+                            >
+                                <div className={styles.passwordContainer}>
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        placeholder="Password"
+                                        className={`${styles.inputField} ${errors.password ? styles.errorInput : ''}`}
+                                        name='password'
+                                        value={formData.password}
+                                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                        required
+                                    />
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleTogglePassword}
+                                        edge="end"
+                                        className={styles.passwordToggle}
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </div>
+                            </Tooltip>
+                        </Grid>
                     )}
                     {title === "Humko join karlo!" && (
                         <Grid item xs={12} className={styles.inputGroup}>

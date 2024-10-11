@@ -43,7 +43,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
     useEffect(() => {
         const fetchShippingAddress = async () => {
             try {
-                const response = await axios.get(`https://maalana-backend.onrender.com/api/get-my-shiped-address/${userId}`);
+                const response = await axios.get(`https://maalana.ritaz.in/api/get-my-shiped-address/${userId}`);
                 if (response.status === 200 && response.data.success) {
                     const addressData = response.data.shipedaddress;
                     setAddressId(addressData[0]._id);
@@ -121,7 +121,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
     const handleSave = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`https://maalana-backend.onrender.com/api/create-shiped-address`, {
+            const response = await fetch(`https://maalana.ritaz.in/api/create-shiped-address`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -168,7 +168,7 @@ const AddressSection = ({ firstName, lastName, phone }) => {
 
         setLoading(true);
         try {
-            const response = await axios.put(`https://maalana-backend.onrender.com/api/update-shiped-address/${addressId}`, {
+            const response = await axios.put(`https://maalana.ritaz.in/api/update-shiped-address/${addressId}`, {
                 ...shippingAddress,
             });
 
