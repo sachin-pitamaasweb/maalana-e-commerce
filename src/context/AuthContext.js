@@ -119,6 +119,30 @@ export const AuthProvider = ({ children }) => {
         setUserId(null);
     };
 
+   // Method to remove an item from the cart
+    const handleRemove = async (cartId, productId) => {
+        try {
+            const response = await fetch(`https://maalana.ritaz.in/api/delete-cart-product`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId,
+                    productId,
+                    cartId,
+                }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                // Update cart item count or perform other necessary actions
+                setCartItem((prevCart) => prevCart.filter(item => item.productId !== productId));
+            }
+        } catch (error) {
+            console.error('Error removing item:', error);
+        }
+    };
+
     return (
         <AuthContext.Provider value={{
             isUserAuthenticated,
@@ -131,7 +155,8 @@ export const AuthProvider = ({ children }) => {
             addresses,
             profile,
             cartItem,
-            setCartItem
+            setCartItem,
+            handleRemove
         }}>
             {children}
         </AuthContext.Provider>

@@ -188,6 +188,8 @@ import './style.css';
 import ProductDrawer from "../ProductDrawer/index";
 import { useAuth } from '../../context/AuthContext';
 
+import axios from "axios";
+
 const CommonCard = React.memo(({ products, title }) => {
     const navigate = useNavigate();
     const { userId, isUserAuthenticated, cartItem, setCartItem, updateCartItemCount } = useAuth();
@@ -289,6 +291,9 @@ const CommonCard = React.memo(({ products, title }) => {
             const result = await response.json();
             if (result.success) {
                 await fetchCartData(); // Re-fetch the cart data after adding an item
+                console.log('Product added to cart successfully', result.totalQuantity);
+                const totalQuantity = result.totalQuantity || 1; // Assuming API returns total quantity in cart
+                updateCartItemCount(totalQuantity); // Update cart item count in real-time
             }
         } catch (error) {
             console.error('Error adding product to cart:', error);
@@ -311,7 +316,10 @@ const CommonCard = React.memo(({ products, title }) => {
             });
             const result = await response.json();
             if (result.success) {
-                await fetchCartData(); // Re-fetch the cart data after updating an item
+                console.log('Cart updated successfully', result.totalQuantity);
+                await fetchCartData(); 
+                const totalQuantity = result.totalQuantity || 1; // Assuming API returns total quantity in cart
+                updateCartItemCount(totalQuantity); // Update cart item count in real-time
             }
         } catch (error) {
             console.error('Error updating cart:', error);
@@ -330,16 +338,42 @@ const CommonCard = React.memo(({ products, title }) => {
         }
     };
 
-    const handleDecrement = (productId) => {
+    // const handleDecrement = (productId) => {
+    //     const cart = cartItem.find(cart => cart.items.some(item => item.productId._id === productId));
+    //     if (cart) {
+    //         const item = cart.items.find(item => item.productId._id === productId);
+    //         if (item && item.quantity > 1) {
+    //             const newQuantity = item.quantity - 1;
+    //             updateCart(newQuantity, cart._id, productId);
+    //         }
+    //     }
+    // };
+
+    const handleDecrement = async (productId) => {
         const cart = cartItem.find(cart => cart.items.some(item => item.productId._id === productId));
         if (cart) {
             const item = cart.items.find(item => item.productId._id === productId);
-            if (item && item.quantity > 1) {
-                const newQuantity = item.quantity - 1;
-                updateCart(newQuantity, cart._id, productId);
+            if (item) {
+                if (item.quantity > 1) {
+                    const newQuantity = item.quantity - 1;
+                    await updateCart(newQuantity, cart._id, productId);
+                } else {
+                    // If the quantity is 1, remove the product from the cart
+                    try {
+                        const response = await axios.delete(`https://maalana.ritaz.in/api/delete-cart-product`, {
+                            data: { userId, productId, cartId: cart._id }
+                        });
+                        if (response.data.success) {
+                            await fetchCartData(); // Re-fetch the cart data after removing the item
+                        }
+                    } catch (error) {
+                        console.error('Error removing product from cart:', error);
+                    }
+                }
             }
         }
     };
+
 
     const isProductInCart = (productId) => {
         return cartItem.some(cart =>

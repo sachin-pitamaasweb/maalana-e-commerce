@@ -183,18 +183,6 @@ const Cart = () => {
         setCartItems(updatedItems);
     };
 
-    // const handleDecrement = (cartId, productId) => {
-    //     const updatedItems = cartItems.map(item => {
-    //         if (item.cartId === cartId && item.productId === productId && item.quantity > 1) {
-    //             const newQuantity = item.quantity - 1;
-    //             updateCart(newQuantity, cartId, productId);
-    //             return { ...item, quantity: newQuantity };
-    //         }
-    //         return item;
-    //     });
-    //     setCartItems(updatedItems);
-    // };
-
     const handleDecrement = (cartId, productId) => {
         const updatedItems = cartItems.map(item => {
             if (item.cartId === cartId && item.productId === productId) {
@@ -285,7 +273,7 @@ const Cart = () => {
                                             <h3>{item.cartProducts.name.slice(0, 20)}</h3>
                                             <p>₹{item.cartProducts.price * item.quantity}</p>
                                             {isMobile ? (
-                                                <div>
+                                                <div className="item-controls">
                                                     <div className="item-quantity">
                                                         <button aria-label="Decrease quantity" onClick={() => handleDecrement(item.cartId, item.productId)}>-</button>
                                                         <input type="number" value={item.quantity} readOnly min="1" aria-label="Quantity" />

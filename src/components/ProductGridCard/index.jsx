@@ -21,7 +21,7 @@ const ProductGridCard = ({ products, title }) => {
     const [cartId, setCartId] = useState(null);
     const [cartItems, setCartItems] = useState(cartItem || []);
     const [loadingProductId, setLoadingProductId] = useState(null);
-    const [countLoading, setCountLoading] = useState(null)  ;
+    const [countLoading, setCountLoading] = useState(null);
     const handleDetails = (productId, product) => {
         navigate(`/products-details/${productId}`, { state: { product, productId } });
         window.scrollTo(0, 0);
@@ -79,7 +79,7 @@ const ProductGridCard = ({ products, title }) => {
         if (!Array.isArray(cartItem) || cartItem.length === 0) {
             return false;
         }
-         console.log('cartItem', cartItem);
+        console.log('cartItem', cartItem);
         // Loop through each cart item
         return cartItem.some(cart =>
             cart.items.some(item => item.productId && item.productId._id === productId)
@@ -154,19 +154,60 @@ const ProductGridCard = ({ products, title }) => {
         setCartItems(updatedItems);
     };
 
-    const handleDecrement = (productId) => {
+    const handleDecrement = async (productId) => {
         const updatedItems = cartItem.map(cartItem => {
             const updatedItems = cartItem.items.map(item => {
                 if (item.productId._id === productId && item.quantity > 1) {
                     const newQuantity = item.quantity - 1;
                     updateCart(newQuantity, cartItem._id, productId);
                     return { ...item, quantity: newQuantity };
+                } else if (item.productId._id === productId && item.quantity === 1) {
+                    // Remove item from cart if quantity becomes 0
+                    removeFromCart(cartItem._id, productId);
+                    return null; // Return null to remove the item from the cart array
                 }
                 return item;
-            });
+            }).filter(item => item !== null); // Filter out removed items
             return { ...cartItem, items: updatedItems };
-        });
+        }).filter(cart => cart.items.length > 0); // Filter out empty carts
         setCartItems(updatedItems);
+    };
+
+    const removeFromCart = async (cartId, productId) => {
+        try {
+            setCountLoading(productId);
+            const response = await fetch('https://maalana.ritaz.in/api/delete-cart-product', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId,
+                    productId,
+                    cartId
+                }),
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                console.log('Product removed from cart');
+                updateCartItemCount(data.totalQuantity); // Update the cart item count
+                // Fetch updated cart items
+                const updatedCartResponse = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
+                const updatedCartData = await updatedCartResponse.json();
+                if (updatedCartData.success) {
+                    setCartItem(Array.isArray(updatedCartData.cart) ? updatedCartData.cart : []);
+                    setCartId(updatedCartData.cart._id);
+                }
+            } else {
+                console.error('Failed to remove product from cart:', data.message);
+            }
+
+        } catch (error) {
+            console.error('Error removing product from cart:', error);
+        } finally {
+            setCountLoading(null);
+        }
     };
 
     return (
@@ -190,7 +231,7 @@ const ProductGridCard = ({ products, title }) => {
                                         <span className="product-price">₹{product.price || "N/A"}</span>
                                         {isProductInCart(product._id) ? (
                                             <div className="item-quantity">
-                                                { countLoading === product._id  ? <CircularProgress size={24} /> :
+                                                {countLoading === product._id ? <CircularProgress size={24} /> :
                                                     <>
                                                         <button
                                                             aria-label="Decrease quantity"
