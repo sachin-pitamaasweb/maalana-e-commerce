@@ -19,6 +19,7 @@ import SpecialOfferModel from '../../components/SpecialOfferModel';
 
 import { useAuth } from '../../context/AuthContext';
 
+
 const Products = ({ products }) => {
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [showOffer, setShowOffer] = useState(false);

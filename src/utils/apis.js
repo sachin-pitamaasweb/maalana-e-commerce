@@ -1,7 +1,7 @@
 // src/api.js
 
 // Base URLs for production and local environments
-const productionBaseUrl = 'https://maalana.ritaz.in';
+const productionBaseUrl = 'https://maalana-backend.onrender.com/';
 const localBaseUrl = 'http://localhost:8000';
 
 // Choose the base URL based on the environment
@@ -22,6 +22,8 @@ const endpoints = {
     deleteCartProduct: `${API_BASE_URL}/api/delete-cart-product`,
     applyCoupon: `${API_BASE_URL}/api/apply-coupon`,
     removeUserShippingAddress: `${API_BASE_URL}/api/delete-shiped-address`,
+    getAllProduct: `${API_BASE_URL}/api/admin/get-all-products`,
+    addToCart: `${API_BASE_URL}/api/add-to-cart`,
 };
 
 /**
@@ -88,3 +90,7 @@ export const applyCoupon = (data) => apiRequest(endpoints.applyCoupon, 'POST', d
 
 export const removeUserShippingAddress = (addressId) =>
     apiRequest(`${endpoints.removeUserShippingAddress}/${addressId}`, 'DELETE');
+
+export const getAllProducts = () => apiRequest(endpoints.getAllProduct, 'GET');
+
+export const addToCart = (data) => apiRequest(endpoints.addToCart, 'POST', data);

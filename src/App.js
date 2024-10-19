@@ -31,6 +31,9 @@ import PrivacyPolicy from './components/PrivacyPolicy/index.jsx';
 import ShippingProcess from './components/ShippingProcess/index.jsx';
 import TermsAndConditions from './components/TermsAndConditions/index.jsx';
 
+import { getAllProducts } from './utils/apis.js'
+
+
 function App() {
 
   const [products, setProducts] = useState([]);
@@ -44,17 +47,14 @@ function App() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('https://maalana.ritaz.in/api/admin/get-all-products');
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        setProducts(data);
-      } catch (err) {
-        console.error('Failed to fetch products:', err);
+        const data = await getAllProducts();
+        setProducts(data); // Set the fetched products to the state
+      } catch (error) {
+        console.error('Error fetching products:', error);
       }
     };
-
-    fetchProducts();
-  }, []); // Empty dependency array ensures this runs only once
+    fetchProducts(); // Call the function inside useEffect
+  }, []);
 
   return (
     <>
@@ -155,7 +155,7 @@ function App() {
                 <PrivacyPolicy />
               }
             />
-              <Route
+            <Route
               path="/shipping-process"
               element={
                 <ShippingProcess />
@@ -164,11 +164,11 @@ function App() {
             <Route
               path="/terms-and-conditions"
               element={
-               <TermsAndConditions />
+                <TermsAndConditions />
               }
             />
           </Routes>
-         
+
           <Footer />
         </Router>
       </AuthProvider>
