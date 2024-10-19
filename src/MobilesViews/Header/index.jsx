@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { ShoppingCart, AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton, Menu, MenuItem, Button } from '@mui/material';
@@ -9,25 +9,39 @@ import Badge from '@mui/material/Badge';
 import Stack from '@mui/material/Stack';
 
 import './Header.scss';
-// import Logo from '../../assets/logo/logo-1.png';
 import { navLinks } from '../../constants/helper.js';
 
 import { useAuth } from '../../context/AuthContext';
+import { getSingleUser } from '../../utils/apis.js';
 
 const Header = () => {
     const navigate = useNavigate();
+    const location = useLocation(); // Get the current location
     const isMobile = useMediaQuery('(max-width: 899px)');
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [activeLink, setActiveLink] = useState('');
     const [anchorEl, setAnchorEl] = useState(null);
+    const [profileImage, setProfileImage] = useState(null);
     const { isUserAuthenticated, userId, cartItemCount, logout } = useAuth();
 
+    // Fetch user profile image only
+    useEffect(() => {
+        if (userId) {
+            getSingleUser(userId)
+                .then((data) => {
+                    console.log(data);
+                    if (data.user && data.user.userImage) {
+                        setProfileImage(data.user.userImage); // Set only the profile image
+                    }
+                })
+                .catch((error) => console.error('Error fetching profile image:', error));
+        }
+    }, [userId]);
+    console.log(profileImage);
     const handleLinkClick = (link) => {
-        setActiveLink(link);
         if (isMobile) {
             setDrawerOpen(false);
         }
-        navigate(link)
+        navigate(link);
     };
 
     const handleMenuClick = (event) => {
@@ -62,7 +76,6 @@ const Header = () => {
                         : <Link className="iconButton">
                             <ShoppingCart sx={{ color: '#000 !important' }} />
                         </Link>
-
                     }
                     <IconButton onClick={() => setDrawerOpen(true)}>
                         <MenuIcon className="menu-icon" />
@@ -75,7 +88,7 @@ const Header = () => {
                         <li key={link.id}>
                             <Link
                                 to={link.link}
-                                className={link.link === activeLink ? 'active' : 'active'}
+                                className={location.pathname === link.link ? 'active' : ''} // Check if the current path matches the link
                                 onClick={() => handleLinkClick(link.link)}
                             >
                                 {link.title}
@@ -94,9 +107,18 @@ const Header = () => {
                                         <ShoppingCart />
                                     </Link>
                                 </Badge>
-                                <IconButton onClick={handleMenuClick} className="iconButton">
+                                {!profileImage ? <IconButton onClick={handleMenuClick} className="iconButton">
                                     <AccountCircle />
                                 </IconButton>
+                                    :
+                                    <IconButton onClick={handleMenuClick} className="iconButton">
+                                        <img src={profileImage} alt="Profile" style={{
+                                            width: '30px',
+                                            height: '30px',
+                                            borderRadius: '50%',
+                                        }} />
+                                    </IconButton>
+                                }
                                 <Menu
                                     anchorEl={anchorEl}
                                     open={Boolean(anchorEl)}
@@ -138,7 +160,6 @@ const Header = () => {
                                 </Button>
                             </>
                         )}
-
                     </Stack>
                 </div>
             )}
@@ -153,7 +174,7 @@ const Header = () => {
                                         button
                                         component={Link}
                                         to={link.link}
-                                        selected={link.link === activeLink}
+                                        selected={location.pathname === link.link} // Check if the current path matches the link
                                         onClick={() => handleLinkClick(link.link)}
                                     >
                                         <ListItemText primary={link.title} />

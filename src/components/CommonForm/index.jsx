@@ -94,6 +94,10 @@ const CommonForm = ({ title = "" }) => {
                     setSnackbarSeverity('error');
                     setSnackbarMessage('Invalid credentials. Please try again.');
                 }
+            } else if (title === "Become a Partner") {
+                setSnackbarSeverity('success');
+                setSnackbarMessage('User registered successfully. Please check your email for verification.');
+
             }
         } catch (error) {
             console.error('Error:', error);

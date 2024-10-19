@@ -195,6 +195,16 @@ const ProductDetails = () => {
         }
     };
 
+    const handleBackButton = () => {
+        navigate(-1);
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+            // left: 0,
+            // behavior: 'smooth'
+        });
+    };
+
     // Show Loading or Error Message if Product is not available
     if (!product) {
         return <div>Loading Product Details...</div>;
@@ -209,7 +219,7 @@ const ProductDetails = () => {
             </Helmet>
 
             <header className="ProductDetails-header">
-                <button className="ProductDetails-back-button" onClick={() => window.history.back()}>←</button>
+                <button className="ProductDetails-back-button" onClick={handleBackButton}>←</button>
                 <h1 className="ProductDetails-product-title">Product Details</h1>
             </header>
 

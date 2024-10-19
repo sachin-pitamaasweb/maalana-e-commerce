@@ -10,8 +10,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './Cart.css';
 import { useAuth } from '../../context/AuthContext';
 import EditAddressModal from '../../components/EditAddressModal';
+import AddAddressModal from '../../components/EditAddressModal/AddNewAddressModal';
 
-
+import { updateUserShippingAddress, removeUserShippingAddress, addShippingAddress } from '../../utils/apis';
 
 const Cart = () => {
     const theme = useTheme();
@@ -35,6 +36,7 @@ const Cart = () => {
         deliveryDate: 'DD/MM/YY',
     });
     const [open, setOpen] = useState(false);
+    const [openAddAddress, setOpenAddAddress] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [formData, setFormData] = useState({
         address: '',
@@ -171,39 +173,75 @@ const Cart = () => {
 
     const handlePageChange = (_, value) => setPage(value);
 
-    const handleIncrement = (cartId, productId) => {
+    const handleIncrement = async (cartId, productId) => {
         const updatedItems = cartItems.map(item => {
             if (item.cartId === cartId && item.productId === productId) {
+                // Locally update the item quantity
                 const newQuantity = item.quantity + 1;
-                updateCart(newQuantity, cartId, productId);
-                return { ...item, quantity: newQuantity };
+                item.quantity = newQuantity;
+
+                // Call the API to update the backend
+                axios.put(`http://localhost:8000/api/increase-quantity`, {
+                    cartId: cartId,
+                    productId: productId,
+                    quantity: 1
+                })
+                    .then(response => {
+                        updateCartItemCount(response.data.totalQuantity);
+                        setOrderSummary(prev => ({
+                            ...prev,
+                            total: response.data.totalPrice,
+                            subTotal: response.data.totalPrice
+                        }))
+                    })
+                    .catch(error => {
+                        console.error('Error updating quantity:', error);
+                        setSnackbarMessage('Failed to update quantity');
+                        setSnackbarSeverity('error');
+                        setSnackbarOpen(true);
+                    });
             }
             return item;
         });
+
         setCartItems(updatedItems);
     };
-
-    const handleDecrement = (cartId, productId) => {
+    const handleDecrement = async (cartId, productId) => {
         const updatedItems = cartItems.map(item => {
             if (item.cartId === cartId && item.productId === productId) {
-                // If the quantity is 1 and the decrement button is clicked, remove the item from the cart
-                if (item.quantity === 1) {
-                    // Remove the item from the cart
-                    handleRemove(cartId, productId); // Call handleRemove to remove the item
-                } else {
-                    const newQuantity = item.quantity - 1;
-                    updateCart(newQuantity, cartId, productId); // Update the quantity in the cart
-                    return { ...item, quantity: newQuantity };
-                }
+                // Call the API to update the backend
+                axios.put('http://localhost:8000/api/decrease-quantity', {
+                    cartId: cartId,
+                    productId: productId,
+                    quantity: 1
+                })
+                    .then(response => {
+                        if (response.data.success) {
+                            updateCartItemCount(response.data.totalQuantity);
+                            setOrderSummary(prev => ({
+                                ...prev,
+                                total: response.data.totalPrice,
+                                subTotal: response.data.totalPrice
+                            }))
+                        } else {
+                            setSnackbarMessage('Failed to decrease quantity');
+                            setSnackbarSeverity('error');
+                        }
+                        setSnackbarOpen(true);
+                    })
+                    .catch(error => {
+                        console.error('Error decreasing quantity:', error);
+                        setSnackbarMessage('Failed to decrease quantity');
+                        setSnackbarSeverity('error');
+                        setSnackbarOpen(true);
+                    });
             }
             return item;
         });
 
-        // Update the local cart items state, this will also handle the case when an item is removed
-        const filteredItems = updatedItems.filter(item => item.quantity > 0); // Remove items with 0 quantity
-        setCartItems(filteredItems);
+        // Update the cart items locally
+        setCartItems(updatedItems);
     };
-
 
     const handleCheckout = () => navigate('/payment', { state: { selectedAddress, cartItems, profile, orderSummary } });
 
@@ -239,6 +277,116 @@ const Cart = () => {
             setLoading(false);
         }
     };
+
+    const handleEditAddress = () => {
+        setOpen(true)
+        setFormData(selectedAddress)
+    }
+
+    const handleInputChange = async (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+
+        if (name === 'pincode' && value.length === 6) {
+            try {
+                const response = await fetch(`https://api.postalpincode.in/pincode/${value}`);
+                const data = await response.json();
+
+                if (data && data.length > 0 && data[0].Status === 'Success') {
+                    const postOffice = data[0].PostOffice[0];
+
+                    // Update the formData based on fetched pincode details
+                    setFormData((prevAddress) => ({
+                        ...prevAddress,
+                        pincode: value,
+                        country: postOffice.Country,
+                        state: postOffice.State,
+                        city: postOffice.District,
+                    }));
+                } else {
+                    console.error('Pincode not found or API response was unsuccessful.');
+                }
+            } catch (error) {
+                console.error('Error fetching pincode details:', error);
+            }
+        }
+    };
+
+    const handleUpdateAddress = async () => {
+        try {
+            const response = await updateUserShippingAddress(selectedAddress._id, formData);
+            if (response.success) {
+                fetchAddresses();
+                setSnackbarMessage('Address updated successfully!');
+                setSnackbarSeverity('success');
+                setOpen(false);
+            } else {
+                setSnackbarMessage('Failed to update address. Please try again.');
+                setSnackbarSeverity('error');
+            }
+        } catch (error) {
+            setSnackbarMessage('Failed to update address. Please try again.');
+            setSnackbarSeverity('error');
+            console.error('Error updating address:', error);
+        } finally {
+            setSnackbarOpen(true);
+        }
+    };
+
+    const handleRemoveAddress = async (address) => {
+        try {
+            const response = await removeUserShippingAddress(address._id);
+            if (response.success) {
+                fetchAddresses();
+                setSnackbarMessage('Address removed successfully!');
+                setSnackbarSeverity('success');
+            } else {
+                setSnackbarMessage('Failed to remove address. Please try again.');
+                setSnackbarSeverity('error');
+            }
+        } catch (error) {
+            setSnackbarMessage('Failed to remove address. Please try again.');
+            setSnackbarSeverity('error');
+            console.error('Error removing address:', error);
+        } finally {
+            setSnackbarOpen(true);
+        }
+    }
+
+    const handleAddAddress = () => {
+        setOpenAddAddress(true)
+        setFormData({
+            address: '',
+            city: '',
+            state: '',
+            country: '',
+            pincode: '',
+        })
+    }
+
+    const handleSaveAddress = async () => {
+        try {
+            const response = await addShippingAddress({
+                ...formData,
+                userId: userId
+            });
+            if (response.success) {
+                fetchAddresses();
+                setSnackbarMessage('Address added successfully!');
+                setSnackbarSeverity('success');
+                setOpenAddAddress(false);
+            } else {
+                setSnackbarMessage('Failed to add address. Please try again.');
+                setSnackbarSeverity('error');
+            }
+        } catch (error) {
+            setSnackbarMessage('Failed to add address. Please try again.');
+        }
+    }
+
 
     const paginatedItems = cartItems.slice((page - 1) * itemsPerPage, page * itemsPerPage);
     return (
@@ -349,7 +497,7 @@ const Cart = () => {
                             <div className="shipping-address">
                                 <h3>Shipping Addresses</h3>
                                 {addresses.length === 0 ? (
-                                    <p>No addresses available. Go to profile and click on "My Address".</p>
+                                    <p>No addresses available. Go to profile and click on <p onClick={handleAddAddress} style={{ cursor: 'pointer' }}>"My Address."</p></p>
                                 ) : (
                                     addresses.map((address, index) => (
                                         <div className="address-box" key={index}>
@@ -369,10 +517,10 @@ const Cart = () => {
                                                     </div>
                                                 </label>
                                                 <div className="address-actions">
-                                                    <button className="btn" aria-label="Edit address" onClick={() => setFormData(address) || setOpen(true)}>
+                                                    <button className="btn" aria-label="Edit address" onClick={handleEditAddress}>
                                                         Edit
                                                     </button>
-                                                    <button className="btn" aria-label="Delete address" onClick={() => handleRemove(address)}>
+                                                    <button className="btn" aria-label="Delete address" onClick={() => handleRemoveAddress(address)}>
                                                         Delete
                                                     </button>
                                                 </div>
@@ -389,10 +537,18 @@ const Cart = () => {
                 open={open}
                 handleClose={() => setOpen(false)}
                 formData={formData}
-                handleInputChange={(e) => setFormData({ ...formData, [e.target.name]: e.target.value })}
-                handleUpdate={() => { }} // Pass your update address function here
+                handleInputChange={handleInputChange}
+                handleUpdate={handleUpdateAddress}
                 loading={loading}
                 selectedAddress={selectedAddress}
+            />
+            <AddAddressModal
+                open={openAddAddress}
+                handleClose={() => setOpenAddAddress(false)}
+                formData={formData}
+                handleInputChange={handleInputChange}
+                handleAdd={handleSaveAddress}
+                loading={loading}
             />
             <Snackbar
                 open={snackbarOpen}
@@ -409,5 +565,3 @@ const Cart = () => {
 };
 
 export default Cart;
-
-

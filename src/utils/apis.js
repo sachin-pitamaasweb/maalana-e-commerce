@@ -15,12 +15,13 @@ const endpoints = {
     getUserShippingAddress: `${API_BASE_URL}/api/get-my-shiped-address`,
     updateUserProfile: `${API_BASE_URL}/api/update-user-by-id`,
     updateUserShippingAddress: `${API_BASE_URL}/api/update-shiped-address`,
-    addShippingAddress: `${API_BASE_URL}/api/add-shipping-address`,
+    addShippingAddress: `${API_BASE_URL}/api/create-shiped-address`,
     getUserOrders: `${API_BASE_URL}/api/get-orders-by-user-id`,
     getCartByUser: `${API_BASE_URL}/api/get-all-cart-by-user`,
     updateCart: `${API_BASE_URL}/api/update-cart`,
     deleteCartProduct: `${API_BASE_URL}/api/delete-cart-product`,
     applyCoupon: `${API_BASE_URL}/api/apply-coupon`,
+    removeUserShippingAddress: `${API_BASE_URL}/api/delete-shiped-address`,
 };
 
 /**
@@ -84,3 +85,6 @@ export const deleteCartProduct = (data) =>
     apiRequest(endpoints.deleteCartProduct, 'DELETE', data);
 
 export const applyCoupon = (data) => apiRequest(endpoints.applyCoupon, 'POST', data);
+
+export const removeUserShippingAddress = (addressId) =>
+    apiRequest(`${endpoints.removeUserShippingAddress}/${addressId}`, 'DELETE');

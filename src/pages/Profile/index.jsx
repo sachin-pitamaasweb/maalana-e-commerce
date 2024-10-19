@@ -92,6 +92,7 @@ const Profile = () => {
     if (userId) {
       getUserShippingAddress(userId)
         .then((data) => {
+          console.log('data', data);
           setAddressId(data.shipedaddress[0]._id);
           setShippingAddress(data.shipedaddress ? data.shipedaddress[0] : {});
           setAddressExists(data.shipedaddress ? true : false);
@@ -261,23 +262,44 @@ const Profile = () => {
 
   const handleSaveNewAddress = async () => {
     try {
-      const response = await addShippingAddress(shippingAddress);
-      if (response.status === 200) {
+      // Call the API to add the shipping address
+      const response = await addShippingAddress({
+        ...shippingAddress,
+        userId: userId,
+      });
+
+      if (response.success) {
         setSnackbarMessage('Address added successfully!');
         setSnackbarSeverity('success');
-        setIsAdded(false); // Reset to initial state after successful addition
+
+        // Reset the state after successful addition
+        setIsAdded(false);
+
+        // Fetch the user's shipping addresses again to update the list
+        const data = await getUserShippingAddress(userId);
+
+        if (data && data.shipedaddress && data.shipedaddress.length > 0) {
+          setAddressId(data.shipedaddress[0]._id);
+          setShippingAddress(data.shipedaddress[0]); // Set the first address as the selected one
+          setAddressExists(true); // Address now exists
+        } else {
+          setShippingAddress({}); // No addresses found
+          setAddressExists(false);
+        }
       } else {
         setSnackbarMessage('Failed to add address. Please try again.');
         setSnackbarSeverity('error');
       }
     } catch (error) {
+      // Handle any errors during the address addition
       setSnackbarMessage('Failed to add address. Please try again.');
       setSnackbarSeverity('error');
       console.error('Error adding address:', error);
     } finally {
-      setSnackbarOpen(true);
+      setSnackbarOpen(true); // Show the Snackbar message
     }
   };
+
 
   const handleAddButtonClick = () => {
     setIsAdded(true);
@@ -289,7 +311,7 @@ const Profile = () => {
 
   // Calculate the orders to display based on the current page
   const displayedOrders = orders.slice((page - 1) * ordersPerPage, page * ordersPerPage);
-
+  console.log('shippingAddress', shippingAddress);
   return (
     <div className="user-profile-container">
       {/* User Profile Section */}

@@ -117,13 +117,16 @@
     margin-right: 16px;
   }
   
-  .item-details {
+  .item-details-checkout {
     flex-grow: 1;
+    gap: 14px;
+    display: flex;
   }
   
   .item-title {
     font-size: 16px;
     font-weight: 500;
+    width: 100px;
   }
   
   .item-quantity {

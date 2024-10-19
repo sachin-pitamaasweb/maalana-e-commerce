@@ -32,7 +32,7 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
         setLoading(true);
         setError('');
         try {
-            const response = await fetch('https://maalana.ritaz.in/api/new-forgot-password', {
+            const response = await fetch('http://localhost:8000/api/new-forgot-password', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -116,17 +116,6 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
                     {resetPasswordMode ? "Enter your new password" : otpMode ? "Enter the OTP sent to your email address" : "No worries, it happens! Just enter your email address below, and we'll send you an OTP to reset your password."}
                 </Typography>
                 {resetPasswordMode ? (
-                    // <TextField
-                    //     label="New Password"
-                    //     type="password"
-                    //     variant="outlined"
-                    //     fullWidth
-                    //     className={styles.modalInput}
-                    //     value={newPassword}
-                    //     onChange={(e) => setNewPassword(e.target.value)}
-                    //     error={Boolean(error)}
-                    //     helperText={error}
-                    // />
                     <FormControl sx={{ m: 1, width: '28ch' }} variant="outlined">
                         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                         <OutlinedInput
@@ -137,7 +126,7 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
                             error={Boolean(error)}
                             className={styles.modalInput}
                             helperText={error}
-                            fullWidth={true}    
+                            fullWidth={true}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
@@ -161,7 +150,7 @@ const ForgetPasswordModal = ({ open, handleClose }) => {
                         fullWidth
                         className={styles.modalInput}
                         value={otp}
-                        onChange={(e) => setOtp(e.target.value)}
+                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                         error={Boolean(error)}
                         helperText={error}
                     />
