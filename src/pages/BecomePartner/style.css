@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
 .form-container-humko {
     font-family: 'Poppins', sans-serif;
@@ -158,4 +158,60 @@
     .form-body {
         padding: 30px 20px;
     }
+} */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+@font-face {
+    font-family: 'Flower of Summer Personal Use';
+    src: url('../../assets/font/FlowersofSummerPersonalUse.woff2') format('truetype');
+  }
+.custom-card {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.custom-title {
+    color: #F0FFF0;
+    text-align: center;
+    font-family: "Flower of Summer Personal Use", sans-serif !important;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.input-bg {
+    background-color: white;
+}
+
+.input-no-border .MuiOutlinedInput-notchedOutline {
+    border: none !important;
+    /* Removes the border */
+}
+
+.input-no-border.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border: 2px solid #9ACD32 !important; /* Custom border color on focus */
+  }
+.submit-button {
+    background-color: white !important;
+    color: #9ACD32 !important;
+    box-shadow: none !important;
+    transform: translate();
+    font-family: "Flower of Summer Personal Use", sans-serif !important;
+}
+
+.submit-button:hover {
+    background-color: #F0FFF0 !important;
+    transform: translateY(0px) !important;
 }

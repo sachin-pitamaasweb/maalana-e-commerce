@@ -22,7 +22,7 @@ const SpecialOfferModel = ({ open, handleClose }) => {
 
     try {
       // Make HTTP POST request to generate coupon
-      await axios.post('https://maalana.ritaz.in/api/generate-coupon', {
+      await axios.post('http://localhost:8000/api/generate-coupon', {
         email,
         discount: 10
       });

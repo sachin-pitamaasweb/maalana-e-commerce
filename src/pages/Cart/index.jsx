@@ -51,7 +51,7 @@ const Cart = () => {
     const fetchCartData = useCallback(async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
+            const response = await axios.get(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
             const data = response.data;
 
             if (data.cart) {
@@ -77,9 +77,6 @@ const Cart = () => {
             }
         } catch (error) {
             console.error('Error fetching cart data:', error);
-            setSnackbarMessage('Failed to fetch cart data');
-            setSnackbarSeverity('error');
-            setSnackbarOpen(true);
         } finally {
             setLoading(false);
         }
@@ -91,7 +88,7 @@ const Cart = () => {
 
     const fetchAddresses = async () => {
         try {
-            const response = await axios.get(`https://maalana.ritaz.in/api/get-my-shiped-address/${userId}`);
+            const response = await axios.get(`http://localhost:8000/api/get-my-shiped-address/${userId}`);
             const data = response.data;
 
             if (data.success) {
@@ -110,7 +107,7 @@ const Cart = () => {
     const updateCart = async (newQuantity, cartId, productId) => {
         try {
             setLoading(true);
-            const response = await axios.put(`https://maalana.ritaz.in/api/update-cart`, {
+            const response = await axios.put(`http://localhost:8000/api/update-cart`, {
                 userId,
                 productId,
                 quantity: newQuantity,
@@ -134,7 +131,7 @@ const Cart = () => {
     const handleRemove = async (cartId, productId) => {
         try {
             setLoading(true);
-            const response = await axios.delete(`https://maalana.ritaz.in/api/delete-cart-product`, {
+            const response = await axios.delete(`http://localhost:8000/api/delete-cart-product`, {
                 data: { userId, productId, cartId }
             });
 
@@ -155,8 +152,7 @@ const Cart = () => {
                 }));
                 setSnackbarMessage('Item removed successfully');
                 setSnackbarSeverity('success');
-                // Reload the entire website to reflect changes
-                window.location.reload();
+
             } else {
                 setSnackbarMessage('Failed to remove item');
                 setSnackbarSeverity('error');
@@ -174,81 +170,141 @@ const Cart = () => {
     const handlePageChange = (_, value) => setPage(value);
 
     const handleIncrement = async (cartId, productId) => {
+        // Create a new array to avoid mutating the original cartItems
         const updatedItems = cartItems.map(item => {
             if (item.cartId === cartId && item.productId === productId) {
                 // Locally update the item quantity
                 const newQuantity = item.quantity + 1;
-                item.quantity = newQuantity;
 
-                // Call the API to update the backend
-                axios.put(`http://localhost:8000/api/increase-quantity`, {
-                    cartId: cartId,
-                    productId: productId,
-                    quantity: 1
-                })
-                    .then(response => {
-                        updateCartItemCount(response.data.totalQuantity);
-                        setOrderSummary(prev => ({
-                            ...prev,
-                            total: response.data.totalPrice,
-                            subTotal: response.data.totalPrice
-                        }))
-                    })
-                    .catch(error => {
-                        console.error('Error updating quantity:', error);
-                        setSnackbarMessage('Failed to update quantity');
-                        setSnackbarSeverity('error');
-                        setSnackbarOpen(true);
-                    });
+                // Update the item with the new quantity
+                return { ...item, quantity: newQuantity };
             }
-            return item;
+            return item; // Return the item as is if it doesn't match
         });
 
+        // Update the state immediately to give feedback to the user
         setCartItems(updatedItems);
+
+        try {
+            // Call the API to update the backend
+            const response = await axios.put(`http://localhost:8000/api/increase-quantity`, {
+                userId,
+                cartId,
+                productId,
+                quantity: 1
+            });
+
+            updateCartItemCount(response.data.totalQuantity);
+            console.log('response', response.data)
+            setOrderSummary(prev => ({
+                ...prev,
+                total: response.data.subTotalPrice,
+                subTotal: response.data.subTotalPrice
+            }));
+        } catch (error) {
+            console.error('Error updating quantity:', error);
+            setSnackbarMessage('Failed to update quantity');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+
+            // If there was an error, revert the cart item quantity back
+            setCartItems(cartItems);
+        }
     };
+
     const handleDecrement = async (cartId, productId) => {
-        const updatedItems = cartItems.map(item => {
-            if (item.cartId === cartId && item.productId === productId) {
-                // Call the API to update the backend
-                axios.put('http://localhost:8000/api/decrease-quantity', {
-                    cartId: cartId,
-                    productId: productId,
-                    quantity: 1
-                })
-                    .then(response => {
-                        if (response.data.success) {
-                            updateCartItemCount(response.data.totalQuantity);
-                            setOrderSummary(prev => ({
-                                ...prev,
-                                total: response.data.totalPrice,
-                                subTotal: response.data.totalPrice
-                            }))
-                        } else {
-                            setSnackbarMessage('Failed to decrease quantity');
-                            setSnackbarSeverity('error');
-                        }
-                        setSnackbarOpen(true);
-                    })
-                    .catch(error => {
-                        console.error('Error decreasing quantity:', error);
-                        setSnackbarMessage('Failed to decrease quantity');
-                        setSnackbarSeverity('error');
-                        setSnackbarOpen(true);
-                    });
-            }
-            return item;
-        });
+        // Find the item in the cart
+        const itemToUpdate = cartItems.find(item => item.cartId === cartId && item.productId === productId);
 
-        // Update the cart items locally
-        setCartItems(updatedItems);
+        if (!itemToUpdate) {
+            setSnackbarMessage('Item not found in the cart');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+            return;
+        }
+
+        // If the item quantity is already 1, it will become 0 after decrement, so we remove it immediately
+        if (itemToUpdate.quantity === 1) {
+            try {
+                // Call API to delete the item
+                const deleteResponse = await axios.delete('http://localhost:8000/api/delete-cart-product', {
+                    data: { userId, productId, cartId }
+                });
+
+                if (deleteResponse.data.success) {
+                    setSnackbarMessage('Item removed from cart');
+                    setSnackbarSeverity('info');
+
+                    // Remove the item from the cartItems state immediately
+                    const filteredItems = cartItems.filter(item => item.cartId !== cartId || item.productId !== productId);
+                    setCartItems(filteredItems);
+
+                    // Update cart item count and order summary
+                    updateCartItemCount(deleteResponse.data.totalQuantity);
+                    setOrderSummary(prev => ({
+                        ...prev,
+                        total: deleteResponse.data.totalPrice,
+                        subTotal: deleteResponse.data.subTotalPrice
+                    }));
+                } else {
+                    setSnackbarMessage('Failed to remove item from cart');
+                    setSnackbarSeverity('error');
+                }
+            } catch (error) {
+                console.error('Error removing item:', error);
+                setSnackbarMessage('Failed to remove item');
+                setSnackbarSeverity('error');
+            }
+        } else {
+            // If the quantity is greater than 1, decrease it
+            try {
+                // Call the API to decrease the quantity
+                const response = await axios.put('http://localhost:8000/api/decrease-quantity', {
+                    userId,
+                    cartId,
+                    productId,
+                    quantity: 1
+                });
+
+                if (response.data.success) {
+                    // Real-time update of cartItems state
+                    const updatedItems = cartItems.map(item => {
+                        if (item.cartId === cartId && item.productId === productId) {
+                            const newQuantity = item.quantity - 1;
+                            return { ...item, quantity: newQuantity };
+                        }
+                        return item;
+                    });
+
+                    setCartItems(updatedItems);  // Update the cart items on the frontend
+
+                    // Update cart item count and order summary
+                    updateCartItemCount(response.data.totalQuantity);
+                    setOrderSummary(prev => ({
+                        ...prev,
+                        total: response.data.totalPrice,
+                        subTotal: response.data.subTotalPrice
+                    }));
+                } else {
+                    setSnackbarMessage('Failed to decrease quantity');
+                    setSnackbarSeverity('error');
+                }
+            } catch (error) {
+                console.error('Error decreasing quantity:', error);
+                setSnackbarMessage('Failed to decrease quantity');
+                setSnackbarSeverity('error');
+            }
+        }
     };
+
+
 
     const handleCheckout = () => navigate('/payment', { state: { selectedAddress, cartItems, profile, orderSummary } });
 
     const handleApplyCoupon = async () => {
         try {
             setLoading(true);
-            const response = await axios.post(`https://maalana.ritaz.in/api/apply-coupon`, {
+            const response = await axios.post(`http://localhost:8000/api/apply-coupon`, {
                 couponCode
             });
 

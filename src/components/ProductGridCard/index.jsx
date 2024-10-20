@@ -1,16 +1,9 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-import { CircularProgress } from '@mui/material';
-
-
-// import FilterListIcon from '@mui/icons-material/FilterList';
-
-import ProductDrawer from "../ProductDrawer/index";
-
+import { CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+// import ProductDrawer from "../ProductDrawer/index";
 import { useAuth } from '../../context/AuthContext';
-
 import './style.css';
 
 const ProductGridCard = ({ products, title }) => {
@@ -22,6 +15,26 @@ const ProductGridCard = ({ products, title }) => {
     const [cartItems, setCartItems] = useState(cartItem || []);
     const [loadingProductId, setLoadingProductId] = useState(null);
     const [countLoading, setCountLoading] = useState(null);
+    const [quantities, setQuantities] = useState({});
+    const [loginPromptOpen, setLoginPromptOpen] = useState(false);
+
+    useEffect(() => {
+        const initialQuantities = {};
+        cartItems.forEach(cart => {
+            cart.items.forEach(item => {
+                initialQuantities[item.productId._id] = item.quantity;
+            });
+        });
+        setQuantities(initialQuantities);
+    }, [cartItems, ]);
+
+    const handleQuantityChange = (productId, newQuantity) => {
+        setQuantities(prev => ({
+            ...prev,
+            [productId]: newQuantity > 0 ? newQuantity : 1,
+        }));
+    };
+
     const handleDetails = (productId, product) => {
         navigate(`/products-details/${productId}`, { state: { product, productId } });
         window.scrollTo(0, 0);
@@ -29,14 +42,12 @@ const ProductGridCard = ({ products, title }) => {
 
     const handleOpenDrawer = async (product) => {
         if (!isUserAuthenticated) {
-            // Redirect to login page if user is not authenticated
-            navigate('/login');
+            setLoginPromptOpen(true);
             return;
         }
         setLoadingProductId(product._id);
         try {
-
-            const response = await fetch('https://maalana.ritaz.in/api/add-to-cart', {
+            const response = await fetch('http://localhost:8000/api/add-to-cart', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -49,24 +60,33 @@ const ProductGridCard = ({ products, title }) => {
                     id: userId || '',
                 }),
             });
-
+    
             const data = await response.json();
             if (data.success) {
                 setSelectedProduct(product);
                 setDrawerOpen(true);
                 setCartId(data.cart._id);
                 updateCartItemCount(data.totalQuantity);
-                // Fetch updated cart items
-                const updatedCartResponse = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
+    
+                // Fetch updated cart items after adding the product
+                const updatedCartResponse = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
                 const updatedCartData = await updatedCartResponse.json();
                 if (updatedCartData.success) {
                     setCartItem(updatedCartData.cart);
-                    // setCartId(updatedCartData.cart._id);
+    
+                    // Update the quantities state for the newly added product
+                    const initialQuantities = {};
+                    updatedCartData.cart.forEach(cart => {
+                        cart.items.forEach(item => {
+                            initialQuantities[item.productId._id] = item.quantity;
+                        });
+                    });
+                    setQuantities(initialQuantities); // This updates the quantities for the newly added product
                 }
             } else {
                 console.error('Failed to add product to cart:', data.message);
             }
-
+    
         } catch (error) {
             console.error(error);
         } finally {
@@ -75,139 +95,142 @@ const ProductGridCard = ({ products, title }) => {
     };
 
     const isProductInCart = (productId) => {
-        // Check if cartItems is an array and has elements
-        if (!Array.isArray(cartItem) || cartItem.length === 0) {
-            return false;
-        }
-        console.log('cartItem', cartItem);
-        // Loop through each cart item
+        if (!Array.isArray(cartItem) || cartItem.length === 0) return false;
         return cartItem.some(cart =>
             cart.items.some(item => item.productId && item.productId._id === productId)
         );
     };
 
-    const getProductQuantityInCart = (productId) => {
-        // Check if cartItem is an array and has elements
-        if (!Array.isArray(cartItem) || cartItem.length === 0) {
-            return 1; // Default quantity if cartItem is empty or not an array
-        }
+    const handleIncrement = async (productId) => {
+        if (!productId) return;
+        let cartId = '';
+        let currentQuantity = 0;
 
-        // Find the product in the cart
-        const productInCart = cartItem.flatMap(cart =>
-            cart.items.filter(item => item.productId && item.productId._id === productId)
-        ).find(item => item.productId && item.productId._id === productId);
-
-        // Return the quantity of the product if found, otherwise return default quantity
-        return productInCart ? productInCart.quantity : 1;
-    };
-
-    const updateCart = async (newQuantity, cartId, productId) => {
-        if (cartId) {
-            setCountLoading(productId);
-        }
-        try {
-            const response = await fetch('https://maalana.ritaz.in/api/update-cart', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: userId,
-                    productId: productId,
-                    quantity: newQuantity,
-                    cartId: cartId,
-                }),
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-            updateCartItemCount(data.totalQuantity);
-            // Fetch updated cart items
-            const updatedCartResponse = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
-            const updatedCartData = await updatedCartResponse.json();
-            if (updatedCartData.success) {
-                setCartItem(Array.isArray(updatedCartData.cart) ? updatedCartData.cart : []);
-                setCartId(updatedCartData.cart._id);
-            }
-
-        } catch (error) {
-            console.error('Error updating cart:', error);
-        } finally {
-            setCountLoading(null);
-        }
-    };
-
-    const handleIncrement = (productId) => {
-        const updatedItems = cartItem.map(cartItem => {
-            const updatedItems = cartItem.items.map(item => {
+        const updatedItems = cartItems.map(cartItem => {
+            const newItems = cartItem.items.map(item => {
                 if (item.productId._id === productId) {
                     const newQuantity = item.quantity + 1;
-                    updateCart(newQuantity, cartItem._id, productId);
+                    if (cartItem._id) {
+                        cartId = cartItem._id;
+                    }
+                    currentQuantity = item.quantity;
                     return { ...item, quantity: newQuantity };
                 }
                 return item;
             });
-            return { ...cartItem, items: updatedItems };
+            return { ...cartItem, items: newItems };
         });
+
+        if (!cartId) {
+            console.error("Error: cartId is not set.");
+            return;
+        }
+
         setCartItems(updatedItems);
+
+        try {
+            const response = await axios.put('http://localhost:8000/api/increase-quantity', {
+                userId,
+                cartId,
+                productId,
+                quantity: 1,
+            });
+            updateCartItemCount(response.data.totalQuantity);
+            setQuantities(prev => ({
+                ...prev,
+                [productId]: response.data.cartQuantity,
+            }));
+        } catch (error) {
+            console.error('Error updating quantity:', error);
+            rollbackUpdate(productId, currentQuantity);
+        }
     };
 
     const handleDecrement = async (productId) => {
-        const updatedItems = cartItem.map(cartItem => {
-            const updatedItems = cartItem.items.map(item => {
-                if (item.productId._id === productId && item.quantity > 1) {
-                    const newQuantity = item.quantity - 1;
-                    updateCart(newQuantity, cartItem._id, productId);
-                    return { ...item, quantity: newQuantity };
-                } else if (item.productId._id === productId && item.quantity === 1) {
-                    // Remove item from cart if quantity becomes 0
-                    removeFromCart(cartItem._id, productId);
-                    return null; // Return null to remove the item from the cart array
+        if (!productId) return;
+        let cartId = '';
+        let currentQuantity = 0;
+    
+        // Optimistically update the cart items in state
+        const updatedItems = cartItems.map(cartItem => {
+            const newItems = cartItem.items.map(item => {
+                if (item.productId._id === productId) {
+                    cartId = cartItem._id;
+                    currentQuantity = item.quantity;
+                    if (item.quantity > 1) {
+                        return { ...item, quantity: item.quantity - 1 };
+                    } else if (item.quantity === 1) {
+                        return null; // Remove the item when quantity is 1
+                    }
                 }
                 return item;
-            }).filter(item => item !== null); // Filter out removed items
-            return { ...cartItem, items: updatedItems };
-        }).filter(cart => cart.items.length > 0); // Filter out empty carts
+            }).filter(item => item !== null); // Remove null items (when quantity is 1)
+            return { ...cartItem, items: newItems };
+        }).filter(cart => cart.items.length > 0); // Remove empty carts
+    
         setCartItems(updatedItems);
+    
+        try {
+            if (currentQuantity > 1) {
+                // Decrease the quantity
+                const response = await axios.put('http://localhost:8000/api/decrease-quantity', {
+                    userId,
+                    cartId,
+                    productId,
+                    quantity: 1,
+                });
+                updateCartItemCount(response.data.totalQuantity);
+                setQuantities(prev => ({
+                    ...prev,
+                    [productId]: response.data.cartQuantity, // Update the quantity state
+                }));
+            } else {
+                console.log('cartId', cartId);
+                // Delete the product from the cart if quantity is 1
+                await axios.delete('http://localhost:8000/api/delete-cart-product', {
+                    data: { userId, productId, cartId },
+                });
+    
+                // After successful deletion, remove the product from the quantities state
+                setQuantities(prev => {
+                    const updatedQuantities = { ...prev };
+                    delete updatedQuantities[productId]; // Remove the product's quantity
+                    return updatedQuantities;
+                });
+    
+                // Optionally, fetch the updated cart items from the server after deletion
+                const updatedCartResponse = await axios.get(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
+                const updatedCartData = updatedCartResponse.data;
+                if (updatedCartData.success) {
+                    setCartItem(updatedCartData.cart);
+                    updateCartItemCount(updatedCartData.totalQuantity); // Update the cart count
+                }
+            }
+        } catch (error) {
+            console.error('Error updating cart:', error);
+            rollbackUpdate(productId, currentQuantity);
+        }
+    };
+    
+
+    const rollbackUpdate = (productId, originalQuantity) => {
+        const rolledBackItems = cartItems.map(cartItem => {
+            const originalItems = cartItem.items.map(item => {
+                if (item.productId._id === productId) {
+                    return { ...item, quantity: originalQuantity };
+                }
+                return item;
+            });
+            return { ...cartItem, items: originalItems };
+        });
+        setCartItems(rolledBackItems);
     };
 
-    const removeFromCart = async (cartId, productId) => {
-        try {
-            setCountLoading(productId);
-            const response = await fetch('https://maalana.ritaz.in/api/delete-cart-product', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId,
-                    productId,
-                    cartId
-                }),
-            });
+    const handleCloseLoginPrompt = () => setLoginPromptOpen(false);
 
-            const data = await response.json();
-            if (data.success) {
-                console.log('Product removed from cart');
-                updateCartItemCount(data.totalQuantity); // Update the cart item count
-                // Fetch updated cart items
-                const updatedCartResponse = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
-                const updatedCartData = await updatedCartResponse.json();
-                if (updatedCartData.success) {
-                    setCartItem(Array.isArray(updatedCartData.cart) ? updatedCartData.cart : []);
-                    setCartId(updatedCartData.cart._id);
-                }
-            } else {
-                console.error('Failed to remove product from cart:', data.message);
-            }
-
-        } catch (error) {
-            console.error('Error removing product from cart:', error);
-        } finally {
-            setCountLoading(null);
-        }
+    const handleNavigateLogin = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        navigate('/login');
     };
 
     return (
@@ -220,9 +243,11 @@ const ProductGridCard = ({ products, title }) => {
                 {products.length > 0 ? (
                     <div className="product-grid-card-container">
                         {products.map((product, index) => (
-                            <div className="product-card-content-card" key={index} >
-                                <img src={product.images.mainImage || "http://res.cloudinary.com/dtivafy25/image/upload/v1724736713/image/f-1_fskvqz.png"}
-                                    alt="Strawberry Fruit Kotti" className="product-image-card-grid"
+                            <div className="product-card-content-card" key={index}>
+                                <img
+                                    src={product.images.mainImage || "default-image-url"}
+                                    alt={product.name}
+                                    className="product-image-card-grid"
                                     onClick={() => handleDetails(product._id, product)}
                                 />
                                 <div className="product-info">
@@ -233,35 +258,24 @@ const ProductGridCard = ({ products, title }) => {
                                             <div className="item-quantity">
                                                 {countLoading === product._id ? <CircularProgress size={24} /> :
                                                     <>
-                                                        <button
-                                                            aria-label="Decrease quantity"
-                                                            onClick={() => handleDecrement(product._id)}
-                                                        >
-                                                            -
-                                                        </button>
+                                                        <button onClick={() => handleDecrement(product._id)}>-</button>
                                                         <input
                                                             type="number"
-                                                            value={getProductQuantityInCart(product._id)}
+                                                            value={quantities[product._id]}
                                                             min="1"
-                                                            aria-label="Quantity"
+                                                            onChange={(e) => handleQuantityChange(product._id, parseInt(e.target.value))}
                                                         />
-                                                        <button
-                                                            aria-label="Increase quantity"
-                                                            onClick={() => handleIncrement(product._id)}
-                                                        >
-                                                            +
-                                                        </button>
+                                                        <button onClick={() => handleIncrement(product._id)}>+</button>
                                                     </>
                                                 }
                                             </div>
                                         ) : (
-                                            <button className="add-to-cart-card"
-                                                disabled={loadingProductId === product._id} onClick={() => handleOpenDrawer(product)}>
-                                                {loadingProductId === product._id ? (
-                                                    <CircularProgress size={24} />
-                                                ) : (
-                                                    "ADD TO CART"
-                                                )}
+                                            <button
+                                                className="add-to-cart-card"
+                                                disabled={loadingProductId === product._id}
+                                                onClick={() => handleOpenDrawer(product)}
+                                            >
+                                                {loadingProductId === product._id ? <CircularProgress size={24} /> : "ADD TO CART"}
                                             </button>
                                         )}
                                     </div>
@@ -275,17 +289,30 @@ const ProductGridCard = ({ products, title }) => {
                     </div>
                 )}
             </div>
-            {selectedProduct && (
+            {/* {selectedProduct && (
                 <ProductDrawer
                     drawerOpen={drawerOpen}
                     setDrawerOpen={setDrawerOpen}
                     product={selectedProduct}
                     cartId={cartId}
                 />
-            )}
+            )} */}
+            <Dialog open={loginPromptOpen} onClose={handleCloseLoginPrompt}>
+                <DialogTitle>Login Required</DialogTitle>
+                <DialogContent>
+                    <p>You need to log in to add items to your cart.</p>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleNavigateLogin} color="primary">
+                        Go to Login
+                    </Button>
+                    <Button onClick={handleCloseLoginPrompt} color="secondary">
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
-    )
+    );
 };
+
 export default ProductGridCard;
-
-

@@ -30,7 +30,7 @@ const ProductCard = ({ product, filter }) => {
     const handleAddToCart = async (product) => {
         console.log('handleAddToCart', product);
         try {
-            const response = await fetch('https://maalana.ritaz.in/api/add-to-cart', {
+            const response = await fetch('http://localhost:8000/api/add-to-cart', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

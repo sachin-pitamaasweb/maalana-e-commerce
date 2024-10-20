@@ -98,10 +98,6 @@ const Products = ({ products }) => {
                             products={fruitKatliRange}
                             title={"Fruit Katli Range"}
                         />
-                        {/* <Banners
-                            title="lollipops"
-                            img='https://res.cloudinary.com/dtivafy25/image/upload/v1725013318/b-3_yia19h.png'
-                        /> */}
                         <StyledBox />
                         <OverlayImage />
                         <MoreProducts products={products} setSelectedCategory={setSelectedCategory} />

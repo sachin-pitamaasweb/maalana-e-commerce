@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
         const fetchCartItemCount = async () => {
             if (userId) {
                 try {
-                    const response = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
+                    const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
                     const data = await response.json();
                     if (data.success) {
                         setCartItem(data.cart);
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
         const fetchAddresses = async () => {
             if (userId) {
                 try {
-                    const response = await fetch(`https://maalana.ritaz.in/api/get-my-shiped-address/${userId}`);
+                    const response = await fetch(`http://localhost:8000/api/get-my-shiped-address/${userId}`);
                     const data = await response.json();
                     if (data.success) {
                         setAddresses(data.shipedaddress);
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         if (userId) {
             // Fetch user data on component load
-            fetch(`https://maalana.ritaz.in/api/get-single-user/${userId}`)
+            fetch(`http://localhost:8000/api/get-single-user/${userId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -122,7 +122,7 @@ export const AuthProvider = ({ children }) => {
    // Method to remove an item from the cart
     const handleRemove = async (cartId, productId) => {
         try {
-            const response = await fetch(`https://maalana.ritaz.in/api/delete-cart-product`, {
+            const response = await fetch(`http://localhost:8000/api/delete-cart-product`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

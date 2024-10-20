@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './style.css'; 
-import axios from 'axios'; 
+import './style.css';
+import axios from 'axios';
 
 const OrderDetails = () => {
     const location = useLocation();
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
     const { orderNumber } = location.state || {}; // Ensure this is passed correctly
 
     const [items, setItems] = useState([]);
@@ -18,7 +18,7 @@ const OrderDetails = () => {
             try {
                 const response = await axios.get(`http://localhost:8000/api/get-order-details-by-order-number/${orderNumber}`);
                 console.log(response.data.data); // Log the response to check its structure
-                
+
                 // Access the relevant parts of the response
                 setOrderDetails(response.data.data || {});
                 setItems(response.data.data.cartItems || []); // Fallback to empty array if cartItems is not defined
@@ -92,11 +92,11 @@ const OrderDetails = () => {
                             </li>
                         ))}
                     </ul>
-                    <div className="pagination">
+                    {itemsPerPage > 5 && <div className="pagination">
                         <button onClick={handlePrev} className="btn-order-details" disabled={currentPage === 1}>Previous</button>
                         <span>{`Page ${currentPage} of ${totalPages}`}</span>
                         <button onClick={handleNext} className="btn-order-details" disabled={currentPage === totalPages}>Next</button>
-                    </div>
+                    </div>}
                 </div>
                 <div>
                     <div className="order-details-card">

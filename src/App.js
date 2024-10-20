@@ -128,9 +128,7 @@ function App() {
             <Route
               path="/products-details/:productId"
               element={
-                <ProtectedRoute>
-                  <ProductDetails />
-                </ProtectedRoute>
+                <ProductDetails />
               }
             />
             <Route
