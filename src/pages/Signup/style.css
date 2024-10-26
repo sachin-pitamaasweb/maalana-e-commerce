@@ -1,0 +1,120 @@
+.container-signup {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom right, #9acd32, #32cd32);
+  position: relative;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.signup-box {
+  width: 100%;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.row {
+  display: flex;
+  gap: 1.2rem;
+  width: 96%;
+}
+
+.row .input-container {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+}
+
+.input-field {
+  width: 92%;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  border: none;
+  outline: none;
+}
+
+.signup-btn,
+.google-signup-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s;
+  border: none;
+}
+
+.signup-btn {
+  background-color: #32cd32;
+}
+
+.google-signup-btn {
+  background-color: #4285f4;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.signup-btn:hover,
+.google-signup-btn:hover {
+  transform: scale(1.05);
+}
+
+.error-text {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #333;
+}
+
+.error-icon-toggle {
+  position: absolute;
+  top: 33%;
+  right: 1rem;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #333;
+}
+
+@media screen and (max-width: 480px) {
+  .input-field {
+    width: 92%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    border: none;
+    outline: none;
+  }
+  .row {
+    display: flex;
+    gap: 1.2rem;
+    width: 100%;
+}
+}

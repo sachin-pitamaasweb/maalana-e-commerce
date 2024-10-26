@@ -35,6 +35,7 @@ import mediaBgPink from "./mediaBgPink.svg"
 import mediaBgGreen from "./mediaBgGreen.svg"
 import mediaShatter from "./mediaShatter.svg"
 
+
 export const assets = {
 	bgWaveWhite,
 	bgWaveYellow,

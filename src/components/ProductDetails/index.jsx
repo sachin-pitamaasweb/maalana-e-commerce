@@ -210,6 +210,8 @@ const ProductDetails = () => {
         return <div>Loading Product Details...</div>;
     }
 
+    console.log('product', product);
+
     return (
         <div className="ProductDetails-container">
             {/* Add Helmet for better SEO */}
@@ -230,12 +232,15 @@ const ProductDetails = () => {
                             <img src={mainImage} alt={product.name || "Product Image"} id="main-image" />
                         </div>
                         <div className="ProductDetails-thumbnails">
-                            {product?.images?.thumbnails?.map((src, index) => (
-                                <button key={index} className="ProductDetails-thumbnail" onClick={() => handleThumbnailClick(src)}>
-                                    <img src={src} alt={`Thumbnail ${index + 1}`} />
-                                </button>
+                            {Object.entries(product?.images ?? {}).map(([key, src], index) => (
+                                src && (  // Skip empty images
+                                    <button key={index} className="ProductDetails-thumbnail" onClick={() => handleThumbnailClick(src)}>
+                                        <img  src={src} alt={`Thumbnail ${key}`} />
+                                    </button>
+                                )
                             ))}
                         </div>
+
                     </div>
 
                     <div className="ProductDetails-product-info">

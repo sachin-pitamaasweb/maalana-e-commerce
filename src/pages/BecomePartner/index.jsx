@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, Typography, TextField, Button, Snackbar, Alert, CircularProgress } from '@mui/material';
-import emailjs from 'emailjs-com'; // Import EmailJS
-import { useFormik } from 'formik'; // Import Formik
-import * as Yup from 'yup'; // Import Yup
-import './style.css'; // Custom CSS file
+import emailjs from 'emailjs-com';
+import { useFormik } from 'formik'; 
+import * as Yup from 'yup'; 
+import './style.css'; 
 
 export default function HumkoJoinKarlo() {
     const [snackbar, setSnackbar] = useState({

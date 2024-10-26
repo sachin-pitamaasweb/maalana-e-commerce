@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom"
 import { assets } from "../../assets/assets/assets"
 import styles from "./DesktopHomeView.module.css"
 import { motion } from "framer-motion"
+import  shatter from '../../assets/assets/shatter.png'
+import BannerTextWithLogo from '../../assets/assets/bannertextwithlogo.png'
 
 
 const Home = () => {
@@ -30,7 +32,7 @@ const Home = () => {
 							ease: "easeIn",
 							duration: 0.8,
 						}}
-						src={assets.bannerText}
+						src={BannerTextWithLogo}
 						alt=""
 					/>
 					<motion.img
@@ -327,7 +329,7 @@ const Home = () => {
 				>
 					<div className={styles.shatterImg}>
 						<img
-							src={assets.shatter}
+							src={shatter}
 							alt=""
 						/>
 					</div>
