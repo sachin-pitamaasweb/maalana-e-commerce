@@ -104,29 +104,7 @@ const Cart = () => {
         if (userId) fetchAddresses();
     }, [userId]);
 
-    const updateCart = async (newQuantity, cartId, productId) => {
-        try {
-            setLoading(true);
-            const response = await axios.put(`http://localhost:8000/api/update-cart`, {
-                userId,
-                productId,
-                quantity: newQuantity,
-                cartId,
-            });
 
-            const data = response.data;
-            updateCartItemCount(data.totalQuantity);
-            setOrderSummary(prev => ({
-                ...prev,
-                total: data.totalPrice,
-                subTotal: data.totalPrice
-            }));
-        } catch (error) {
-            console.error('Error updating cart:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleRemove = async (cartId, productId) => {
         try {

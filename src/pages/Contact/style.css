@@ -96,7 +96,7 @@ button {
 
 button:hover {
     background-color: #a5bd12;
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
 }
 
 .contact-info {

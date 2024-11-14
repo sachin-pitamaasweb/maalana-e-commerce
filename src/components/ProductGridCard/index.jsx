@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
-// import ProductDrawer from "../ProductDrawer/index";
+import ProductDrawer from "../ProductDrawer/index";
 import { useAuth } from '../../context/AuthContext';
 import './style.css';
 
@@ -11,7 +11,7 @@ const ProductGridCard = ({ products, title }) => {
     const { userId, updateCartItemCount, isUserAuthenticated, cartItem, setCartItem } = useAuth();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [cartId, setCartId] = useState(null);
+    const [cartIdByAddToCart, setCartIdByAddToCart] = useState(null);
     const [cartItems, setCartItems] = useState(cartItem || []);
     const [loadingProductId, setLoadingProductId] = useState(null);
     const [countLoading, setCountLoading] = useState(null);
@@ -26,7 +26,7 @@ const ProductGridCard = ({ products, title }) => {
             });
         });
         setQuantities(initialQuantities);
-    }, [cartItems, ]);
+    }, [cartItems]);
 
     const handleQuantityChange = (productId, newQuantity) => {
         setQuantities(prev => ({
@@ -60,20 +60,20 @@ const ProductGridCard = ({ products, title }) => {
                     id: userId || '',
                 }),
             });
-    
+
             const data = await response.json();
             if (data.success) {
                 setSelectedProduct(product);
                 setDrawerOpen(true);
-                setCartId(data.cart._id);
+                setCartIdByAddToCart(data.cart._id);
                 updateCartItemCount(data.totalQuantity);
-    
+
                 // Fetch updated cart items after adding the product
                 const updatedCartResponse = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
                 const updatedCartData = await updatedCartResponse.json();
                 if (updatedCartData.success) {
                     setCartItem(updatedCartData.cart);
-    
+
                     // Update the quantities state for the newly added product
                     const initialQuantities = {};
                     updatedCartData.cart.forEach(cart => {
@@ -86,7 +86,7 @@ const ProductGridCard = ({ products, title }) => {
             } else {
                 console.error('Failed to add product to cart:', data.message);
             }
-    
+
         } catch (error) {
             console.error(error);
         } finally {
@@ -102,16 +102,17 @@ const ProductGridCard = ({ products, title }) => {
     };
 
     const handleIncrement = async (productId) => {
+        console.log('productId', productId);
         if (!productId) return;
-        let cartId = '';
+        let cartId = cartIdByAddToCart || '';
         let currentQuantity = 0;
-
+        console.log('productId1', productId);
         const updatedItems = cartItems.map(cartItem => {
             const newItems = cartItem.items.map(item => {
                 if (item.productId._id === productId) {
                     const newQuantity = item.quantity + 1;
                     if (cartItem._id) {
-                        cartId = cartItem._id;
+                        cartId = cartId || cartItem._id;
                     }
                     currentQuantity = item.quantity;
                     return { ...item, quantity: newQuantity };
@@ -125,7 +126,6 @@ const ProductGridCard = ({ products, title }) => {
             console.error("Error: cartId is not set.");
             return;
         }
-
         setCartItems(updatedItems);
 
         try {
@@ -135,6 +135,12 @@ const ProductGridCard = ({ products, title }) => {
                 productId,
                 quantity: 1,
             });
+            console.log('response.data', response.data);
+            if (!response.data.success) {
+                console.error('Error updating quantity:', response.data.message);
+                rollbackUpdate(productId, currentQuantity);
+                return;
+            }
             updateCartItemCount(response.data.totalQuantity);
             setQuantities(prev => ({
                 ...prev,
@@ -148,15 +154,19 @@ const ProductGridCard = ({ products, title }) => {
 
     const handleDecrement = async (productId) => {
         if (!productId) return;
-        let cartId = '';
+        let cartId = cartIdByAddToCart || '';
         let currentQuantity = 0;
-    
+        console.log('cartId', cartId);
         // Optimistically update the cart items in state
         const updatedItems = cartItems.map(cartItem => {
             const newItems = cartItem.items.map(item => {
+                console.log('item.productId._id', item.productId._id);
+                console.log('item.productId._id === productId', item.productId._id === productId);
                 if (item.productId._id === productId) {
-                    cartId = cartItem._id;
+                    console.log(' cartItem._id', cartItem._id);
+                    cartId = cartId || cartItem._id;
                     currentQuantity = item.quantity;
+                    console.log('currentQuantity', currentQuantity);
                     if (item.quantity > 1) {
                         return { ...item, quantity: item.quantity - 1 };
                     } else if (item.quantity === 1) {
@@ -167,11 +177,12 @@ const ProductGridCard = ({ products, title }) => {
             }).filter(item => item !== null); // Remove null items (when quantity is 1)
             return { ...cartItem, items: newItems };
         }).filter(cart => cart.items.length > 0); // Remove empty carts
-    
+
         setCartItems(updatedItems);
-    
+
         try {
-            if (currentQuantity > 1) {
+            if (currentQuantity !== 1) {
+                console.log('currentQuantity', currentQuantity);
                 // Decrease the quantity
                 const response = await axios.put('http://localhost:8000/api/decrease-quantity', {
                     userId,
@@ -182,22 +193,26 @@ const ProductGridCard = ({ products, title }) => {
                 updateCartItemCount(response.data.totalQuantity);
                 setQuantities(prev => ({
                     ...prev,
-                    [productId]: response.data.cartQuantity, // Update the quantity state
+                    [productId]: response.data.cartQuantity, // Update the quantity state for the decreased quantity
                 }));
             } else {
-                console.log('cartId', cartId);
-                // Delete the product from the cart if quantity is 1
-                await axios.delete('http://localhost:8000/api/delete-cart-product', {
+                // If quantity is 1, delete the product from the cart
+                const responseDelete = await axios.delete('http://localhost:8000/api/delete-cart-product', {
                     data: { userId, productId, cartId },
                 });
-    
+
+                if (!responseDelete.data.success) {
+                    console.error('Error deleting product:', responseDelete.data.message);
+                    return;
+                }
+
                 // After successful deletion, remove the product from the quantities state
                 setQuantities(prev => {
                     const updatedQuantities = { ...prev };
                     delete updatedQuantities[productId]; // Remove the product's quantity
                     return updatedQuantities;
                 });
-    
+
                 // Optionally, fetch the updated cart items from the server after deletion
                 const updatedCartResponse = await axios.get(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
                 const updatedCartData = updatedCartResponse.data;
@@ -211,7 +226,7 @@ const ProductGridCard = ({ products, title }) => {
             rollbackUpdate(productId, currentQuantity);
         }
     };
-    
+
 
     const rollbackUpdate = (productId, originalQuantity) => {
         const rolledBackItems = cartItems.map(cartItem => {
@@ -263,6 +278,7 @@ const ProductGridCard = ({ products, title }) => {
                                                             type="number"
                                                             value={quantities[product._id]}
                                                             min="1"
+                                                            disabled={true}
                                                             onChange={(e) => handleQuantityChange(product._id, parseInt(e.target.value))}
                                                         />
                                                         <button onClick={() => handleIncrement(product._id)}>+</button>
@@ -294,7 +310,7 @@ const ProductGridCard = ({ products, title }) => {
                     drawerOpen={drawerOpen}
                     setDrawerOpen={setDrawerOpen}
                     product={selectedProduct}
-                    cartId={cartId}
+                    cartId={cartIdByAddToCart || null}
                 />
             )} */}
             <Dialog open={loginPromptOpen} onClose={handleCloseLoginPrompt}>
