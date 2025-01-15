@@ -47,7 +47,8 @@ function App() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await getAllProducts();
+        const response = await fetch(`https://maalana.ritaz.in/api/admin/get-all-products`);
+        const data = await response.json(); // Convert response to JSON
         setProducts(data); // Set the fetched products to the state
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -55,7 +56,7 @@ function App() {
     };
     fetchProducts(); // Call the function inside useEffect
   }, []);
-
+  console.log('products', products);
   return (
     <>
       <AuthProvider>

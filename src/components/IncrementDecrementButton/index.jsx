@@ -10,7 +10,7 @@ const IncrementDecrementButton = ({ productId }) => {
     useEffect(() => {
         const fetchCartData = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`, {
+                const response = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const IncrementDecrementButton = ({ productId }) => {
     // Update cart on the server
     const updateCart = async (newQuantity) => {
         try {
-            const response = await fetch('http://localhost:8000/api/update-cart', {
+            const response = await fetch('https://maalana.ritaz.in/api/update-cart', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

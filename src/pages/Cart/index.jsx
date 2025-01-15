@@ -51,7 +51,7 @@ const Cart = () => {
     const fetchCartData = useCallback(async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
+            const response = await axios.get(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
             const data = response.data;
 
             if (data.cart) {
@@ -88,7 +88,7 @@ const Cart = () => {
 
     const fetchAddresses = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/get-my-shiped-address/${userId}`);
+            const response = await axios.get(`https://maalana.ritaz.in/api/get-my-shiped-address/${userId}`);
             const data = response.data;
 
             if (data.success) {
@@ -109,7 +109,7 @@ const Cart = () => {
     const handleRemove = async (cartId, productId) => {
         try {
             setLoading(true);
-            const response = await axios.delete(`http://localhost:8000/api/delete-cart-product`, {
+            const response = await axios.delete(`https://maalana.ritaz.in/api/delete-cart-product`, {
                 data: { userId, productId, cartId }
             });
 
@@ -165,7 +165,7 @@ const Cart = () => {
 
         try {
             // Call the API to update the backend
-            const response = await axios.put(`http://localhost:8000/api/increase-quantity`, {
+            const response = await axios.put(`https://maalana.ritaz.in/api/increase-quantity`, {
                 userId,
                 cartId,
                 productId,
@@ -205,7 +205,7 @@ const Cart = () => {
         if (itemToUpdate.quantity === 1) {
             try {
                 // Call API to delete the item
-                const deleteResponse = await axios.delete('http://localhost:8000/api/delete-cart-product', {
+                const deleteResponse = await axios.delete('https://maalana.ritaz.in/api/delete-cart-product', {
                     data: { userId, productId, cartId }
                 });
 
@@ -237,7 +237,7 @@ const Cart = () => {
             // If the quantity is greater than 1, decrease it
             try {
                 // Call the API to decrease the quantity
-                const response = await axios.put('http://localhost:8000/api/decrease-quantity', {
+                const response = await axios.put('https://maalana.ritaz.in/api/decrease-quantity', {
                     userId,
                     cartId,
                     productId,
@@ -282,7 +282,7 @@ const Cart = () => {
     const handleApplyCoupon = async () => {
         try {
             setLoading(true);
-            const response = await axios.post(`http://localhost:8000/api/apply-coupon`, {
+            const response = await axios.post(`https://maalana.ritaz.in/api/apply-coupon`, {
                 couponCode
             });
 

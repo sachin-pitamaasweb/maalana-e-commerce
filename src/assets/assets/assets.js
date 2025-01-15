@@ -33,7 +33,7 @@ import mediaBgYellow from "./mediaBgYellow.svg"
 import mediaBgPurple from "./mediaBgPurple.svg"
 import mediaBgPink from "./mediaBgPink.svg"
 import mediaBgGreen from "./mediaBgGreen.svg"
-import mediaShatter from "./mediaShatter.svg"
+import mediaShatter from "./mediaShatter.png"
 
 
 export const assets = {

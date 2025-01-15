@@ -32,7 +32,7 @@ const CommonCard = React.memo(({ products, title }) => {
 
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
+            const response = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
             const data = await response.json();
             if (data.success) {
                 setCartItem(Array.isArray(data.cart) ? data.cart : []);
@@ -73,7 +73,7 @@ const CommonCard = React.memo(({ products, title }) => {
         setLoading(true);
         setLoadingProductId(product._id)
         try {
-            const response = await fetch('http://localhost:8000/api/add-to-cart', {
+            const response = await fetch('https://maalana.ritaz.in/api/add-to-cart', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -127,7 +127,7 @@ const CommonCard = React.memo(({ products, title }) => {
         setCountLoading(productId);
         try {
             // Call the API to persist the quantity increment
-            const response = await axios.put('http://localhost:8000/api/increase-quantity', {
+            const response = await axios.put('https://maalana.ritaz.in/api/increase-quantity', {
                 userId,
                 cartId,
                 productId,
@@ -173,7 +173,7 @@ const CommonCard = React.memo(({ products, title }) => {
         try {
             if (currentQuantity > 1) {
                 // Call the API to persist the quantity decrement
-                const response = await axios.put('http://localhost:8000/api/decrease-quantity', {
+                const response = await axios.put('https://maalana.ritaz.in/api/decrease-quantity', {
                     userId,
                     cartId,
                     productId,
@@ -186,7 +186,7 @@ const CommonCard = React.memo(({ products, title }) => {
                 }));
             } else {
                 // Delete the product from the cart if quantity is 1
-                await axios.delete('http://localhost:8000/api/delete-cart-product', {
+                await axios.delete('https://maalana.ritaz.in/api/delete-cart-product', {
                     data: { userId, productId, cartId },
                 });
 
@@ -198,7 +198,7 @@ const CommonCard = React.memo(({ products, title }) => {
                 });
 
                 // Optionally, fetch the updated cart items from the server after deletion
-                const updatedCartResponse = await axios.get(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
+                const updatedCartResponse = await axios.get(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
                 const updatedCartData = updatedCartResponse.data;
                 if (updatedCartData.success) {
                     setCartItem(updatedCartData.cart);

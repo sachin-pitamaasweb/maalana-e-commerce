@@ -21,6 +21,7 @@ import { useAuth } from '../../context/AuthContext';
 
 
 const Products = ({ products }) => {
+    console.log('products', products);
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [showOffer, setShowOffer] = useState(false);
     const { isUserAuthenticated } = useAuth();
@@ -119,6 +120,8 @@ const Products = ({ products }) => {
                 return <PrductGridCard products={filteredProducts} title={"Fruit Katli Range"} />;
         }
     };
+
+  
 
     return (
         <>

@@ -1,8 +1,8 @@
 // src/api.js
 
 // Base URLs for production and local environments
-const productionBaseUrl = 'https://maalana-backend.onrender.com';
-const localBaseUrl = 'http://localhost:8000';
+const productionBaseUrl = 'https://maalana.ritaz.in';
+const localBaseUrl = 'https://maalana.ritaz.in';
 
 // Choose the base URL based on the environment
 const API_BASE_URL = process.env.NODE_ENV === 'production' ? productionBaseUrl : localBaseUrl;

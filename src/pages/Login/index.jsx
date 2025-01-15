@@ -1,27 +1,6 @@
-// import React from 'react'
-// import { Helmet } from 'react-helmet';
-// import CommonForm from '../../components/CommonForm/index.jsx';
-
-
-// const Login = () => {
-//     return (
-//         <>
-//             <Helmet>
-//                 <title>Maalana-Login</title>
-//             </Helmet>
-//             <CommonForm
-//                 title='Login'
-//                 isValue={true}
-//             />
-//         </>
-//     )
-// }
-
-// export default Login
-
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Snackbar, Alert, Button } from "@mui/material";
+import { Snackbar, Alert } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import { motion, AnimatePresence } from "framer-motion";
 import { useFormik } from "formik";
@@ -29,10 +8,10 @@ import * as Yup from "yup";
 import { useAuth } from "../../context/AuthContext";
 import { loginUser } from "../../utils/apis";
 import ForgetPasswordModal from "../../components/ForgetPasswordModal/index.jsx";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-
-import "./style.css";
+import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { gapi } from "gapi-script";
+import "./style.css";
 
 const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -41,13 +20,30 @@ const validationSchema = Yup.object({
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState("");
-    const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+    const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
     const [modalOpen, setModalOpen] = useState(false);
+    const [statusMessage, setStatusMessage] = useState("");
+    const [messageType, setMessageType] = useState("info");
+    const [isSubmitted, setIsSubmitted] = useState(false);  
 
     const { login } = useAuth();
-    const navigate = useNavigate(); // Initialize navigate
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const initializeGapi = async () => {
+            try {
+                await gapi.load("client:auth2");
+                await gapi.client.init({
+                    clientId: '591116137411-agcrqt053njgmgn1tvsc8pjk5q2mr1ka.apps.googleusercontent.com',
+                    scope: "profile email",
+                });
+            } catch (error) {
+                console.error("Error initializing Google API:", error);
+            }
+        };
+
+        initializeGapi();
+    }, []);
 
     const formik = useFormik({
         initialValues: {
@@ -62,46 +58,81 @@ export default function Login() {
                     password: formData.password,
                 });
 
-                console.log("Login response:", responseData);
                 if (responseData.success) {
-                    console.log("Login successful:", responseData);
-                    setSnackbarSeverity("success");
-                    setSnackbarMessage("Login successful!");
-                    login(responseData.user._id); // Mark the user as authenticated
-                    navigate("/products"); // Redirect to products page
+                    setSnackbar({ open: true, message: "Login successful!", severity: "success" });
+                    login(responseData.user._id);
+                    navigate("/products");
                 } else {
-                    setSnackbarSeverity("error");
-                    setSnackbarMessage("Invalid credentials. Please try again.");
+                    setSnackbar({ open: true, message: "Invalid credentials. Please try again.", severity: "error" });
                 }
             } catch (error) {
                 console.error("Error during login:", error);
-                setSnackbarSeverity("error");
-                setSnackbarMessage("An error occurred. Please try again later.");
-            } finally {
-                setSnackbarOpen(true);
+                setSnackbar({ open: true, message: "An error occurred. Please try again later.", severity: "error" });
             }
         },
     });
 
-    const handleSnackbarClose = () => {
-        setSnackbarOpen(false);
+    const handleSnackbarClose = () => setSnackbar({ ...snackbar, open: false });
+
+    const handleGoogleLogin = async () => {
+        if (!gapi.auth2 || !gapi.auth2.getAuthInstance()) {
+            console.error("Google Auth instance is not initialized.");
+            setStatusMessage("Google Login Failed!");
+            setMessageType("error");
+            setIsSubmitted(true);
+            return;
+        }
+
+        const auth2 = gapi.auth2.getAuthInstance();
+        try {
+            const googleUser = await auth2.signIn();
+            const profile = googleUser.getBasicProfile();
+            const token = googleUser.getAuthResponse().id_token;
+
+            console.log("User Info:", {
+                name: profile.getName(),
+                email: profile.getEmail(),
+                token,
+            });
+
+            // Send token to the backend for verification
+            const response = await fetch('/api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                console.log("Backend authenticated successfully:", result);
+                setStatusMessage("Google Login Successful!");
+                setMessageType("success");
+                setIsSubmitted(true);
+                navigate('/products');
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            console.error("Google Sign In Failed:", error);
+            setStatusMessage("Google Login Failed!");
+            setMessageType("error");
+            setIsSubmitted(true);
+        }
     };
 
-    const handleGoogleLogin = () => {
-        console.log("Google login clicked");
-    };
 
     const handleModalOpen = () => setModalOpen(true);
     const handleModalClose = () => setModalOpen(false);
-    const navigateToSignup = () => navigate('/signup');
+    const navigateToSignup = () => navigate("/signup");
 
     return (
         <>
-         <Helmet>
-            <title>Maalana-Login</title>
-            <meta name="description" content="Login Page" />
-            <link rel="canonical" href="/login" />
-         </Helmet>
+            <Helmet>
+                <title>Maalana-Login</title>
+                <meta name="description" content="Login Page" />
+                <link rel="canonical" href="/login" />
+            </Helmet>
             <div className="container-login">
                 <motion.div
                     className="login-box"
@@ -128,10 +159,11 @@ export default function Login() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 required
+                                aria-label="Email Address"
                             />
-                            {formik.touched.email && formik.errors.email ? (
+                            {formik.touched.email && formik.errors.email && (
                                 <div className="error-text">{formik.errors.email}</div>
-                            ) : null}
+                            )}
                         </div>
                         <div className="input-container">
                             <input
@@ -143,22 +175,24 @@ export default function Login() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 required
+                                aria-label="Password"
                             />
                             <span
                                 onClick={() => setShowPassword(!showPassword)}
-                                className={formik.touched.password && formik.errors.password ? "error-icon" : "password-toggle"}
+                                className="password-toggle"
+                                aria-label="Toggle Password Visibility"
                             >
                                 {showPassword ? (
-                                    <VisibilityOff fontSize="small" sx={{ color: "gray", marginTop: "6px" }} />
+                                    <VisibilityOff fontSize="small" sx={{ color: "gray" }} />
                                 ) : (
-                                    <Visibility fontSize="small" sx={{ color: "gray", marginTop: "6px" }} />
+                                    <Visibility fontSize="small" sx={{ color: "gray" }} />
                                 )}
                             </span>
-                            {formik.touched.password && formik.errors.password ? (
+                            {formik.touched.password && formik.errors.password && (
                                 <div className="error-text">{formik.errors.password}</div>
-                            ) : null}
+                            )}
                         </div>
-                        <div className="forgot-password" onClick={handleModalOpen}>Forget Password?</div>
+                        <div className="forgot-password" onClick={handleModalOpen}>Forgot Password?</div>
                         <AnimatePresence>
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
@@ -172,7 +206,12 @@ export default function Login() {
                             </motion.div>
                         </AnimatePresence>
                         <hr className="divider" />
-                        <button type="button" onClick={handleGoogleLogin} className="google-login-btn">
+                        <button
+                            type="button"
+                            onClick={handleGoogleLogin}
+                            className="google-login-btn"
+                            aria-label="Login with Google"
+                        >
                             <GoogleIcon /> Login with Google
                         </button>
                         <div className="signup">
@@ -182,13 +221,13 @@ export default function Login() {
                 </motion.div>
             </div>
             <Snackbar
-                open={snackbarOpen}
+                open={snackbar.open}
                 autoHideDuration={6000}
                 onClose={handleSnackbarClose}
                 anchorOrigin={{ vertical: "top", horizontal: "center" }}
             >
-                <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: "100%" }}>
-                    {snackbarMessage}
+                <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: "100%" }}>
+                    {snackbar.message}
                 </Alert>
             </Snackbar>
             {modalOpen && <ForgetPasswordModal open={modalOpen} handleClose={handleModalClose} />}

@@ -5,7 +5,6 @@ import candy from '../../assets/styled-box/s-1.svg';
 import tasty from '../../assets/styled-box/s-2.svg';
 import sweet from '../../assets/styled-box/s-3.svg';
 
-// const dummyImage = 'https://via.placeholder.com/150';
 
 const StyledBox = () => {
   return (

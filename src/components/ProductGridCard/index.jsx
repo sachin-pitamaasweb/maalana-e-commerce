@@ -47,7 +47,7 @@ const ProductGridCard = ({ products, title }) => {
         }
         setLoadingProductId(product._id);
         try {
-            const response = await fetch('http://localhost:8000/api/add-to-cart', {
+            const response = await fetch('https://maalana.ritaz.in/api/add-to-cart', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ const ProductGridCard = ({ products, title }) => {
                 updateCartItemCount(data.totalQuantity);
 
                 // Fetch updated cart items after adding the product
-                const updatedCartResponse = await fetch(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
+                const updatedCartResponse = await fetch(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
                 const updatedCartData = await updatedCartResponse.json();
                 if (updatedCartData.success) {
                     setCartItem(updatedCartData.cart);
@@ -129,7 +129,7 @@ const ProductGridCard = ({ products, title }) => {
         setCartItems(updatedItems);
 
         try {
-            const response = await axios.put('http://localhost:8000/api/increase-quantity', {
+            const response = await axios.put('https://maalana.ritaz.in/api/increase-quantity', {
                 userId,
                 cartId,
                 productId,
@@ -184,7 +184,7 @@ const ProductGridCard = ({ products, title }) => {
             if (currentQuantity !== 1) {
                 console.log('currentQuantity', currentQuantity);
                 // Decrease the quantity
-                const response = await axios.put('http://localhost:8000/api/decrease-quantity', {
+                const response = await axios.put('https://maalana.ritaz.in/api/decrease-quantity', {
                     userId,
                     cartId,
                     productId,
@@ -197,7 +197,7 @@ const ProductGridCard = ({ products, title }) => {
                 }));
             } else {
                 // If quantity is 1, delete the product from the cart
-                const responseDelete = await axios.delete('http://localhost:8000/api/delete-cart-product', {
+                const responseDelete = await axios.delete('https://maalana.ritaz.in/api/delete-cart-product', {
                     data: { userId, productId, cartId },
                 });
 
@@ -214,7 +214,7 @@ const ProductGridCard = ({ products, title }) => {
                 });
 
                 // Optionally, fetch the updated cart items from the server after deletion
-                const updatedCartResponse = await axios.get(`http://localhost:8000/api/get-all-cart-by-user/${userId}`);
+                const updatedCartResponse = await axios.get(`https://maalana.ritaz.in/api/get-all-cart-by-user/${userId}`);
                 const updatedCartData = updatedCartResponse.data;
                 if (updatedCartData.success) {
                     setCartItem(updatedCartData.cart);

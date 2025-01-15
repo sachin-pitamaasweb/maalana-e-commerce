@@ -16,7 +16,7 @@ const OrderDetails = () => {
     useEffect(() => {
         const fetchOrderDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/get-order-details-by-order-number/${orderNumber}`);
+                const response = await axios.get(`https://maalana.ritaz.in/api/get-order-details-by-order-number/${orderNumber}`);
                 console.log(response.data.data); // Log the response to check its structure
 
                 // Access the relevant parts of the response

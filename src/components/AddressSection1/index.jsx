@@ -55,7 +55,7 @@ const AddressSection = ({ addresses, onAddressUpdate }) => {
 
         try {
             const response = await axios.put(
-                `http://localhost:8000/api/update-shiped-address/${selectedAddress._id}`,
+                `https://maalana.ritaz.in/api/update-shiped-address/${selectedAddress._id}`,
                 formData,
                 {
                     headers: {
