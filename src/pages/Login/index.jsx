@@ -21,10 +21,7 @@ const validationSchema = Yup.object({
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
-    const [modalOpen, setModalOpen] = useState(false);
-    const [statusMessage, setStatusMessage] = useState("");
-    const [messageType, setMessageType] = useState("info");
-    const [isSubmitted, setIsSubmitted] = useState(false);  
+    const [modalOpen, setModalOpen] = useState(false);  
 
     const { login } = useAuth();
     const navigate = useNavigate();
@@ -77,9 +74,7 @@ export default function Login() {
     const handleGoogleLogin = async () => {
         if (!gapi.auth2 || !gapi.auth2.getAuthInstance()) {
             console.error("Google Auth instance is not initialized.");
-            setStatusMessage("Google Login Failed!");
-            setMessageType("error");
-            setIsSubmitted(true);
+            setSnackbar({ open: true, message: "Google Login Failed!", severity: "error" });
             return;
         }
 
@@ -105,22 +100,16 @@ export default function Login() {
             const result = await response.json();
 
             if (result.success) {
-                console.log("Backend authenticated successfully:", result);
-                setStatusMessage("Google Login Successful!");
-                setMessageType("success");
-                setIsSubmitted(true);
+                setSnackbar({ open: true, message: "Google Login Successful!", severity: "success" });
                 navigate('/products');
             } else {
                 throw new Error(result.message);
             }
         } catch (error) {
             console.error("Google Sign In Failed:", error);
-            setStatusMessage("Google Login Failed!");
-            setMessageType("error");
-            setIsSubmitted(true);
+            setSnackbar({ open: true, message: "Google Login Failed!", severity: "error" });
         }
     };
-
 
     const handleModalOpen = () => setModalOpen(true);
     const handleModalClose = () => setModalOpen(false);

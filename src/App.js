@@ -31,9 +31,6 @@ import PrivacyPolicy from './components/PrivacyPolicy/index.jsx';
 import ShippingProcess from './components/ShippingProcess/index.jsx';
 import TermsAndConditions from './components/TermsAndConditions/index.jsx';
 
-import { getAllProducts } from './utils/apis.js'
-
-
 function App() {
 
   const [products, setProducts] = useState([]);
@@ -56,7 +53,6 @@ function App() {
     };
     fetchProducts(); // Call the function inside useEffect
   }, []);
-  console.log('products', products);
   return (
     <>
       <AuthProvider>
